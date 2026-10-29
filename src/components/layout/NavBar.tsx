@@ -13,7 +13,6 @@ import {
   ShieldCheck,
   User,
   Compass,
-  UserPlus,
   Store,
 } from 'lucide-react';
 import { ThemeToggle } from '../common/ThemeToggle';
@@ -138,38 +137,12 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
 
           {/* 3. Acciones y Perfil (Derecha) */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Cart / Lista Button */}
-            <button
-              onClick={toggleCart}
-              className="relative p-2 rounded-xl text-charcoal-700 dark:text-sand-200 hover:bg-sand-200 dark:hover:bg-charcoal-700 active:scale-95 transition-all focus:outline-none focus:ring-2 focus:ring-terracotta"
-              aria-label="Ver mi lista de compras"
-              title="Mi Lista de Feria"
-            >
-              <ShoppingBag className="w-5 h-5" />
-              {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-terracotta text-white font-black text-[10px] flex items-center justify-center shadow-xs animate-in zoom-in-75">
-                  {totalItems > 99 ? '99+' : totalItems}
-                </span>
-              )}
-            </button>
-
             <ThemeToggle />
 
             {/* SECCIÓN DE AUTENTICACIÓN (COMPRADOR / FERIANTE) */}
             {!isAuthenticated ? (
               <div className="hidden sm:flex items-center gap-1.5 lg:gap-2">
-                {/* 1. Crear tu cuenta como usuario normal */}
-                <button
-                  type="button"
-                  onClick={() => openLoginModal('comprador', 'register')}
-                  className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-charcoal-700 dark:text-sand-200 hover:text-forest dark:hover:text-forest-400 hover:bg-sand-200 dark:hover:bg-charcoal-700 text-xs font-semibold transition-all active:scale-95"
-                  title="Crear tu cuenta como usuario normal"
-                >
-                  <UserPlus className="w-4 h-4 text-forest dark:text-forest-400" />
-                  <span>Crear tu cuenta como usuario normal</span>
-                </button>
-
-                {/* 2. Iniciar sesión */}
+                {/* 1. Iniciar sesión */}
                 <button
                   type="button"
                   onClick={() => openLoginModal('comprador', 'login')}
@@ -180,15 +153,15 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   <span>Iniciar sesión</span>
                 </button>
 
-                {/* 3. Postularme mi emprendimiento */}
+                {/* 2. Postular mi emprendimiento */}
                 <button
                   type="button"
                   onClick={openPostulacionModal}
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer"
-                  title="Postularme con mi emprendimiento a la feria física"
+                  title="Postular mi emprendimiento a la feria física"
                 >
                   <Store className="w-4 h-4" />
-                  <span>Postularme mi emprendimiento</span>
+                  <span>Postular mi emprendimiento</span>
                 </button>
               </div>
             ) : userRole === 'comprador' && currentComprador ? (
@@ -456,18 +429,6 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   type="button"
                   onClick={() => {
                     setMobileMenuOpen(false);
-                    openLoginModal('comprador', 'register');
-                  }}
-                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl border border-sand-300 dark:border-charcoal-600 text-charcoal-800 dark:text-sand-100 hover:bg-sand-200 dark:hover:bg-charcoal-700 font-bold text-sm shadow-xs transition-all"
-                >
-                  <UserPlus className="w-4 h-4 text-forest dark:text-forest-400" />
-                  <span>Crear tu cuenta como usuario normal</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
                     openLoginModal('comprador', 'login');
                   }}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-forest hover:bg-forest-600 text-white font-bold text-sm shadow-md transition-all"
@@ -485,7 +446,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white font-bold text-sm shadow-md transition-all text-center cursor-pointer"
                 >
                   <Store className="w-4 h-4" />
-                  <span>Postularme mi emprendimiento</span>
+                  <span>Postular mi emprendimiento</span>
                 </button>
               </div>
             ) : userRole === 'comprador' ? (
