@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MessageCircle, Instagram, MapPin } from 'lucide-react';
+import { MessageCircle, Instagram, MapPin, ExternalLink } from 'lucide-react';
 import { PrivacyModal } from '../common/PrivacyModal';
 import { GuidesModal, GuideTab } from '../common/GuidesModal';
 
@@ -144,8 +144,32 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-sand-300 dark:border-charcoal-700 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left text-xs text-charcoal-500 dark:text-sand-400">
+        <div className="pt-8 border-t border-sand-300 dark:border-charcoal-700 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left text-xs text-charcoal-500 dark:text-sand-400">
           <p>Copyright © -2026- Vertex Solutions S.A.S.</p>
+
+          {/* Quiénes somos - Enlace a Vertex Tech */}
+          <div className="flex items-center gap-2">
+            <span className="text-charcoal-600 dark:text-sand-300 font-medium">Quiénes somos</span>
+            <a
+              href="https://www.vertextech.com.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-charcoal-800 border border-sand-300 dark:border-charcoal-600 hover:border-terracotta dark:hover:border-terracotta text-charcoal-800 dark:text-sand-200 hover:text-terracotta shadow-xs hover:shadow transition-all group"
+              aria-label="Ir al sitio de Vertex Tech (abre en nueva pestaña)"
+              title="Ir a Vertex Tech"
+            >
+              <img
+                src="/vertex-logo.png"
+                alt="Logo Vertex Tech"
+                className="h-4 w-auto object-contain transition-transform group-hover:scale-110"
+              />
+              <span className="font-semibold text-xs text-charcoal-900 dark:text-white group-hover:text-terracotta transition-colors">
+                Vertex
+              </span>
+              <ExternalLink className="w-3 h-3 text-charcoal-400 dark:text-sand-400 group-hover:text-terracotta" />
+            </a>
+          </div>
+
           <div className="flex items-center gap-3">
             <a
               href="https://facebook.com"
