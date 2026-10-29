@@ -34,9 +34,10 @@ export const CartDrawer = ({ telefonoFeria = '5493584112233' }: CartDrawerProps)
     };
   }, [isOpen, closeCart]);
 
+  const { currentComprador } = useAuthStore();
+
   if (!isOpen) return null;
 
-  const { currentComprador } = useAuthStore();
   const totalItems = getTotalItems();
   const totalPrice = getTotalPrice();
 
