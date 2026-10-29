@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send, Loader2, Sparkles } from 'lucide-react';
+import { Send, Loader2, Sparkles, Instagram, Facebook } from 'lucide-react';
 import { ConsultaContacto } from '../../types';
 import { contactoRepository } from '../../repositories';
 
@@ -14,6 +14,8 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
     nombreEmprendimiento: '',
     email: '',
     whatsapp: '',
+    instagram: '',
+    facebook: '',
     rubro: 'artesanias',
     mensaje: '',
   });
@@ -40,6 +42,8 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
           nombreEmprendimiento: '',
           email: '',
           whatsapp: '',
+          instagram: '',
+          facebook: '',
           rubro: 'artesanias',
           mensaje: '',
         });
@@ -134,6 +138,40 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="tucorreo@ejemplo.com"
+                  className="w-full bg-sand-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 px-4 py-3 rounded-2xl text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none transition-all"
+                />
+              </div>
+
+              {/* Instagram */}
+              <div>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
+                  <Instagram className="w-3.5 h-3.5 text-terracotta" />
+                  <span>Instagram *</span>
+                </label>
+                <input
+                  type="url"
+                  name="instagram"
+                  required
+                  value={formData.instagram}
+                  onChange={handleChange}
+                  placeholder="https://www.instagram.com/tu_cuenta/"
+                  className="w-full bg-sand-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 px-4 py-3 rounded-2xl text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none transition-all"
+                />
+              </div>
+
+              {/* Facebook */}
+              <div>
+                <label className="flex items-center gap-1.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
+                  <Facebook className="w-3.5 h-3.5 text-terracotta" />
+                  <span>Facebook *</span>
+                </label>
+                <input
+                  type="url"
+                  name="facebook"
+                  required
+                  value={formData.facebook}
+                  onChange={handleChange}
+                  placeholder="https://www.facebook.com/tu_cuenta/"
                   className="w-full bg-sand-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 px-4 py-3 rounded-2xl text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none transition-all"
                 />
               </div>

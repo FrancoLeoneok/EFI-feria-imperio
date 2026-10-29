@@ -25,7 +25,7 @@
 - **`ProductModal`**: Ventana modal con ficha ampliada y especificaciones artesanales.
 - **`CartDrawer`**: Panel deslizable lateral que lista productos seleccionados, subtotales y botón de consulta por WhatsApp.
 - **`FeriasSection`**: Sección informativa sobre los predios feriales oficiales (Andino y Sarmiento).
-- **`ContactForm`**: Formulario de postulación para nuevos feriantes interesados en registrarse.
+- **`ContactForm`**: Formulario de postulación de "Convocatoria Abierta" para nuevos feriantes interesados en registrarse, que solicita datos de contacto, rubro y enlaces obligatorios a redes sociales (Instagram y Facebook con URLs de ejemplo).
 - **`FloatingWhatsApp`**: Botón flotante de contacto rápido ubicado en la esquina inferior derecha.
 - **`ThemeToggle`**: Botón para alternar entre modo claro y modo oscuro.
 - **`Toast`**: Notificación flotante temporal de confirmación o alerta.

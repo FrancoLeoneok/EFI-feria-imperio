@@ -12,7 +12,7 @@ export class MockContactoRepository implements IContactoRepository {
     await this.delay();
 
     // Validación básica de campos requeridos
-    if (!consulta.nombreCompleto || !consulta.whatsapp || !consulta.email) {
+    if (!consulta.nombreCompleto || !consulta.whatsapp || !consulta.email || !consulta.instagram || !consulta.facebook) {
       return {
         success: false,
         mensaje: 'Por favor complete todos los campos obligatorios del formulario.',

@@ -67,6 +67,8 @@ export interface ConsultaContacto {
   nombreEmprendimiento: string;
   email: string;
   whatsapp: string;
+  instagram: string;
+  facebook: string;
   rubro: Rubro;
   mensaje: string;
   fechaEnvio?: string;
