@@ -154,22 +154,22 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 4: Espacios Feriales */}
+          {/* Column 4: Ferias */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-charcoal-900 dark:text-white mb-4">
-              Polos Feriales
+              Ferias
             </h4>
             <ul className="space-y-3 text-xs text-charcoal-600 dark:text-sand-300">
               <li className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-forest shrink-0 mt-0.5" />
                 <span>
-                  <strong>Paseo del Andino:</strong> Bv. Ameghino & Rieles (Sáb, Dom y Feriados 16 a 22 hs)
+                  <strong>Paseo del Andino:</strong> Bv. Ameghino & Rieles
                 </span>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-terracotta shrink-0 mt-0.5" />
                 <span>
-                  <strong>Parque Sarmiento:</strong> Banda Norte (Sáb y Dom 15:30 a 21:30 hs)
+                  <strong>Parque Sarmiento:</strong> Banda Norte
                 </span>
               </li>
             </ul>
