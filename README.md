@@ -124,13 +124,45 @@ Los datos de demostración, precios, contactos y confirmaciones de presencia no 
 
 ## 🤝 Colaboradores
 
-Participantes del proyecto:
+Participantes del Trabajo
 
-- [Joaquin Fornasari](https://github.com/FornaJoa)
-- [Franco Leone](https://github.com/FrancoLeoneok)
-- [Alejo Alaminos](https://github.com/AlejoAlaminos)
-- [Nicolás Quiroga](https://github.com/nicoquiroga20-lang)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/FornaJoa" title="Perfil de Joaquin Fornasari en GitHub">
+        <img src="https://avatars.githubusercontent.com/u/163206353?v=4" width="100" alt="Foto de Joaquin Fornasari en GitHub"/><br>
+        <sub>
+          <b>Joaquin Fornasari</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/FrancoLeoneok" title="Perfil de Franco Leone en GitHub">
+        <img src="https://avatars.githubusercontent.com/u/178578464?v=4" width="100" alt="Foto de Franco Leone en GitHub"/><br>
+        <sub>
+          <b>Franco Leone</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/AlejoAlaminos" title="Perfil de Alejo Alaminos en GitHub">
+        <img src="https://avatars.githubusercontent.com/u/164796037?v=4" width="100" alt="Foto de Alejo Alaminos en GitHub"/><br>
+        <sub>
+          <b>Alejo Alaminos</b>
+        </sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/nicoquiroga20-lang" title="Perfil de Nicolas Quiroga en GitHub">
+        <img src="https://avatars.githubusercontent.com/u/232619836?v=4" width="100" alt="Foto de Nicolas Quiroga en GitHub"/><br>
+        <sub>
+          <b>Nicolas Quiroga</b>
+        </sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## 📝 Licencia
 
-El repositorio no incluye actualmente un archivo `LICENSE`. No se declara una licencia de uso o redistribución en este README.
+- Este proyecto fue desarrollado exclusivamente con fines educativos y de aprendizaje como parte de la **EFI (Examen Final Integrador) de Programación 2**, enfocado en la aplicación e integración de los conocimientos de la materia mediante el desarrollo de Feria Imperio. Queda libre su consulta, uso e inspiración como material de referencia y estudio académico.
