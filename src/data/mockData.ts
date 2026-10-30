@@ -51,7 +51,6 @@ export const FERIANTES_MOCK: Feriante[] = [
     ubicacionFeria: 'paseo_andino',
     puestoNumero: 'Puesto 14 - Galpón Blanco',
     findeConfirmado: true,
-    whatsapp: '5493584112233',
     instagram: '@elgauchotradicion.cba',
   },
   {
@@ -65,7 +64,6 @@ export const FERIANTES_MOCK: Feriante[] = [
     ubicacionFeria: 'parque_sarmiento',
     puestoNumero: 'Puesto 03 - Paseo de los Tilos',
     findeConfirmado: true,
-    whatsapp: '5493584223344',
     instagram: '@barrovivo.rc',
   },
   {
@@ -79,7 +77,6 @@ export const FERIANTES_MOCK: Feriante[] = [
     ubicacionFeria: 'ambos',
     puestoNumero: 'Puesto 22 - Carpa Central',
     findeConfirmado: true,
-    whatsapp: '5493584334455',
     instagram: '@saboresserranos_rc',
   },
   {
@@ -93,7 +90,6 @@ export const FERIANTES_MOCK: Feriante[] = [
     ubicacionFeria: 'paseo_andino',
     puestoNumero: 'Puesto 08 - Sector Rieles',
     findeConfirmado: true,
-    whatsapp: '5493584445566',
     instagram: '@cuerosdelsur.ok',
   },
   {
@@ -107,7 +103,6 @@ export const FERIANTES_MOCK: Feriante[] = [
     ubicacionFeria: 'parque_sarmiento',
     puestoNumero: 'Puesto 19 - Costanera Norte',
     findeConfirmado: false,
-    whatsapp: '5493584556677',
   },
   {
     id: 'fer-06',
@@ -120,7 +115,6 @@ export const FERIANTES_MOCK: Feriante[] = [
     ubicacionFeria: 'paseo_andino',
     puestoNumero: 'Puesto 11 - Glorieta',
     findeConfirmado: true,
-    whatsapp: '5493584667788',
   },
 ];
 

@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
-import { Store, MapPin, Calendar, ArrowRight, MessageCircle } from 'lucide-react';
+import { Store, MapPin, Calendar, ArrowRight } from 'lucide-react';
 import { Feriante } from '../../types';
-import { buildWhatsAppLink } from '../../utils/formatters';
 
 interface StoreCardProps {
   feriante: Feriante;
@@ -15,11 +14,6 @@ export const StoreCard = ({ feriante, conteoProductos }: StoreCardProps) => {
       : feriante.ubicacionFeria === 'parque_sarmiento'
       ? 'Parque Sarmiento'
       : 'Andino & Sarmiento';
-
-  const whatsappUrl = buildWhatsAppLink(
-    feriante.whatsapp,
-    `¡Hola ${feriante.nombreResponsable}! Vi tu puesto "${feriante.nombreComercio}" en Feria Imperio y me gustaría consultar por tus productos.`
-  );
 
   return (
     <article className="group flex flex-col bg-white dark:bg-charcoal-700 rounded-3xl border border-sand-300 dark:border-charcoal-600 overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200">
@@ -98,17 +92,6 @@ export const StoreCard = ({ feriante, conteoProductos }: StoreCardProps) => {
 
         {/* Botones de Acción */}
         <div className="pt-3 border-t border-sand-200 dark:border-charcoal-600 flex items-center justify-between gap-2">
-          <a
-            href={whatsappUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5 rounded-xl bg-forest-50 hover:bg-forest text-forest hover:text-white dark:bg-forest-900/40 dark:hover:bg-forest transition-colors shadow-xs"
-            title={`Contactar a ${feriante.nombreResponsable} por WhatsApp`}
-            aria-label={`Contactar por WhatsApp a ${feriante.nombreComercio}`}
-          >
-            <MessageCircle className="w-4 h-4" />
-          </a>
-
           <Link
             to={`/tienda/${feriante.id}`}
             className="flex-1 inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white font-bold text-xs shadow-xs active:scale-95 transition-all"

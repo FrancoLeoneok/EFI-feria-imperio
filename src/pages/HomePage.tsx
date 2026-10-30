@@ -8,7 +8,6 @@ import { ProductCard } from '../components/catalog/ProductCard';
 import { ProductModal } from '../components/catalog/ProductModal';
 import { Feriante, Producto, Rubro, UbicacionFeria, UIStatus } from '../types';
 import { ferianteRepository, productoRepository } from '../repositories';
-import { buildWhatsAppLink, formatARS } from '../utils/formatters';
 import { Sparkles, MapPin, Calendar, ShoppingBag } from 'lucide-react';
 
 interface HomePageProps {
@@ -207,14 +206,6 @@ export const HomePage = ({
                   key={producto.id}
                   producto={producto}
                   onVerDetalle={setSelectedProductModal}
-                  onConsultarWhatsApp={(prod) => {
-                    const fer = feriantes.find((f) => f.id === prod.ferianteId);
-                    const tel = fer?.whatsapp || '5493584112233';
-                    const msg = `¡Hola! Vi en Feria Imperio tu producto "${prod.titulo}" (${formatARS(
-                      prod.precio
-                    )}) y me gustaría consultar disponibilidad.`;
-                    window.open(buildWhatsAppLink(tel, msg), '_blank');
-                  }}
                 />
               ))}
             </div>
@@ -245,10 +236,6 @@ export const HomePage = ({
         <ProductModal
           producto={selectedProductModal}
           onClose={() => setSelectedProductModal(null)}
-          ferianteTelefono={
-            feriantes.find((f) => f.id === selectedProductModal.ferianteId)?.whatsapp ||
-            '5493584112233'
-          }
           ferianteUbicacion={
             feriantes.find((f) => f.id === selectedProductModal.ferianteId)?.puestoNumero
           }

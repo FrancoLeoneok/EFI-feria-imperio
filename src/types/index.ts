@@ -31,7 +31,6 @@ export interface Feriante {
   ubicacionFeria: UbicacionFeria;
   puestoNumero: string;
   findeConfirmado: boolean;
-  whatsapp: string; // Formato internacional, ej: "5493581234567"
   instagram?: string;
 }
 
@@ -66,7 +65,6 @@ export interface ConsultaContacto {
   nombreCompleto: string;
   nombreEmprendimiento: string;
   email: string;
-  whatsapp: string;
   instagram: string;
   facebook: string;
   rubro: Rubro;

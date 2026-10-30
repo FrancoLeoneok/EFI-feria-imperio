@@ -58,11 +58,6 @@ export default {
           800: "#18181b",
           900: "#09090b",
         },
-        whatsapp: {
-          DEFAULT: "#25d366",
-          hover: "#20bd5a",
-          dark: "#128c7e",
-        },
 
         // Mapeo Semántico Unificado (compatible con el maquetado base)
         primary: {

@@ -85,7 +85,7 @@ export const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
               <h3>1. Información de Puestos y Postulaciones</h3>
             </div>
             <p className="text-charcoal-600 dark:text-sand-300">
-              Los datos facilitados mediante el formulario de postulación (nombre, WhatsApp, rubro de producción y descripción del puesto) se utilizan exclusivamente para validar la presencia ferial, coordinar las ubicaciones en los paseos y publicar el catálogo digital al público.
+              Los datos facilitados mediante el formulario de postulación (nombre, rubro de producción y descripción del puesto) se utilizan exclusivamente para validar la presencia ferial, coordinar las ubicaciones en los paseos y publicar el catálogo digital al público.
             </p>
           </div>
 
@@ -100,14 +100,14 @@ export const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
             </p>
           </div>
 
-          {/* Sección 3: Trato Directo vía WhatsApp */}
+          {/* Sección 3: Trato Directo */}
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-forest dark:text-forest-400 font-bold text-sm">
               <Smartphone className="w-4 h-4 shrink-0" />
               <h3>3. Vínculo Directo sin Comisiones</h3>
             </div>
             <p className="text-charcoal-600 dark:text-sand-300">
-              Feria Imperio no procesa cobros ni retiene pagos. Cada pedido o consulta redirige directamente al canal oficial de WhatsApp del feriante. Las condiciones de entrega, pago y garantía se pactan de forma bilateral entre el productor y el consumidor final.
+              Feria Imperio no procesa cobros ni retiene pagos. Las condiciones de entrega, pago y garantía se pactan de forma bilateral entre el productor y el consumidor final.
             </p>
           </div>
 

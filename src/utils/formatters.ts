@@ -14,16 +14,6 @@ export function formatARS(precio: number): string {
 }
 
 /**
- * Formatea un número de WhatsApp a enlace clickeable con mensaje pre-armado
- */
-export function buildWhatsAppLink(telefono: string, mensaje: string): string {
-  // Limpia caracteres no numéricos
-  const telefonoLimpio = telefono.replace(/\D/g, '');
-  const encodedMsg = encodeURIComponent(mensaje);
-  return `https://wa.me/${telefonoLimpio}?text=${encodedMsg}`;
-}
-
-/**
  * Normaliza un texto para búsquedas insensibles a mayúsculas, minúsculas y tildes/acentos.
  * Ejemplo: "Cerámica" -> "ceramica"
  */

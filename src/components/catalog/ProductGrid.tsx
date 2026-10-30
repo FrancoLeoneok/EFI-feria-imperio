@@ -9,7 +9,6 @@ interface ProductGridProps {
   onRetry?: () => void;
   onResetFilters?: () => void;
   onVerDetalle: (producto: Producto) => void;
-  onConsultarWhatsApp: (producto: Producto) => void;
 }
 
 export const ProductGrid = ({
@@ -19,7 +18,6 @@ export const ProductGrid = ({
   onRetry,
   onResetFilters,
   onVerDetalle,
-  onConsultarWhatsApp,
 }: ProductGridProps) => {
   // 1. Estado Loading (Skeletons)
   if (status === 'loading') {
@@ -106,7 +104,6 @@ export const ProductGrid = ({
           key={producto.id}
           producto={producto}
           onVerDetalle={onVerDetalle}
-          onConsultarWhatsApp={onConsultarWhatsApp}
         />
       ))}
     </div>

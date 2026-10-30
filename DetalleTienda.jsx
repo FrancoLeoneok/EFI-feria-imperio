@@ -437,17 +437,6 @@ export default function DetalleTienda() {
                             >
                           </a>
                           <a
-                            aria-label="WhatsApp"
-                            className="w-9 h-9 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-colors"
-                            href="https://wa.me"
-                            rel="noopener"
-                            target="_blank"
-                          >
-                            <span className="material-symbols-outlined text-[18px]"
-                              >chat</span
-                            >
-                          </a>
-                          <a
                             aria-label="Pinterest"
                             className="w-9 h-9 rounded-full bg-surface-container-highest flex items-center justify-center text-on-surface hover:bg-primary hover:text-on-primary transition-colors"
                             href="https://pinterest.com"
