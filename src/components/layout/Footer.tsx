@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, ExternalLink } from 'lucide-react';
+import { MapPin } from 'lucide-react';
 import { PrivacyModal } from '../common/PrivacyModal';
 import { GuidesModal, GuideTab } from '../common/GuidesModal';
 
@@ -20,13 +20,6 @@ export const Footer = () => {
           {/* Column 1: Brand Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-2xl overflow-hidden bg-white shadow-md border border-sand-300 dark:border-charcoal-700 p-0.5 flex items-center justify-center">
-                <img
-                  src="/logo.png"
-                  alt="Logo Feria Imperio"
-                  className="w-full h-full object-contain"
-                />
-              </div>
               <span className="font-extrabold text-xl text-terracotta tracking-tight">
                 Feria Imperio
               </span>
@@ -164,35 +157,16 @@ export const Footer = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="pt-8 border-t border-sand-300 dark:border-charcoal-700 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs text-charcoal-500 dark:text-sand-400">
-          <p className="text-center md:text-left">
+        <div className="pt-8 border-t border-sand-300 dark:border-charcoal-700 flex justify-center text-center">
+          <a
+            href="https://www.vertextech.com.ar/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-3 py-2 rounded-xl text-xs text-charcoal-500 dark:text-sand-400 hover:text-terracotta dark:hover:text-terracotta transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2"
+            aria-label="Copyright © -2026- Vertex Solutions S.A.S. (abre en nueva pestaña)"
+          >
             Copyright © -2026- Vertex Solutions S.A.S.
-          </p>
-
-          {/* Quiénes somos - Enlace a Vertex Tech (Centrado) */}
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-charcoal-600 dark:text-sand-300 font-medium">Quiénes somos</span>
-            <a
-              href="https://www.vertextech.com.ar"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white dark:bg-charcoal-800 border border-sand-300 dark:border-charcoal-600 hover:border-terracotta dark:hover:border-terracotta text-charcoal-800 dark:text-sand-200 hover:text-terracotta shadow-xs hover:shadow transition-all group"
-              aria-label="Ir al sitio de Vertex Tech (abre en nueva pestaña)"
-              title="Ir a Vertex Tech"
-            >
-              <img
-                src="/vertex-logo.png"
-                alt="Logo Vertex Tech"
-                className="h-4 w-auto object-contain transition-transform group-hover:scale-110"
-              />
-              <span className="font-semibold text-xs text-charcoal-900 dark:text-white group-hover:text-terracotta transition-colors">
-                Vertex
-              </span>
-              <ExternalLink className="w-3 h-3 text-charcoal-400 dark:text-sand-400 group-hover:text-terracotta" />
-            </a>
-          </div>
-
-          <div className="hidden md:block" aria-hidden="true" />
+          </a>
         </div>
       </div>
 
