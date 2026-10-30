@@ -223,7 +223,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                     </button>
 
                     <a
-                      href="/#contacto"
+                      href="/#tiendas"
                       onClick={() => setProfileDropdownOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium text-charcoal-700 dark:text-sand-200 hover:bg-sand-100 dark:hover:bg-charcoal-700 transition-colors"
                     >
