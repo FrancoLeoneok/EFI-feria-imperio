@@ -1,6 +1,5 @@
-import { MapPin, Calendar, Clock, CheckCircle2, MessageSquare } from 'lucide-react';
+import { MapPin, Calendar, Clock, CheckCircle2 } from 'lucide-react';
 import { Feriante } from '../../types';
-import { buildWhatsAppLink } from '../../utils/formatters';
 
 interface FeriasSectionProps {
   feriantes: Feriante[];
@@ -166,18 +165,6 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
                     {feriante.rubroPrincipal}
                   </span>
                 </div>
-                <a
-                  href={buildWhatsAppLink(
-                    feriante.whatsapp,
-                    `¡Hola ${feriante.nombreResponsable}! Vi tu puesto "${feriante.nombreComercio}" en Feria Imperio y quería consultar por tus productos.`
-                  )}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-2 rounded-xl bg-forest-50 dark:bg-forest-900/40 text-forest hover:bg-forest hover:text-white transition-colors"
-                  title="Contactar al feriante"
-                >
-                  <MessageSquare className="w-4 h-4" />
-                </a>
               </div>
             ))}
           </div>

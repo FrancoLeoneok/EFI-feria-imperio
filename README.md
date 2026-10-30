@@ -8,7 +8,7 @@ Feriantes y emprendedores de Río Cuarto, Córdoba.
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_3-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)
 ![Zustand](https://img.shields.io/badge/Zustand-443E38?style=for-the-badge&logoColor=white)
 
-> Proyecto de catálogo digital para dar visibilidad a los puestos del Paseo del Andino y del Parque Sarmiento, conocer sus productos y facilitar el contacto directo por WhatsApp.
+> Proyecto de catálogo digital para dar visibilidad a los puestos del Paseo del Andino y del Parque Sarmiento, conocer sus productos.
 
 ## 🌐 Sitio web
 
@@ -20,22 +20,22 @@ El proyecto está desplegado en **Vercel**:
 
 **Feria Imperio** reúne en una misma aplicación a artesanos y emprendedores locales. Cada puesto cuenta con una tienda que presenta su historia, responsable, ubicación y catálogo de productos con precios en pesos argentinos.
 
-La propuesta permite explorar la feria antes de visitarla, armar una lista con un presupuesto estimado y coordinar consultas o retiros por WhatsApp. Incluye seis rubros: **artesanías, cerámica, gastronomía, marroquinería, madera e indumentaria**.
+La propuesta permite explorar la feria antes de visitarla, armar una lista con un presupuesto estimado. Incluye seis rubros: **artesanías, cerámica, gastronomía, marroquinería, madera e indumentaria**.
 
 La versión actual es una **demostración frontend** con datos simulados: seis feriantes, ocho productos y tres perfiles de compradores de ejemplo.
 
 ## ✨ Funcionalidades
 
 - **Directorio de puestos:** búsqueda por nombre, responsable o biografía; filtros por rubro, paseo ferial y presencia confirmada para el fin de semana.
-- **Tiendas individuales:** perfil del emprendedor, catálogo, búsqueda interna de productos y enlaces a WhatsApp e Instagram cuando están disponibles.
+- **Tiendas individuales:** perfil del emprendedor, catálogo, búsqueda interna de productos y enlaces a Instagram cuando están disponibles.
 - **Detalle de productos:** imagen, descripción, precio, disponibilidad y especificaciones.
-- **Mi Lista de Feria:** agregar productos, modificar cantidades, quitar artículos y calcular el total estimado. Genera un mensaje consolidado para consultar por WhatsApp al contacto de la feria.
+- **Mi Lista de Feria:** agregar productos, modificar cantidades, quitar artículos y calcular el total estimado.
 - **Accesos de demostración:** inicio de sesión como comprador o feriante y registro simulado de compradores.
 - **Mi Taller:** panel del feriante con creación y eliminación de productos, edición de precios y cambio de disponibilidad dentro de la vista.
 - **Información de las ferias:** ubicaciones y enlaces a Google Maps.
 - **Postulación de emprendimientos:** formulario con datos de contacto, rubro y enlaces obligatorios a Instagram y Facebook.
 - **Postulación de stands:** modal accesible desde el banner y el botón «Postular mi emprendimiento», con elección de paseo, resumen del stand, pago simulado y confirmación. La demostración contempla un costo de $45.000 ARS e incluye un espacio de 3 × 3 metros, electricidad y Wi-Fi.
-- **Banner y redes institucionales:** portada promocional, enlaces a Facebook, Instagram, YouTube y WhatsApp, y enlace a Vertex Tech en el pie de página.
+- **Banner y redes institucionales:** portada promocional, enlaces a Facebook, Instagram, y YouTube, y enlace a Vertex Tech en el pie de página.
 - **Interfaz adaptable:** navegación móvil, tema claro y oscuro, notificaciones, guías de uso y modal de privacidad.
 
 ## 🛠️ Tecnologías utilizadas
@@ -59,7 +59,7 @@ La aplicación utiliza el **patrón Repository** para separar las consultas de d
 3. Las implementaciones `mock` trabajan con datos locales y demoras artificiales para simular consultas asíncronas.
 4. Los stores de Zustand administran la sesión, la lista de productos y los pasos de la postulación de stands.
 
-Los modelos compartidos están en `src/types/index.ts`; el formato de precios y la construcción de enlaces a WhatsApp se centralizan en `src/utils/formatters.ts`.
+Los modelos compartidos están en `src/types/index.ts`; el formato de precios se centraliza en `src/utils/formatters.ts`.
 
 ## 📁 Estructura
 
@@ -84,7 +84,7 @@ EFI-feria-imperio/
 │   │   └── mock/               # Implementaciones simuladas
 │   ├── store/                  # Sesión, lista de productos y postulación de stands
 │   ├── types/                  # Tipos del dominio
-│   ├── utils/                  # Formateadores y enlaces a WhatsApp
+│   ├── utils/                  # Formateadores
 │   ├── App.tsx                # Rutas y componentes globales
 │   ├── main.tsx               # Entrada de React
 │   └── index.css              # Directivas Tailwind y estilos base
@@ -118,7 +118,7 @@ La aplicación actual se ejecuta desde `src/main.tsx`. Los prototipos JSX y las 
 - **Consultas y postulaciones del formulario de contacto:** se guardan localmente con la clave `feria_imperio_consultas`; el formulario no envía correos ni notifica a una organización real.
 - **Postulaciones de stands:** se guardan localmente con la clave `feria_imperio_postulaciones_stand`. El enlace y la acreditación del pago son simulados; no se realiza ningún cobro ni reserva real.
 - **Autenticación y registro:** se simulan en el cliente. El registro de compradores genera una sesión local, sin crear una cuenta en un servidor.
-- **Compras:** no se procesan pagos ni se generan órdenes de compra. WhatsApp abre un mensaje preparado para que la persona revise y envíe la consulta.
+- **Compras:** no se procesan pagos ni se generan órdenes de compra.
 
 Los datos de demostración, precios, contactos y confirmaciones de presencia no provienen de una agenda o inventario actualizado en tiempo real. La información local depende del navegador y puede perderse al borrar sus datos.
 

@@ -159,7 +159,7 @@ export const GuidesModal = ({
                 </div>
 
                 {/* Paso 3 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
+                <div className="md:col-span-2 p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
                   <div className="flex items-center gap-2.5 text-terracotta font-bold text-sm">
                     <span className="w-6 h-6 rounded-full bg-terracotta text-white text-xs flex items-center justify-center shrink-0">
                       3
@@ -168,19 +168,6 @@ export const GuidesModal = ({
                   </div>
                   <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
                     Hacé clic en el ícono de bolsa de compras en cualquier producto para agregarlo a tu presupuesto simulado. Podrás ver los subtotales calculados antes de coordinar tu compra.
-                  </p>
-                </div>
-
-                {/* Paso 4 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-forest dark:text-forest-400 font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-forest text-white text-xs flex items-center justify-center shrink-0">
-                      4
-                    </span>
-                    <h4>Contactá Directo por WhatsApp</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Desde el detalle de cada producto o desde la lista de compras, un botón te abre la conversación oficial de WhatsApp del feriante con un mensaje pre-armado. ¡Sin intermediarios ni recargos!
                   </p>
                 </div>
               </div>
@@ -230,7 +217,7 @@ export const GuidesModal = ({
                     <h4>Actualización Rápida de Precios</h4>
                   </div>
                   <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Modificá tus precios en pesos argentinos al instante para que tus clientes siempre vean los valores actualizados antes de consultarte en la feria o por WhatsApp.
+                    Modificá tus precios en pesos argentinos al instante para que tus clientes siempre vean los valores actualizados antes de consultarte en la feria.
                   </p>
                 </div>
 

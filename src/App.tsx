@@ -3,7 +3,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { NavBar } from './components/layout/NavBar';
 import { Footer } from './components/layout/Footer';
 import { Toast } from './components/common/Toast';
-import { FloatingWhatsApp } from './components/common/FloatingWhatsApp';
 import { CartDrawer } from './components/cart/CartDrawer';
 import { LoginModal } from './components/auth/LoginModal';
 import { PostulacionStandModal } from './components/stand/PostulacionStandModal';
@@ -74,10 +73,6 @@ export default function App() {
 
         {/* Modal de Postulación a Stand Presencial con Link de Pago */}
         <PostulacionStandModal onShowToast={showToast} />
-
-
-        {/* Botón Sticky Flotante de WhatsApp para Celulares */}
-        <FloatingWhatsApp />
 
         {/* Notificación Toast Flotante Global */}
         <Toast

@@ -16,7 +16,7 @@ import {
 } from 'lucide-react';
 import { usePostulacionStore } from '../../store/usePostulacionStore';
 import { Rubro, UbicacionFeria } from '../../types';
-import { formatARS, buildWhatsAppLink } from '../../utils/formatters';
+import { formatARS } from '../../utils/formatters';
 
 interface PostulacionStandModalProps {
   onShowToast?: (type: 'success' | 'error', title: string, message: string) => void;
@@ -124,20 +124,6 @@ export const PostulacionStandModal = ({ onShowToast }: PostulacionStandModalProp
     if (exito && onShowToast) {
       onShowToast('success', '¡Puesto Asegurado!', 'El pago del 100% fue acreditado con éxito.');
     }
-  };
-
-  const linkWhatsAppConfirmacion = () => {
-    if (!postulacionActiva) return '#';
-    const mensaje = `¡Hola Organización de Feria Imperio! 👋\n` +
-      `Acabo de abonar el 100% para asegurar mi stand en la feria física:\n\n` +
-      `• Emprendimiento: ${postulacionActiva.nombreEmprendimiento}\n` +
-      `• Responsable: ${postulacionActiva.nombreCompleto}\n` +
-      `• N° Reserva: ${postulacionActiva.id}\n` +
-      `• Paseo: ${postulacionActiva.ubicacionPreferencia === 'paseo_andino' ? 'Paseo del Andino' : 'Parque Sarmiento'}\n` +
-      `• Servicios: Luz + Wi-Fi incluidos\n` +
-      `• Importe Abonado: ${formatARS(postulacionActiva.costoStand)}\n\n` +
-      `¿Me confirman la recepción de la reserva? Muchas gracias.`;
-    return buildWhatsAppLink('5493584112233', mensaje);
   };
 
   return (
@@ -267,10 +253,10 @@ export const PostulacionStandModal = ({ onShowToast }: PostulacionStandModalProp
                   />
                 </div>
 
-                {/* Teléfono / WhatsApp */}
+                {/* Teléfono */}
                 <div>
                   <label className="block text-xs font-bold text-charcoal-800 dark:text-sand-200 mb-1">
-                    Número de Teléfono (WhatsApp) <span className="text-terracotta">*</span>
+                    Número de Teléfono <span className="text-terracotta">*</span>
                   </label>
                   <input
                     type="tel"
@@ -454,7 +440,7 @@ export const PostulacionStandModal = ({ onShowToast }: PostulacionStandModalProp
 
               {/* Botón de Pago Simulado */}
               <div className="space-y-3">
-                <button
+                      <button
                   type="button"
                   onClick={handleConfirmarPago}
                   disabled={isLoading}
@@ -526,15 +512,6 @@ export const PostulacionStandModal = ({ onShowToast }: PostulacionStandModalProp
 
               {/* Acciones Finales */}
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-                <a
-                  href={linkWhatsAppConfirmacion()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-xs sm:text-sm shadow-md transition-all active:scale-95"
-                >
-                  <span>Notificar a la Organización por WhatsApp</span>
-                </a>
-
                 <button
                   type="button"
                   onClick={handleClose}

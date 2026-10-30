@@ -1,20 +1,18 @@
 import { useEffect } from 'react';
-import { X, MessageCircle, Store, Check, MapPin, Tag, ShoppingBag } from 'lucide-react';
+import { X, Store, Check, MapPin, Tag, ShoppingBag } from 'lucide-react';
 import { Producto } from '../../types';
-import { formatARS, buildWhatsAppLink } from '../../utils/formatters';
+import { formatARS } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
 
 interface ProductModalProps {
   producto: Producto | null;
   onClose: () => void;
-  ferianteTelefono?: string;
   ferianteUbicacion?: string;
 }
 
 export const ProductModal = ({
   producto,
   onClose,
-  ferianteTelefono = '5493584112233',
   ferianteUbicacion = 'Paseo del Andino / Parque Sarmiento',
 }: ProductModalProps) => {
   const addItem = useCartStore((state) => state.addItem);
@@ -33,12 +31,6 @@ export const ProductModal = ({
   }, [producto, onClose]);
 
   if (!producto) return null;
-
-  const mensajeWhatsApp = `¡Hola! Vi en Feria Imperio tu producto "${producto.titulo}" (${formatARS(
-    producto.precio
-  )}) de tu puesto "${producto.ferianteNombre}" y me gustaría consultar disponibilidad para este fin de semana.`;
-
-  const whatsAppLink = buildWhatsAppLink(ferianteTelefono, mensajeWhatsApp);
 
   return (
     <div
@@ -129,7 +121,7 @@ export const ProductModal = ({
               )}
             </div>
 
-            {/* Direct Actions: Add to Cart and WhatsApp */}
+            {/* Direct Actions: Add to Cart */}
             <div className="pt-4 border-t border-sand-200 dark:border-charcoal-700 space-y-2.5">
               <button
                 onClick={() => {
@@ -140,19 +132,6 @@ export const ProductModal = ({
                 <ShoppingBag className="w-4 h-4" />
                 <span>Sumar a mi Lista de Feria</span>
               </button>
-
-              <a
-                href={whatsAppLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-sm shadow-md active:scale-95 transition-all"
-              >
-                <MessageCircle className="w-5 h-5 fill-current" />
-                <span>Consultar Disponibilidad por WhatsApp</span>
-              </a>
-              <p className="text-[11px] text-center text-charcoal-400 dark:text-sand-500 mt-2">
-                Trato directo con el artesano • Sin comisiones intermediarias
-              </p>
             </div>
           </div>
         </div>

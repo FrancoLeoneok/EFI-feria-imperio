@@ -5,8 +5,6 @@ import {
   Store,
   MapPin,
   Calendar,
-  MessageCircle,
-  Instagram,
   Sparkles,
   RotateCcw,
   AlertTriangle,
@@ -15,7 +13,6 @@ import { Feriante, Producto, UIStatus } from '../types';
 import { ferianteRepository, productoRepository } from '../repositories';
 import { ProductCard } from '../components/catalog/ProductCard';
 import { ProductModal } from '../components/catalog/ProductModal';
-import { buildWhatsAppLink, formatARS } from '../utils/formatters';
 
 export const StoreDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -91,11 +88,6 @@ export const StoreDetailPage = () => {
     return p.titulo.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term);
   });
 
-  const whatsappGeneralUrl = buildWhatsAppLink(
-    feriante.whatsapp,
-    `¡Hola ${feriante.nombreResponsable}! Vi la página de tu puesto "${feriante.nombreComercio}" en Feria Imperio y me gustaría hacerte una consulta.`
-  );
-
   const ubicacionTexto =
     feriante.ubicacionFeria === 'paseo_andino'
       ? 'Paseo del Andino'
@@ -167,31 +159,7 @@ export const StoreDetailPage = () => {
               </div>
             </div>
 
-            {/* Acciones de Contacto */}
-            <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-              <a
-                href={whatsappGeneralUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-xs sm:text-sm shadow-md active:scale-95 transition-all"
-              >
-                <MessageCircle className="w-4 h-4 fill-current" />
-                <span>Contactar por WhatsApp</span>
-              </a>
 
-              {feriante.instagram && (
-                <a
-                  href={`https://instagram.com/${feriante.instagram.replace('@', '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-2xl bg-sand-200 dark:bg-charcoal-700 text-charcoal-700 dark:text-sand-200 hover:text-terracotta transition-colors shadow-xs"
-                  title="Instagram del emprendedor"
-                  aria-label="Instagram del emprendedor"
-                >
-                  <Instagram className="w-4 h-4" />
-                </a>
-              )}
-            </div>
           </div>
 
           {/* Biografía y Ubicación del Gazebo */}
@@ -273,12 +241,6 @@ export const StoreDetailPage = () => {
                   key={producto.id}
                   producto={producto}
                   onVerDetalle={setProductoModal}
-                  onConsultarWhatsApp={(prod) => {
-                    const msg = `¡Hola ${feriante.nombreResponsable}! Vi en Feria Imperio tu producto "${prod.titulo}" (${formatARS(
-                      prod.precio
-                    )}) y me gustaría consultar disponibilidad para este fin de semana.`;
-                    window.open(buildWhatsAppLink(feriante.whatsapp, msg), '_blank');
-                  }}
                 />
               ))}
             </div>
@@ -290,7 +252,6 @@ export const StoreDetailPage = () => {
       <ProductModal
         producto={productoModal}
         onClose={() => setProductoModal(null)}
-        ferianteTelefono={feriante.whatsapp}
         ferianteUbicacion={`${ubicacionTexto} • ${feriante.puestoNumero}`}
       />
     </div>

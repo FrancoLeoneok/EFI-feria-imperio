@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, MessageCircle, Sparkles, Store, ShoppingBag } from 'lucide-react';
+import { Eye, Sparkles, Store, ShoppingBag } from 'lucide-react';
 import { Producto } from '../../types';
 import { formatARS } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
@@ -7,13 +7,11 @@ import { useCartStore } from '../../store/useCartStore';
 interface ProductCardProps {
   producto: Producto;
   onVerDetalle: (producto: Producto) => void;
-  onConsultarWhatsApp: (producto: Producto) => void;
 }
 
 export const ProductCard = ({
   producto,
   onVerDetalle,
-  onConsultarWhatsApp,
 }: ProductCardProps) => {
   const [imageError, setImageError] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
@@ -104,15 +102,6 @@ export const ProductCard = ({
               aria-label={`Sumar ${producto.titulo} a mi lista`}
             >
               <ShoppingBag className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => onConsultarWhatsApp(producto)}
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-forest hover:bg-forest-600 text-white text-xs font-bold active:scale-95 transition-all shadow-xs"
-              title="Consultar disponibilidad por WhatsApp"
-            >
-              <MessageCircle className="w-4 h-4 text-whatsapp" />
-              <span className="hidden xs:inline sm:inline">Consultar</span>
             </button>
           </div>
         </div>

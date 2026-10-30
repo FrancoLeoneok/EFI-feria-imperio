@@ -13,7 +13,6 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
     nombreCompleto: '',
     nombreEmprendimiento: '',
     email: '',
-    whatsapp: '',
     instagram: '',
     facebook: '',
     rubro: 'artesanias',
@@ -41,7 +40,6 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
           nombreCompleto: '',
           nombreEmprendimiento: '',
           email: '',
-          whatsapp: '',
           instagram: '',
           facebook: '',
           rubro: 'artesanias',
@@ -110,24 +108,8 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
                 />
               </div>
 
-              {/* Teléfono / WhatsApp */}
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
-                  WhatsApp (para coordinar) *
-                </label>
-                <input
-                  type="tel"
-                  name="whatsapp"
-                  required
-                  value={formData.whatsapp}
-                  onChange={handleChange}
-                  placeholder="Ej: 358 1234567"
-                  className="w-full bg-sand-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 px-4 py-3 rounded-2xl text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none transition-all"
-                />
-              </div>
-
               {/* Email */}
-              <div>
+              <div className="sm:col-span-2">
                 <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
                   Correo Electrónico *
                 </label>

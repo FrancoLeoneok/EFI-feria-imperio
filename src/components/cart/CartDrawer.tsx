@@ -1,14 +1,10 @@
 import { useEffect } from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, MessageCircle, ArrowRight } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { formatARS, buildWhatsAppLink } from '../../utils/formatters';
+import { formatARS } from '../../utils/formatters';
 
-interface CartDrawerProps {
-  telefonoFeria?: string;
-}
-
-export const CartDrawer = ({ telefonoFeria = '5493584112233' }: CartDrawerProps) => {
+export const CartDrawer = () => {
   const {
     items,
     isOpen,
@@ -40,23 +36,6 @@ export const CartDrawer = ({ telefonoFeria = '5493584112233' }: CartDrawerProps)
 
   const totalItems = getTotalItems();
   const totalPrice = getTotalPrice();
-
-  // Generador de mensaje consolidado para WhatsApp
-  const generarMensajeWhatsApp = () => {
-    let msg = currentComprador
-      ? `¡Hola! Soy ${currentComprador.nombre}. Estuve armando mi lista de productos en Feria Imperio:\n\n`
-      : '¡Hola! Estuve armando mi lista de productos en Feria Imperio:\n\n';
-    items.forEach((item) => {
-      msg += `• ${item.cantidad}x ${item.producto.titulo} (${item.producto.ferianteNombre}) - ${formatARS(
-        item.producto.precio * item.cantidad
-      )}\n`;
-    });
-    msg += `\n*Total Estimado: ${formatARS(totalPrice)}*\n`;
-    msg += '¿Me confirmarían disponibilidad para coordinar retiro en la feria este finde?';
-    return msg;
-  };
-
-  const whatsappUrl = buildWhatsAppLink(telefonoFeria, generarMensajeWhatsApp());
 
   return (
     <div
@@ -182,16 +161,6 @@ export const CartDrawer = ({ telefonoFeria = '5493584112233' }: CartDrawerProps)
               </div>
 
               <div className="space-y-2">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl bg-whatsapp hover:bg-whatsapp-hover text-white font-bold text-sm shadow-md active:scale-95 transition-all text-center"
-                >
-                  <MessageCircle className="w-5 h-5 fill-current" />
-                  <span>Consultar Lista por WhatsApp</span>
-                </a>
-
                 <button
                   onClick={clearCart}
                   className="w-full py-2 text-xs font-semibold text-charcoal-500 dark:text-sand-400 hover:text-red-500 dark:hover:text-red-400 transition-colors text-center"
