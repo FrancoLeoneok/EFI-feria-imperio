@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Store, MapPin, Calendar, ArrowRight } from 'lucide-react';
+import { Store, MapPin, ArrowRight } from 'lucide-react';
 import { Feriante } from '../../types';
 
 interface StoreCardProps {
@@ -32,17 +32,6 @@ export const StoreCard = ({ feriante, conteoProductos }: StoreCardProps) => {
           <span className="px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/60 backdrop-blur-md text-white shadow-xs">
             {feriante.rubroPrincipal}
           </span>
-
-          {feriante.findeConfirmado ? (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold bg-forest text-white shadow-xs">
-              <Calendar className="w-3 h-3" />
-              <span>Finde Confirmado</span>
-            </span>
-          ) : (
-            <span className="px-2.5 py-1 rounded-full text-[10px] font-semibold bg-sand-200/90 dark:bg-charcoal-800/90 text-charcoal-700 dark:text-sand-300 backdrop-blur-xs">
-              Catálogo Online
-            </span>
-          )}
         </div>
       </div>
 

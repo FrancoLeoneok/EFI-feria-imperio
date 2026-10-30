@@ -134,3 +134,15 @@
   5. En `HomePage.tsx`, incorporar resumen de búsqueda y grilla contextual de artículos encontrados con soporte completo de modales y enlaces a WhatsApp.
 - **Consecuencias**: Búsqueda integral y fluida en toda la aplicación, cumpliendo el DoD y los 4 estados de UI sin alterar la persistencia ni agregar dependencias externas.
 
+---
+
+### [ADR-017] · [2026-10-30 17:48] Vista Exclusiva de Catálogo Digital para Usuarios con Rol Cliente
+- **Contexto**: Cuando un usuario iniciaba sesión como Cliente (`comprador`), la pantalla de inicio continuaba mostrando el `HeroBanner` con el banner y botón de postulación ferial (*"Postularme"* hacia `/#contacto`) y el formulario `ContactForm` de convocatoria comercial, generando confusión de rol y ruido visual.
+- **Decisión**:
+  1. En `HomePage.tsx`, evaluar reactivamente `esCliente = isAuthenticated && userRole === 'comprador'`.
+  2. Si `esCliente === true`, omitir `HeroBanner`, `FeriasSection` y `ContactForm`, presentando la vista de Catálogo con cabecera de bienvenida personalizada y selector de pestañas entre *Catálogo de Productos* (`ProductGrid`) y *Tiendas* (`StoreGrid`).
+  3. Cargar reactivamente los productos en `ProductGrid` con soporte estricto de los 4 Estados de UI (loading, empty, error, success).
+  4. En `HeroBanner.tsx`, condicionar el overlay de postulación para que no se muestre si el usuario está autenticado como comprador.
+- **Consecuencias**: Experiencia de compra limpia y directa para los clientes de Río Cuarto, eliminación del llamado a postulación para compradores y cumplimiento total del Definition of Done.
+
+
