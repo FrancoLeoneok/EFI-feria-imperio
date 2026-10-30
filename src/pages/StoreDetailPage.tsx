@@ -5,7 +5,6 @@ import {
   Store,
   MapPin,
   Calendar,
-  Instagram,
   Sparkles,
   RotateCcw,
   AlertTriangle,
@@ -160,21 +159,7 @@ export const StoreDetailPage = () => {
               </div>
             </div>
 
-            {/* Acciones de Contacto */}
-            {feriante.instagram && (
-              <div className="flex items-center gap-3">
-                <a
-                  href={`https://instagram.com/${feriante.instagram.replace('@', '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 rounded-2xl bg-sand-200 dark:bg-charcoal-700 text-charcoal-700 dark:text-sand-200 hover:text-terracotta transition-colors shadow-xs"
-                  title="Instagram del emprendedor"
-                  aria-label="Instagram del emprendedor"
-                >
-                  <Instagram className="w-4 h-4" />
-                </a>
-              </div>
-            )}
+
           </div>
 
           {/* Biografía y Ubicación del Gazebo */}
