@@ -1,11 +1,9 @@
 import { useState } from 'react';
 import { Calendar, MapPin, ArrowRight, ShieldCheck, Store } from 'lucide-react';
-import { usePostulacionStore } from '../../store/usePostulacionStore';
 
 export const HeroBanner = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const openPostulacionModal = usePostulacionStore((state) => state.openModal);
 
 
   return (
@@ -65,16 +63,14 @@ export const HeroBanner = () => {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={openPostulacionModal}
+            <a href="/#contacto"
               className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-terracotta hover:bg-terracotta-600 active:scale-95 text-white font-bold text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
               aria-label="Abrir formulario para postularme a la feria física"
             >
               <Store className="w-4 h-4" />
               <span>Postularme</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </a>
           </div>
         </div>
 

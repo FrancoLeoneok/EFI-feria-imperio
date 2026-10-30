@@ -5,6 +5,7 @@ import {
   Menu,
   X,
   ShoppingBag,
+  ShoppingCart,
   LogIn,
   LogOut,
   ChevronDown,
@@ -18,7 +19,6 @@ import {
 import { ThemeToggle } from '../common/ThemeToggle';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { usePostulacionStore } from '../../store/usePostulacionStore';
 
 interface NavBarProps {
   busqueda: string;
@@ -41,7 +41,6 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
     logout,
   } = useAuthStore();
   const totalItems = getTotalItems();
-  const openPostulacionModal = usePostulacionStore((state) => state.openModal);
 
 
   // Cerrar dropdown al hacer click afuera
@@ -154,15 +153,13 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                 </button>
 
                 {/* 2. Postular mi emprendimiento */}
-                <button
-                  type="button"
-                  onClick={openPostulacionModal}
+                <a href="/#contacto"
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer"
                   title="Postular mi emprendimiento a la feria física"
                 >
                   <Store className="w-4 h-4" />
                   <span>Postular mi emprendimiento</span>
-                </button>
+                </a>
               </div>
             ) : userRole === 'comprador' && currentComprador ? (
               /* Dropdown Usuario Comprador */
@@ -193,7 +190,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   <div className="absolute right-0 mt-2 w-60 rounded-2xl bg-white dark:bg-charcoal-800 shadow-xl border border-sand-300 dark:border-charcoal-700 py-2 z-50 animate-in fade-in zoom-in-95 duration-150">
                     <div className="px-4 py-2 border-b border-sand-200 dark:border-charcoal-700">
                       <p className="text-[11px] font-semibold text-charcoal-400 dark:text-sand-400">
-                        Sesión de Comprador
+                        Usuario
                       </p>
                       <p className="text-sm font-bold text-charcoal-900 dark:text-white truncate">
                         {currentComprador.nombre}
@@ -211,8 +208,8 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                       className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 hover:bg-sand-100 dark:hover:bg-charcoal-700 hover:text-forest transition-colors text-left"
                     >
                       <div className="flex items-center gap-2.5">
-                        <ShoppingBag className="w-4 h-4" />
-                        <span>Mi Lista de Compras</span>
+                        <ShoppingCart className="w-4 h-4" aria-hidden="true" />
+                        <span>Mi carrito</span>
                       </div>
                       {totalItems > 0 && (
                         <span className="px-2 py-0.5 rounded-full bg-forest text-white text-[10px]">
@@ -221,14 +218,14 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                       )}
                     </button>
 
-                    <Link
-                      to="/"
+                    <a
+                      href="/#tiendas"
                       onClick={() => setProfileDropdownOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-medium text-charcoal-700 dark:text-sand-200 hover:bg-sand-100 dark:hover:bg-charcoal-700 transition-colors"
                     >
                       <Compass className="w-4 h-4 text-terracotta" />
-                      <span>Explorar Puestos y Ferias</span>
-                    </Link>
+                      <span>Catálogo</span>
+                    </a>
 
                     <div className="border-t border-sand-200 dark:border-charcoal-700 my-1" />
 
@@ -437,17 +434,12 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   <span>Iniciar sesión</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    openPostulacionModal();
-                  }}
+                <a href="/#contacto" onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white font-bold text-sm shadow-md transition-all text-center cursor-pointer"
                 >
                   <Store className="w-4 h-4" />
                   <span>Postular mi emprendimiento</span>
-                </button>
+                </a>
               </div>
             ) : userRole === 'comprador' ? (
               <button

@@ -19,6 +19,8 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
     mensaje: '',
   });
 
+  const [otroRubro, setOtroRubro] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (
@@ -30,12 +32,18 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const rubro = formData.rubro === 'otro' ? otroRubro.trim() : formData.rubro;
+    if (!rubro) {
+      onErrorToast('Rubro requerido', 'Escribí el rubro de tu emprendimiento.');
+      return;
+    }
     setIsSubmitting(true);
 
     try {
-      const response = await contactoRepository.enviarConsulta(formData);
+      const response = await contactoRepository.enviarConsulta({ ...formData, rubro });
       if (response.success) {
         onSuccessToast('¡Solicitud Enviada!', response.mensaje);
+        setOtroRubro('');
         setFormData({
           nombreCompleto: '',
           nombreEmprendimiento: '',
@@ -66,7 +74,7 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
               <span>Convocatoria Abierta</span>
             </div>
             <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 dark:text-white">
-              ¿Sos Feriante de Río Cuarto?
+              Postularte como tienda
             </h2>
             <p className="text-xs sm:text-sm text-charcoal-600 dark:text-sand-300 mt-2">
               Sumá tu puesto al catálogo digital unificado o envianos tu consulta sobre las próximas ediciones de la feria.
@@ -128,12 +136,11 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
                   <Instagram className="w-3.5 h-3.5 text-terracotta" />
-                  <span>Instagram *</span>
+                  <span>Instagram (opcional)</span>
                 </label>
                 <input
                   type="url"
                   name="instagram"
-                  required
                   value={formData.instagram}
                   onChange={handleChange}
                   placeholder="https://www.instagram.com/tu_cuenta/"
@@ -145,12 +152,11 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
                   <Facebook className="w-3.5 h-3.5 text-terracotta" />
-                  <span>Facebook *</span>
+                  <span>Facebook (opcional)</span>
                 </label>
                 <input
                   type="url"
                   name="facebook"
-                  required
                   value={formData.facebook}
                   onChange={handleChange}
                   placeholder="https://www.facebook.com/tu_cuenta/"
@@ -161,11 +167,13 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
 
             {/* Rubro Selector */}
             <div>
-              <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
+              <label htmlFor="contacto-rubro" className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
                 Rubro Principal de Producción *
               </label>
               <select
+                id="contacto-rubro"
                 name="rubro"
+                required
                 value={formData.rubro}
                 onChange={handleChange}
                 className="w-full bg-sand-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white px-4 py-3 rounded-2xl text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none transition-all"
@@ -176,8 +184,27 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
                 <option value="marroquineria">Marroquinería y Cuero</option>
                 <option value="madera">Madera y Tornería</option>
                 <option value="indumentaria">Indumentaria y Textil</option>
+                <option value="otro">Otro</option>
               </select>
             </div>
+
+            {formData.rubro === 'otro' && (
+              <div>
+                <label htmlFor="contacto-otro-rubro" className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
+                  ¿Cuál es tu rubro? *
+                </label>
+                <input
+                  id="contacto-otro-rubro"
+                  name="otroRubro"
+                  type="text"
+                  required
+                  value={otroRubro}
+                  onChange={(e) => setOtroRubro(e.target.value)}
+                  placeholder="Ej: Joyería y accesorios"
+                  className="w-full bg-sand-100 dark:bg-charcoal-800 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 px-4 py-3 rounded-2xl text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none transition-all"
+                />
+              </div>
+            )}
 
             {/* Mensaje */}
             <div>
