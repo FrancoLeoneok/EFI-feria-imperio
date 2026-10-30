@@ -118,7 +118,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#contacto"
+                  href="/#contacto"
                   className="hover:text-terracotta transition-colors"
                 >
                   Postular mi Puesto

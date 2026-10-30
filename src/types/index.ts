@@ -67,7 +67,7 @@ export interface ConsultaContacto {
   email: string;
   instagram: string;
   facebook: string;
-  rubro: Rubro;
+  rubro: string;
   mensaje: string;
   fechaEnvio?: string;
 }

@@ -19,7 +19,6 @@ import {
 import { ThemeToggle } from '../common/ThemeToggle';
 import { useCartStore } from '../../store/useCartStore';
 import { useAuthStore } from '../../store/useAuthStore';
-import { usePostulacionStore } from '../../store/usePostulacionStore';
 
 interface NavBarProps {
   busqueda: string;
@@ -42,7 +41,6 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
     logout,
   } = useAuthStore();
   const totalItems = getTotalItems();
-  const openPostulacionModal = usePostulacionStore((state) => state.openModal);
 
 
   // Cerrar dropdown al hacer click afuera
@@ -155,15 +153,13 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                 </button>
 
                 {/* 2. Postular mi emprendimiento */}
-                <button
-                  type="button"
-                  onClick={openPostulacionModal}
+                <a href="/#contacto"
                   className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white text-xs font-bold shadow-xs active:scale-95 transition-all cursor-pointer"
                   title="Postular mi emprendimiento a la feria física"
                 >
                   <Store className="w-4 h-4" />
                   <span>Postular mi emprendimiento</span>
-                </button>
+                </a>
               </div>
             ) : userRole === 'comprador' && currentComprador ? (
               /* Dropdown Usuario Comprador */
@@ -438,17 +434,12 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   <span>Iniciar sesión</span>
                 </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    openPostulacionModal();
-                  }}
+                <a href="/#contacto" onClick={() => setMobileMenuOpen(false)}
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white font-bold text-sm shadow-md transition-all text-center cursor-pointer"
                 >
                   <Store className="w-4 h-4" />
                   <span>Postular mi emprendimiento</span>
-                </button>
+                </a>
               </div>
             ) : userRole === 'comprador' ? (
               <button
