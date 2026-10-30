@@ -1,273 +1,217 @@
-import { useState, useEffect } from 'react';
-import {
-  X,
-  Compass,
-  Store,
-  ShoppingBag,
-  Calendar,
-  CheckCircle2,
-  ArrowRight,
-  ShieldCheck,
-} from 'lucide-react';
-
-export type GuideTab = 'usuario' | 'feriante';
+import { useEffect, useRef, useState } from 'react';
+import { ChevronLeft, ChevronRight, Expand, X } from 'lucide-react';
+import { guides, GuideTab } from '../../data/guides';
 
 interface GuidesModalProps {
-  isOpen: boolean;
-  initialTab?: GuideTab;
+  guide: GuideTab;
   onClose: () => void;
 }
 
-export const GuidesModal = ({
-  isOpen,
-  initialTab = 'usuario',
-  onClose,
-}: GuidesModalProps) => {
-  const [activeTab, setActiveTab] = useState<GuideTab>(initialTab);
+export const GuidesModal = ({ guide, onClose }: GuidesModalProps) => {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [stepIndex, setStepIndex] = useState(0);
+  const [imageFailed, setImageFailed] = useState(false);
+  const content = guides[guide];
+  const step = content.steps[stepIndex];
+  const image = `/guides/${step.image}.png`;
 
-  // Sincronizar tab inicial cuando se abre el modal
   useEffect(() => {
-    if (isOpen) {
-      setActiveTab(initialTab);
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-  }, [isOpen, initialTab]);
-
-  // Manejo de la tecla Escape
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isOpen) {
-        onClose();
-      }
-    };
-    if (isOpen) {
-      window.addEventListener('keydown', handleKeyDown);
-    }
+    const dialog = dialogRef.current;
+    const previousFocus = document.activeElement;
+    const previousOverflow = document.body.style.overflow;
+    dialog?.showModal();
+    document.body.style.overflow = 'hidden';
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      dialog?.close();
+      document.body.style.overflow = previousOverflow;
+      if (previousFocus instanceof HTMLElement && previousFocus.isConnected)
+        previousFocus.focus();
     };
-  }, [isOpen, onClose]);
+  }, []);
 
-  if (!isOpen) return null;
+  const goToStep = (index: number) => {
+    setStepIndex(Math.max(0, Math.min(content.steps.length - 1, index)));
+    setImageFailed(false);
+    contentRef.current?.scrollTo({ top: 0 });
+  };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal-900/70 backdrop-blur-sm animate-in fade-in duration-200"
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={dialogRef}
       aria-labelledby="guides-modal-title"
-      onClick={onClose}
+      aria-describedby="guides-modal-introduction"
+      className="m-auto w-[calc(100%-2rem)] max-w-4xl max-h-[90dvh] overflow-hidden rounded-3xl border border-sand-300 bg-white p-0 text-charcoal-900 shadow-2xl backdrop:bg-charcoal-900/70 dark:border-charcoal-700 dark:bg-charcoal-800 dark:text-sand-100"
+      onCancel={(event) => {
+        event.preventDefault();
+        onClose();
+      }}
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+      onKeyDown={(event) => {
+        if (event.key === 'Tab') {
+          const controls = Array.from(
+            event.currentTarget.querySelectorAll<HTMLElement>(
+              'button:not(:disabled), a[href]',
+            ),
+          );
+          const first = controls[0];
+          const last = controls[controls.length - 1];
+          if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last?.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first?.focus();
+          }
+        }
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+          event.preventDefault();
+          goToStep(stepIndex + (event.key === 'ArrowRight' ? 1 : -1));
+        }
+      }}
     >
-      <div
-        className="relative w-full max-w-3xl bg-white dark:bg-charcoal-800 rounded-3xl shadow-2xl border border-sand-300 dark:border-charcoal-700 overflow-hidden text-charcoal-900 dark:text-sand-100 animate-in zoom-in-95 duration-200 my-6 flex flex-col max-h-[88vh]"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Cabecera del Modal */}
-        <div className="relative bg-gradient-to-br from-terracotta to-terracotta-700 px-6 py-5 text-white shrink-0 overflow-hidden">
-          <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center shadow-inner text-white">
-                <Compass className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white/25 text-[11px] font-bold tracking-wide uppercase">
-                  Centro de Ayuda • Feria Imperio
-                </span>
-                <h2 id="guides-modal-title" className="text-xl sm:text-2xl font-black tracking-tight mt-0.5">
-                  Guías de la Feria
-                </h2>
-              </div>
-            </div>
-
-            <button
-              onClick={onClose}
-              className="p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
-              aria-label="Cerrar ventana de guías"
+      <div className="flex max-h-[90dvh] flex-col">
+        <header className="flex shrink-0 items-start justify-between gap-4 border-b border-sand-300 px-5 py-4 dark:border-charcoal-700 sm:px-7 sm:py-5">
+          <div>
+            <h2
+              id="guides-modal-title"
+              className="text-xl font-extrabold sm:text-2xl"
             >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-
-          {/* Selector de Pestañas (Tabs) */}
-          <div className="flex items-center gap-2 mt-4 relative z-10">
-            <button
-              type="button"
-              onClick={() => setActiveTab('usuario')}
-              className={`flex-1 py-2 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all ${
-                activeTab === 'usuario'
-                  ? 'bg-white text-terracotta shadow-md'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
+              {content.title}
+            </h2>
+            <p
+              id="guides-modal-introduction"
+              className="mt-2 max-w-prose text-sm leading-relaxed text-charcoal-600 dark:text-sand-300"
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Guía de Usuario (Visitantes)</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setActiveTab('feriante')}
-              className={`flex-1 py-2 px-3 sm:px-4 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all ${
-                activeTab === 'feriante'
-                  ? 'bg-white text-terracotta shadow-md'
-                  : 'bg-white/20 text-white hover:bg-white/30'
-              }`}
-            >
-              <Store className="w-4 h-4" />
-              <span>Guía de Feriante (Artesanos)</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Contenido Dinámico según la Pestaña Activa */}
-        <div className="p-6 sm:p-8 space-y-6 overflow-y-auto">
-          {activeTab === 'usuario' ? (
-            /* ================= GUÍA DE USUARIO ================= */
-            <div className="space-y-6 animate-in fade-in duration-150">
-              <div className="p-4 rounded-2xl bg-sand-100 dark:bg-charcoal-700/60 border border-sand-300 dark:border-charcoal-600">
-                <p className="text-xs sm:text-sm text-charcoal-800 dark:text-sand-100 font-medium">
-                  Bienvenido al catálogo digital de <strong>Feria Imperio</strong>. Esta guía te orienta para descubrir creaciones locales, armar presupuestos y conectar directamente con los artesanos del Paseo del Andino y Parque Sarmiento.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Paso 1 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-terracotta font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-terracotta text-white text-xs flex items-center justify-center shrink-0">
-                      1
-                    </span>
-                    <h4>Explorá Tiendas y Rubros</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Utilizá los filtros por rubro (cerámica, madera, marroquinería, indumentaria, gastronomía) o la barra de búsqueda para encontrar rápidamente a tus artesanos favoritos.
-                  </p>
-                </div>
-
-                {/* Paso 2 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-forest dark:text-forest-400 font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-forest text-white text-xs flex items-center justify-center shrink-0">
-                      2
-                    </span>
-                    <h4>Consultá Paseos y Presencia</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Identificá la insignia <span className="inline-flex items-center gap-1 font-semibold text-forest"><Calendar className="w-3 h-3 inline" /> Finde Confirmado</span> para saber con certeza qué emprendedores estarán en el Paseo del Andino o Parque Sarmiento este fin de semana.
-                  </p>
-                </div>
-
-                {/* Paso 3 */}
-                <div className="md:col-span-2 p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-terracotta font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-terracotta text-white text-xs flex items-center justify-center shrink-0">
-                      3
-                    </span>
-                    <h4>Armá "Mi Lista de Feria"</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Hacé clic en el ícono de bolsa de compras en cualquier producto para agregarlo a tu presupuesto simulado. Podrás ver los subtotales calculados antes de coordinar tu compra.
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            /* ================= GUÍA DE FERIANTE ================= */
-            <div className="space-y-6 animate-in fade-in duration-150">
-              <div className="p-4 rounded-2xl bg-forest-50 dark:bg-forest-950/40 border border-forest-200 dark:border-forest-800/60">
-                <p className="text-xs sm:text-sm text-forest-900 dark:text-forest-200 font-medium">
-                  Guía oficial para emprendedores y artesanos registrados en <strong>Feria Imperio</strong>. Conocé cómo gestionar tu puesto, mantener actualizado tu stock y visibilizar tus creaciones ante toda la ciudad de Río Cuarto.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Paso 1 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-forest dark:text-forest-400 font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-forest text-white text-xs flex items-center justify-center shrink-0">
-                      1
-                    </span>
-                    <h4>Ingreso a "Mi Taller"</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Hacé clic en el botón <strong className="text-charcoal-900 dark:text-white">"Iniciar Sesión"</strong> ubicado en la barra superior. Ingresá con tu nombre de responsable o comercio y tu contraseña ferial asignada.
-                  </p>
-                </div>
-
-                {/* Paso 2 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-terracotta font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-terracotta text-white text-xs flex items-center justify-center shrink-0">
-                      2
-                    </span>
-                    <h4>Control de Stock y Disponibilidad</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Dentro de tu panel de administración podés alternar con un solo clic si una pieza está <span className="font-semibold text-emerald-600 dark:text-emerald-400">En Stock</span> o si se produce <span className="font-semibold text-amber-600 dark:text-amber-400">Bajo Pedido</span>.
-                  </p>
-                </div>
-
-                {/* Paso 3 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-forest dark:text-forest-400 font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-forest text-white text-xs flex items-center justify-center shrink-0">
-                      3
-                    </span>
-                    <h4>Actualización Rápida de Precios</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Modificá tus precios en pesos argentinos al instante para que tus clientes siempre vean los valores actualizados antes de consultarte en la feria.
-                  </p>
-                </div>
-
-                {/* Paso 4 */}
-                <div className="p-4 rounded-2xl bg-sand-50 dark:bg-charcoal-700/40 border border-sand-200 dark:border-charcoal-600 space-y-2">
-                  <div className="flex items-center gap-2.5 text-terracotta font-bold text-sm">
-                    <span className="w-6 h-6 rounded-full bg-terracotta text-white text-xs flex items-center justify-center shrink-0">
-                      4
-                    </span>
-                    <h4>Tu Enlace Público Único</h4>
-                  </div>
-                  <p className="text-xs text-charcoal-600 dark:text-sand-300 leading-relaxed">
-                    Cada puesto dispone de una URL propia (<code className="bg-sand-200 dark:bg-charcoal-600 px-1 py-0.5 rounded text-[11px]">/tienda/:id</code>) que podés colocar en la bio de tu Instagram o enviar por mensaje directo a tus clientes.
-                  </p>
-                </div>
-              </div>
-
-              {/* Registro para nuevos puestos */}
-              <div className="p-4 rounded-2xl bg-sand-100 dark:bg-charcoal-700/60 border border-sand-300 dark:border-charcoal-600 flex flex-col sm:flex-row items-center justify-between gap-3">
-                <div className="flex items-center gap-2 text-xs text-charcoal-700 dark:text-sand-300">
-                  <ShieldCheck className="w-4 h-4 text-forest shrink-0" />
-                  <span>¿Aún no tenés tu puesto dado de alta en la plataforma?</span>
-                </div>
-                <a
-                  href="/#contacto"
-                  onClick={onClose}
-                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-forest hover:bg-forest-600 text-white font-bold text-xs shrink-0 transition-all active:scale-95"
-                >
-                  <span>Postular mi Puesto</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Pie del Modal */}
-        <div className="bg-sand-200/70 dark:bg-charcoal-900/60 px-6 py-4 border-t border-sand-300 dark:border-charcoal-700 flex items-center justify-between gap-3 shrink-0">
-          <div className="flex items-center gap-1.5 text-xs text-charcoal-500 dark:text-sand-400">
-            <CheckCircle2 className="w-3.5 h-3.5 text-forest" />
-            <span>Feria Imperio • Economía Social de Río Cuarto</span>
+              {content.introduction}
+            </p>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="px-5 py-2.5 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white font-bold text-xs shadow-sm active:scale-95 transition-all text-center"
+            aria-label="Cerrar guía"
+            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl hover:bg-sand-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-terracotta dark:hover:bg-charcoal-700"
           >
-            Cerrar Guía
+            <X className="h-5 w-5" aria-hidden="true" />
           </button>
+        </header>
+
+        <div
+          ref={contentRef}
+          className="min-h-0 overflow-y-auto px-5 py-5 sm:px-7"
+          role="region"
+          aria-roledescription="carrusel"
+          aria-label={content.title}
+        >
+          <div aria-live="polite" aria-atomic="true">
+            <p className="text-sm font-semibold text-forest dark:text-forest-300">
+              Paso {stepIndex + 1} de {content.steps.length}
+            </p>
+            <h3 className="mt-2 text-lg font-bold sm:text-xl">{step.title}</h3>
+            <p className="mt-2 max-w-prose text-sm leading-relaxed text-charcoal-600 dark:text-sand-300">
+              {step.description}
+            </p>
+          </div>
+          <figure className="mt-5">
+            {imageFailed ? (
+              <div
+                role="status"
+                className="rounded-2xl border border-sand-300 p-6 text-sm dark:border-charcoal-600"
+              >
+                No pudimos cargar la captura. Podés seguir las instrucciones de
+                este paso.
+              </div>
+            ) : (
+              <a
+                href={image}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Ampliar captura (abre en una pestaña nueva)"
+                className="block overflow-hidden rounded-2xl border border-sand-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-terracotta dark:border-charcoal-600"
+              >
+                <img
+                  key={image}
+                  src={image}
+                  alt={step.alt}
+                  width={1200}
+                  height={750}
+                  onError={() => setImageFailed(true)}
+                  className="h-auto w-full object-contain sm:max-h-[40dvh]"
+                />
+              </a>
+            )}
+            <figcaption className="mt-2 flex flex-wrap items-center justify-between gap-2 text-xs text-charcoal-500 dark:text-sand-400">
+              <span>Los cuadros y las flechas señalan dónde actuar.</span>
+              {!imageFailed && (
+                <a
+                  href={image}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2 font-semibold text-terracotta-700 underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-terracotta dark:text-terracotta-300"
+                >
+                  <Expand className="h-4 w-4" aria-hidden="true" />
+                  Ampliar captura
+                  <span className="sr-only"> (abre en una pestaña nueva)</span>
+                </a>
+              )}
+            </figcaption>
+          </figure>
         </div>
+
+        <nav
+          aria-label="Pasos de la guía"
+          className="grid shrink-0 grid-cols-2 items-center gap-2 border-t border-sand-300 bg-sand-100 px-4 py-3 dark:border-charcoal-700 dark:bg-charcoal-900 sm:grid-cols-[1fr_auto_1fr] sm:px-7"
+        >
+          <button
+            type="button"
+            disabled={stepIndex === 0}
+            onClick={() => goToStep(stepIndex - 1)}
+            className="order-2 inline-flex min-h-11 items-center justify-self-start gap-1 rounded-xl px-3 text-sm font-bold hover:bg-sand-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-terracotta disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-charcoal-700 sm:order-1"
+          >
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            Anterior
+          </button>
+          <div
+            className="order-1 col-span-2 flex justify-self-center sm:order-2 sm:col-span-1"
+            aria-label="Elegir un paso"
+          >
+            {content.steps.map((item, index) => (
+              <button
+                key={item.image}
+                type="button"
+                onClick={() => goToStep(index)}
+                aria-label={`Paso ${index + 1}: ${item.title}`}
+                aria-current={stepIndex === index ? 'step' : undefined}
+                className="flex h-11 w-11 items-center justify-center rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-terracotta"
+              >
+                <span
+                  className={`h-2.5 rounded-full ${stepIndex === index ? 'w-5 bg-terracotta' : 'w-2.5 bg-sand-400 dark:bg-charcoal-400'}`}
+                />
+              </button>
+            ))}
+          </div>
+          {stepIndex === content.steps.length - 1 ? (
+            <button
+              type="button"
+              onClick={onClose}
+              className="order-3 min-h-11 justify-self-end rounded-xl bg-terracotta-700 px-4 text-sm font-bold text-white hover:bg-terracotta-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+            >
+              Finalizar
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={() => goToStep(stepIndex + 1)}
+              className="order-3 inline-flex min-h-11 items-center justify-self-end gap-1 rounded-xl bg-terracotta-700 px-3 text-sm font-bold text-white hover:bg-terracotta-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta"
+            >
+              Siguiente
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            </button>
+          )}
+        </nav>
       </div>
-    </div>
+    </dialog>
   );
 };

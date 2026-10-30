@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, Sparkles, Store, ShoppingBag } from 'lucide-react';
+import { Eye, Plus, Sparkles, Store } from 'lucide-react';
 import { Producto } from '../../types';
 import { formatARS } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
@@ -96,12 +96,14 @@ export const ProductCard = ({
 
           <div className="flex items-center gap-1.5">
             <button
+              type="button"
               onClick={() => addItem(producto)}
-              className="p-2 rounded-xl bg-sand-200 dark:bg-charcoal-600 hover:bg-terracotta hover:text-white dark:hover:bg-terracotta text-charcoal-700 dark:text-sand-200 active:scale-95 transition-all shadow-xs"
-              title="Sumar a mi lista de compras"
-              aria-label={`Sumar ${producto.titulo} a mi lista`}
+              className="group/add inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-2 text-sm font-bold text-white shadow-xs transition-[background-color,transform] duration-150 ease-out hover:bg-forest-600 motion-safe:hover:scale-[1.03] motion-safe:active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-charcoal-700 motion-reduce:transition-none"
+              title="Agregar al carrito"
+              aria-label={`Agregar ${producto.titulo} al carrito`}
             >
-              <ShoppingBag className="w-4 h-4" />
+              <Plus aria-hidden="true" className="h-4 w-4 shrink-0 transition-transform duration-150 ease-out motion-safe:group-hover/add:rotate-90 motion-reduce:transition-none" />
+              <span>Agregar</span>
             </button>
           </div>
         </div>
