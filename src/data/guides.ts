@@ -16,7 +16,7 @@ export const guides = {
       {
         title: 'Explorá los productos y armá tu lista',
         description:
-          'Dentro de cada tienda podés consultar sus productos, precios y disponibilidad. Tocá un producto para ver sus detalles o el botón con la bolsa para sumarlo a tu lista de feria.',
+          'Dentro de cada tienda podés consultar sus productos, precios y disponibilidad. Tocá un producto para ver sus detalles o el botón “Agregar” con el signo + para sumarlo a tu lista de feria.',
         image: 'cliente-producto',
         alt: 'Catálogo de una tienda con el botón de agregar a la lista enmarcado y señalado con una flecha.',
       },
