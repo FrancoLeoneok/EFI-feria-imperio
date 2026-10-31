@@ -92,7 +92,7 @@ export const HeroBanner = () => {
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12">
           <a
-            href="#catalogo"
+            href="/#tiendas"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-terracotta hover:bg-terracotta-600 text-white font-bold text-sm sm:text-base shadow-lg hover:shadow-xl active:scale-95 transition-all"
           >
             <span>Explorar Catálogo Digital</span>
