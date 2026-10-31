@@ -2,7 +2,7 @@ export type GuideTab = 'usuario' | 'feriante';
 
 export const guides = {
   usuario: {
-    title: 'Guía de cliente',
+    title: 'Guía de usuario',
     introduction:
       'Descubrí los puestos y prepará tu visita a la feria. Podés explorar y armar tu lista sin iniciar sesión.',
     steps: [

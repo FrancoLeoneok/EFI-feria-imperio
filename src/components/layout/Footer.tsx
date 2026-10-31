@@ -102,7 +102,7 @@ export const Footer = () => {
               </li>
               <li>
                 <a
-                  href="#catalogo"
+                  href="/#tiendas"
                   className="hover:text-terracotta transition-colors"
                 >
                   Catálogo Digital
@@ -136,10 +136,10 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* Column 3: Guías */}
+          {/* Column 3: Guía */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-charcoal-900 dark:text-white mb-4">
-              Guías
+              Guía
             </h4>
             <ul className="space-y-2 text-xs text-charcoal-600 dark:text-sand-300">
               <li>
@@ -148,7 +148,7 @@ export const Footer = () => {
                   onClick={() => setOpenGuide(availableGuide)}
                   className="hover:text-terracotta transition-colors text-left"
                 >
-                  {isFerianteView ? 'Guía de feriante' : 'Guía de cliente'}
+                  {isFerianteView ? 'Guía de feriante' : 'Guía de usuario'}
                 </button>
               </li>
             </ul>
@@ -162,15 +162,27 @@ export const Footer = () => {
             <ul className="space-y-3 text-xs text-charcoal-600 dark:text-sand-300">
               <li className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-forest shrink-0 mt-0.5" />
-                <span>
+                <a
+                  href="https://www.google.com/maps/search/Paseo+del+Andino+Rio+Cuarto/@-33.127754,-64.3435158,15.5z?entry=ttu&g_ep=EgoyMDI2MTAyNy4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-terracotta transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-terracotta"
+                  aria-label="Paseo del Andino: Bv. Ameghino & Rieles (abrir en Google Maps en una nueva pestaña)"
+                >
                   <strong>Paseo del Andino:</strong> Bv. Ameghino & Rieles
-                </span>
+                </a>
               </li>
               <li className="flex items-start gap-2">
                 <MapPin className="w-3.5 h-3.5 text-terracotta shrink-0 mt-0.5" />
-                <span>
+                <a
+                  href="https://www.google.com/maps/place/Parque+Sarmiento/@-33.1052596,-64.3358801,17z/data=!3m1!4b1!4m6!3m5!1s0x95cdff8625dd71d5:0xe06fa5fb0444e57a!8m2!3d-33.1052596!4d-64.3333052!16s%2Fg%2F1tgpp6n8?entry=ttu&g_ep=EgoyMDI2MTAyNy4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-terracotta transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-terracotta"
+                  aria-label="Parque Sarmiento: Banda Norte (abrir en Google Maps en una nueva pestaña)"
+                >
                   <strong>Parque Sarmiento:</strong> Banda Norte
-                </span>
+                </a>
               </li>
             </ul>
           </div>
