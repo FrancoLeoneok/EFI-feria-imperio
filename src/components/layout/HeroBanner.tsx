@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { Calendar, MapPin, ArrowRight, ShieldCheck, Store } from 'lucide-react';
+import { useAuthStore } from '../../store/useAuthStore';
 
 export const HeroBanner = () => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const isClient = useAuthStore(
+    (state) => state.isAuthenticated && state.userRole === 'comprador'
+  );
 
 
   return (
@@ -16,7 +20,7 @@ export const HeroBanner = () => {
         {/* Next Edition Alert Chip */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-forest-100 dark:bg-forest-900/50 border border-forest-300 dark:border-forest-700 text-forest-700 dark:text-forest-300 text-xs sm:text-sm font-bold mb-6 shadow-xs animate-pulse">
           <Calendar className="w-4 h-4 text-forest" />
-          <span>Próxima Feria: Este Fin de Semana • 16:00 a 22:00 hs</span>
+          <span>Próxima Feria: Sábado 22/11 • 10hs a 20hs</span>
         </div>
 
         {/* Featured Promotional Banner with CTA */}
@@ -53,25 +57,28 @@ export const HeroBanner = () => {
           />
 
           {/* Accessible Overlay & "Postularme" Call to Action */}
-          <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 bg-gradient-to-t from-black/85 via-black/45 to-transparent flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
-            <div className="text-white text-center sm:text-left drop-shadow-sm">
-              <p className="text-xs sm:text-sm font-bold text-sand-100">
-                ¿Tenés un emprendimiento o elaborás artesanías?
-              </p>
-              <p className="text-[11px] sm:text-xs text-sand-300 hidden sm:block">
-                Sumá tu puesto a los paseos del Andino y Parque Sarmiento.
-              </p>
-            </div>
+          {!isClient && (
+            <div className="absolute inset-x-0 bottom-0 p-4 sm:p-6 bg-gradient-to-t from-black/85 via-black/45 to-transparent flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+              <div className="text-white text-center sm:text-left drop-shadow-sm">
+                <p className="text-xs sm:text-sm font-bold text-sand-100">
+                  ¿Tenés un emprendimiento o elaborás artesanías?
+                </p>
+                <p className="text-[11px] sm:text-xs text-sand-300 hidden sm:block">
+                  Sumá tu puesto a los paseos del Andino y Parque Sarmiento.
+                </p>
+              </div>
 
-            <a href="/#contacto"
-              className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-terracotta hover:bg-terracotta-600 active:scale-95 text-white font-bold text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
-              aria-label="Abrir formulario para postularme a la feria física"
-            >
-              <Store className="w-4 h-4" />
-              <span>Postularme</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </a>
-          </div>
+              <a
+                href="/#contacto"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 rounded-xl bg-terracotta hover:bg-terracotta-600 active:scale-95 text-white font-bold text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-white cursor-pointer"
+                aria-label="Abrir formulario para postularme a la feria física"
+              >
+                <Store className="w-4 h-4" />
+                <span>Postularme</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          )}
         </div>
 
         {/* Main Value Proposition Title */}
