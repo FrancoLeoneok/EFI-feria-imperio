@@ -90,7 +90,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                 Feria Imperio
               </span>
               <span className="text-[10px] sm:text-[11px] font-semibold text-forest dark:text-forest-400 tracking-wide mt-0.5">
-                Río Cuarto • Tiendas Locales
+                Río Cuarto
               </span>
             </div>
           </Link>
