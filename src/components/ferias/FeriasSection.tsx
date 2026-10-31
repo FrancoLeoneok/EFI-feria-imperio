@@ -1,4 +1,4 @@
-import { MapPin, Calendar, Clock, CheckCircle2 } from 'lucide-react';
+import { MapPin, Calendar, Clock } from 'lucide-react';
 import { Feriante } from '../../types';
 
 interface FeriasSectionProps {
@@ -13,11 +13,8 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16">
-          <span className="text-xs sm:text-sm font-bold text-forest uppercase tracking-wider bg-forest-100 dark:bg-forest-900/40 px-3 py-1 rounded-full">
-            Encuentros Presenciales
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 dark:text-white mt-3 mb-4">
-            Paseos de Ferias en Río Cuarto
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-charcoal-900 dark:text-white mb-4">
+            Ferias en Río Cuarto
           </h2>
           <p className="text-sm sm:text-base text-charcoal-600 dark:text-sand-300">
             Conocé los dos grandes polos de encuentro donde los feriantes despliegan sus gazebos cada fin de semana.
@@ -32,10 +29,6 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
               <div className="flex items-center justify-between mb-4">
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-terracotta/10 text-terracotta dark:bg-terracotta-900/40 dark:text-terracotta-300">
                   Espacio Cultural y Ferial
-                </span>
-                <span className="flex items-center gap-1 text-xs font-bold text-forest">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Activo</span>
                 </span>
               </div>
 
@@ -81,10 +74,6 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
               <div className="flex items-center justify-between mb-4">
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-forest/10 text-forest dark:bg-forest-900/40 dark:text-forest-300">
                   Pulmón Verde & Feria Familiar
-                </span>
-                <span className="flex items-center gap-1 text-xs font-bold text-forest">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Activo</span>
                 </span>
               </div>
 
