@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
-import { X, Trash2, Plus, Minus, ShoppingBag, ArrowRight } from 'lucide-react';
+import { X, Trash2, Plus, Minus, ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
-import { useAuthStore } from '../../store/useAuthStore';
 import { formatARS } from '../../utils/formatters';
 
 export const CartDrawer = () => {
@@ -30,8 +29,6 @@ export const CartDrawer = () => {
     };
   }, [isOpen, closeCart]);
 
-  const { currentComprador } = useAuthStore();
-
   if (!isOpen) return null;
 
   const totalItems = getTotalItems();
@@ -51,11 +48,11 @@ export const CartDrawer = () => {
           <div className="p-5 sm:p-6 border-b border-sand-200 dark:border-charcoal-700 flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div className="w-9 h-9 rounded-xl bg-terracotta/10 text-terracotta dark:bg-terracotta-900/40 flex items-center justify-center">
-                <ShoppingBag className="w-5 h-5" />
+                <ShoppingCart className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="font-extrabold text-base sm:text-lg text-charcoal-900 dark:text-white leading-tight">
-                  {currentComprador ? `Lista de ${currentComprador.nombre}` : 'Mi Lista de Feria'}
+                  Mi carrito
                 </h3>
                 <span className="text-xs text-charcoal-500 dark:text-sand-400">
                   {totalItems} {totalItems === 1 ? 'artículo' : 'artículos'} seleccionados
@@ -66,7 +63,7 @@ export const CartDrawer = () => {
             <button
               onClick={closeCart}
               className="p-2 rounded-xl text-charcoal-500 hover:text-charcoal-800 dark:text-sand-400 dark:hover:text-white hover:bg-sand-100 dark:hover:bg-charcoal-700 transition-colors"
-              aria-label="Cerrar panel de lista"
+              aria-label="Cerrar carrito"
             >
               <X className="w-5 h-5" />
             </button>
@@ -76,20 +73,21 @@ export const CartDrawer = () => {
           <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-4">
             {items.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 text-charcoal-400 dark:text-sand-500">
-                <ShoppingBag className="w-14 h-14 mb-3 text-sand-400 dark:text-charcoal-600 stroke-1" />
+                <ShoppingCart className="w-14 h-14 mb-3 text-sand-400 dark:text-charcoal-600 stroke-1" />
                 <h4 className="text-base font-bold text-charcoal-800 dark:text-sand-200 mb-1">
-                  Tu lista está vacía
+                  Tu carrito está vacío
                 </h4>
                 <p className="text-xs max-w-xs mb-6 text-charcoal-500 dark:text-sand-400">
                   Explorá el catálogo y sumá tus artesanías y delicias favoritas para presupuestar tu visita.
                 </p>
-                <button
+                <a
+                  href="/#tiendas"
                   onClick={closeCart}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-terracotta text-white font-bold text-xs shadow-sm hover:bg-terracotta-600 active:scale-95 transition-all"
                 >
                   <span>Explorar Catálogo</span>
                   <ArrowRight className="w-4 h-4" />
-                </button>
+                </a>
               </div>
             ) : (
               items.map((item) => (
