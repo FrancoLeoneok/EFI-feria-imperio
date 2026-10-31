@@ -203,7 +203,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
       aria-labelledby="login-modal-title"
     >
       <div
-        className="relative w-full max-w-lg bg-sand-100 dark:bg-charcoal-800 rounded-3xl shadow-2xl border border-sand-300 dark:border-charcoal-700 overflow-hidden text-charcoal-900 dark:text-sand-100 animate-in zoom-in-95 duration-200"
+        className="relative w-full max-w-lg max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain bg-sand-100 dark:bg-charcoal-800 rounded-3xl shadow-2xl border border-sand-300 dark:border-charcoal-700 text-charcoal-900 dark:text-sand-100 animate-in zoom-in-95 duration-200"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Cabecera del Modal con Identidad Adaptativa */}
@@ -215,8 +215,8 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
           }`}
         >
           <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none" />
-          <div className="flex items-center justify-between relative z-10">
-            <div className="flex items-center gap-3">
+          <div className="flex items-center justify-between gap-2 relative z-10">
+            <div className="flex min-w-0 items-center gap-3">
               <div className="w-12 h-12 rounded-2xl bg-white p-1 flex items-center justify-center shadow-md border border-white/30 shrink-0">
                 <img
                   src="/logo.png"
@@ -245,7 +245,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
 
             <button
               onClick={closeLoginModal}
-              className="p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
+              className="shrink-0 p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/20 transition-colors focus:outline-none focus:ring-2 focus:ring-white"
               aria-label="Cerrar ventana de ingreso"
             >
               <X className="w-5 h-5" />
@@ -293,7 +293,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
         </div>
 
         {/* Contenido / Cuerpo */}
-        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+        <div className="p-6 space-y-6">
           {/* Estado de Éxito Inmediato */}
           {loginExitoso ? (
             <div className="py-8 flex flex-col items-center text-center space-y-3">
@@ -501,7 +501,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                   </div>
 
                   <div>
-                    <div className="flex items-center justify-between mb-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 mb-1.5">
                       <label
                         htmlFor="login-comprador-password"
                         className="block text-xs font-bold text-charcoal-700 dark:text-sand-300 uppercase tracking-wider"
@@ -557,8 +557,8 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
 
               {/* Separador */}
               <div className="relative flex items-center justify-center">
-                <div className="border-t border-sand-300 dark:border-charcoal-600 w-full" />
-                <span className="bg-sand-100 dark:bg-charcoal-800 px-3 text-[11px] font-bold text-charcoal-400 dark:text-sand-400 uppercase tracking-widest absolute">
+                <div className="border-t border-sand-300 dark:border-charcoal-600 w-full absolute" />
+                <span className="bg-sand-100 dark:bg-charcoal-800 px-3 text-[11px] font-bold text-charcoal-400 dark:text-sand-400 uppercase tracking-widest text-center max-w-full relative sm:absolute">
                   O Acceso Rápido Vecinos Demo (1 click)
                 </span>
               </div>
@@ -634,7 +634,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                 </div>
 
                 <div>
-                  <div className="flex items-center justify-between mb-1.5">
+                  <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1 mb-1.5">
                     <label
                       htmlFor="login-password-feriante"
                       className="block text-xs font-bold text-charcoal-700 dark:text-sand-300 uppercase tracking-wider"
@@ -679,8 +679,8 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
 
               {/* Separador */}
               <div className="relative flex items-center justify-center">
-                <div className="border-t border-sand-300 dark:border-charcoal-600 w-full" />
-                <span className="bg-sand-100 dark:bg-charcoal-800 px-3 text-[11px] font-bold text-charcoal-400 dark:text-sand-400 uppercase tracking-widest absolute">
+                <div className="border-t border-sand-300 dark:border-charcoal-600 w-full absolute" />
+                <span className="bg-sand-100 dark:bg-charcoal-800 px-3 text-[11px] font-bold text-charcoal-400 dark:text-sand-400 uppercase tracking-widest text-center max-w-full relative sm:absolute">
                   O Acceso Rápido Feriante Demo (1 click)
                 </span>
               </div>
@@ -738,7 +738,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
         </div>
 
         {/* Footer del Modal */}
-        <div className="bg-sand-200/70 dark:bg-charcoal-900/50 px-6 py-3 border-t border-sand-300 dark:border-charcoal-700 flex items-center justify-between text-xs text-charcoal-500 dark:text-sand-400">
+        <div className="bg-sand-200/70 dark:bg-charcoal-900/50 px-6 py-3 border-t border-sand-300 dark:border-charcoal-700 flex flex-wrap items-center justify-between gap-2 text-xs text-charcoal-500 dark:text-sand-400">
           <span>
             {rolActivo === 'feriante'
               ? '¿Querés registrar un nuevo puesto artesanal?'
