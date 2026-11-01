@@ -8,6 +8,7 @@ import { LoginModal } from './components/auth/LoginModal';
 import { HomePage } from './pages/HomePage';
 import { StoreDetailPage } from './pages/StoreDetailPage';
 import { AdminPage } from './pages/AdminPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 export default function App() {
   const [busqueda, setBusqueda] = useState<string>('');
@@ -58,6 +59,7 @@ export default function App() {
 
             {/* 3. Panel de Administración / Mi Taller del Vendedor */}
             <Route path="/admin" element={<AdminPage onShowToast={showToast} />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
 
