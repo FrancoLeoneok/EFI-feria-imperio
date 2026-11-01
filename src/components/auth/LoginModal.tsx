@@ -226,14 +226,14 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                     ? 'Feriante'
                     : modoComprador === 'register'
                     ? 'Registro'
-                    : 'Portal Vecinos'}
+                    : 'Acceso'}
                 </span>
                 <h2 id="login-modal-title" className="text-xl sm:text-2xl font-black tracking-tight mt-0.5">
                   {rolActivo === 'feriante'
                     ? 'Iniciar sesión'
                     : modoComprador === 'register'
                     ? 'Crear Cuenta'
-                    : 'Ingreso de Compradores'}
+                    : 'Iniciar Sesión'}
                 </h2>
               </div>
             </div>
@@ -251,7 +251,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
               ? 'Gestioná tu emprendimiento desde un solo lugar: actualizá tus productos, administrá tus precios y mantené tu catálogo al día.'
               : modoComprador === 'register'
               ? 'Creá tu cuenta para descubrir emprendimientos, explorar sus productos y comprar de forma fácil y rápida.'
-              : 'Conectate para armar listas de pedidos, consultar directamente a los feriantes y guardar tus puestos favoritos.'}
+              : 'Conéctate para explorar los productos de cada emprendimiento, descubrir nuevos artículos y realizar tus compras directamente desde la plataforma.'}
           </p>
 
           {/* Selector de Pestañas Feriante / Comprador */}
@@ -496,7 +496,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                       htmlFor="login-comprador-nombre"
                       className="block text-xs font-bold text-charcoal-700 dark:text-sand-300 uppercase tracking-wider mb-1.5"
                     >
-                      Tu Nombre o Correo Electrónico
+                      Nombre de usuario o correo electrónico
                     </label>
                     <div className="relative">
                       <Mail className="w-4 h-4 text-charcoal-400 dark:text-sand-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -520,9 +520,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                       >
                         Contraseña
                       </label>
-                      <span className="text-[11px] text-forest dark:text-forest-400 font-medium">
-                        Clave demo: <code className="bg-sand-200 dark:bg-charcoal-600 px-1 py-0.5 rounded">comprador123</code>
-                      </span>
                     </div>
                     <div className="relative">
                       <Lock className="w-4 h-4 text-charcoal-400 dark:text-sand-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -561,7 +558,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                       onClick={() => setModoComprador('register')}
                       className="text-xs font-semibold text-forest dark:text-forest-400 hover:underline"
                     >
-                      ¿No tenés cuenta todavía? Crear tu cuenta como usuario normal
+                      ¿No tenés cuenta todavía? Crear tu cuenta
                     </button>
                   </div>
                 </form>
