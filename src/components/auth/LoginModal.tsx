@@ -17,9 +17,8 @@ import {
   UserPlus,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
-import { ferianteRepository } from '../../repositories';
 import { COMPRADORES_MOCK } from '../../data/mockData';
-import { Feriante, UsuarioComprador, RolUsuario } from '../../types';
+import { UsuarioComprador, RolUsuario } from '../../types';
 
 interface LoginModalProps {
   onShowToast?: (type: 'success' | 'error', title: string, message: string) => void;
@@ -33,7 +32,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
     loginModalMode,
     closeLoginModal,
     login,
-    loginDirecto,
     loginComprador,
     loginDirectoComprador,
     registrarComprador,
@@ -47,8 +45,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
   // Formulario Feriante
   const [usuarioFeriante, setUsuarioFeriante] = useState('');
   const [contraseniaFeriante, setContraseniaFeriante] = useState('feria123');
-  const [feriantesLista, setFeriantesLista] = useState<Feriante[]>([]);
-  const [cargandoLista, setCargandoLista] = useState(true);
 
   // Formulario Comprador Login
   const [usuarioComprador, setUsuarioComprador] = useState('');
@@ -67,14 +63,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
     if (loginModalOpen) {
       setRolActivo(loginModalRole || 'comprador');
       setModoComprador(loginModalMode || 'login');
-      setCargandoLista(true);
-      ferianteRepository
-        .getAll()
-        .then((data) => {
-          setFeriantesLista(data);
-          setCargandoLista(false);
-        })
-        .catch(() => setCargandoLista(false));
     } else {
       setLoginExitoso(null);
     }
@@ -115,22 +103,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
     }
   };
 
-  // Quick login para Feriantes
-  const handleQuickLoginFeriante = (f: Feriante) => {
-    loginDirecto(f);
-    setLoginExitoso(`¡Bienvenido al taller de ${f.nombreComercio}!`);
-    if (onShowToast) {
-      onShowToast(
-        'success',
-        'Sesión Iniciada',
-        `Ingresaste como ${f.nombreResponsable} (${f.nombreComercio})`
-      );
-    }
-    setTimeout(() => {
-      closeLoginModal();
-      navigate('/admin');
-    }, 600);
-  };
 
   // Submit para Compradores (Login)
   const handleSubmitComprador = async (e: React.FormEvent) => {
@@ -228,14 +200,14 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                 <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-white/25 text-[11px] font-bold tracking-wide uppercase">
                   <ShieldCheck className="w-3 h-3" />
                   {rolActivo === 'feriante'
-                    ? 'Acceso Ferial'
+                    ? 'Feriante'
                     : modoComprador === 'register'
                     ? 'Registro Vecinos'
                     : 'Portal Vecinos'}
                 </span>
                 <h2 id="login-modal-title" className="text-xl sm:text-2xl font-black tracking-tight mt-0.5">
                   {rolActivo === 'feriante'
-                    ? 'Ingreso de Feriantes'
+                    ? 'Iniciar sesión'
                     : modoComprador === 'register'
                     ? 'Crear Cuenta de Usuario'
                     : 'Ingreso de Compradores'}
@@ -253,7 +225,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
           </div>
           <p className="text-xs text-white/90 mt-3 relative z-10 font-medium">
             {rolActivo === 'feriante'
-              ? 'Accedé a tu taller digital para actualizar tu stock, precios y presencia en la feria.'
+              ? 'Gestioná tu emprendimiento desde un solo lugar: actualizá tus productos, administrá tus precios y mantené tu catálogo al día.'
               : modoComprador === 'register'
               ? 'Creá tu cuenta de usuario normal para armar presupuestos, contactar feriantes y guardar puestos favoritos.'
               : 'Conectate para armar listas de pedidos, consultar directamente a los feriantes y guardar tus puestos favoritos.'}
@@ -617,7 +589,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                     htmlFor="login-usuario-feriante"
                     className="block text-xs font-bold text-charcoal-700 dark:text-sand-300 uppercase tracking-wider mb-1.5"
                   >
-                    Puesto o Responsable
+                    Usuario
                   </label>
                   <div className="relative">
                     <UserCheck className="w-4 h-4 text-charcoal-400 dark:text-sand-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
@@ -639,12 +611,9 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                       htmlFor="login-password-feriante"
                       className="block text-xs font-bold text-charcoal-700 dark:text-sand-300 uppercase tracking-wider"
                     >
-                      Contraseña Ferial
+                      Contraseña
                     </label>
-                    <span className="text-[11px] text-terracotta dark:text-terracotta-300 font-medium">
-                      Clave demo: <code className="bg-sand-200 dark:bg-charcoal-600 px-1 py-0.5 rounded">feria123</code>
-                    </span>
-                  </div>
+                    </div>
                   <div className="relative">
                     <Lock className="w-4 h-4 text-charcoal-400 dark:text-sand-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                     <input
@@ -670,69 +639,14 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
                     </>
                   ) : (
                     <>
-                      <span>Iniciar Sesión en Mi Taller</span>
+                      <span>Iniciar sesión</span>
                       <ArrowRight className="w-4 h-4" />
                     </>
                   )}
                 </button>
               </form>
 
-              {/* Separador */}
-              <div className="relative flex items-center justify-center">
-                <div className="border-t border-sand-300 dark:border-charcoal-600 w-full absolute" />
-                <span className="bg-sand-100 dark:bg-charcoal-800 px-3 text-[11px] font-bold text-charcoal-400 dark:text-sand-400 uppercase tracking-widest text-center max-w-full relative sm:absolute">
-                  O Acceso Rápido Feriante Demo (1 click)
-                </span>
-              </div>
 
-              {/* Lista de Feriantes Disponibles para Demostración */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-terracotta">
-                  <Sparkles className="w-3.5 h-3.5" />
-                  <span>Seleccionar artesano para probar de inmediato:</span>
-                </div>
-
-                {cargandoLista ? (
-                  <div className="space-y-2">
-                    {[1, 2, 3].map((i) => (
-                      <div
-                        key={i}
-                        className="h-12 rounded-2xl bg-sand-200 dark:bg-charcoal-700 animate-pulse"
-                      />
-                    ))}
-                  </div>
-                ) : feriantesLista.length === 0 ? (
-                  <div className="p-4 text-center text-xs text-charcoal-500 dark:text-sand-400 bg-sand-200/50 dark:bg-charcoal-700/50 rounded-2xl">
-                    No hay feriantes cargados en el repositorio.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {feriantesLista.slice(0, 4).map((f) => (
-                      <button
-                        key={f.id}
-                        type="button"
-                        onClick={() => handleQuickLoginFeriante(f)}
-                        className="flex items-center gap-2.5 p-2 rounded-2xl bg-white dark:bg-charcoal-700 hover:bg-sand-200 dark:hover:bg-charcoal-600 border border-sand-300 dark:border-charcoal-600 text-left transition-all group active:scale-95"
-                      >
-                        <img
-                          src={f.avatarUrl}
-                          alt={f.nombreComercio}
-                          className="w-9 h-9 rounded-xl object-cover shrink-0 border border-terracotta/30"
-                          loading="lazy"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <p className="text-xs font-bold text-charcoal-900 dark:text-white truncate group-hover:text-terracotta transition-colors">
-                            {f.nombreComercio}
-                          </p>
-                          <p className="text-[10px] text-charcoal-500 dark:text-sand-400 truncate">
-                            {f.nombreResponsable}
-                          </p>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
             </>
           )}
         </div>
