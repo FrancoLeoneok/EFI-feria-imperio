@@ -127,7 +127,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     rubro: 'artesanias',
     ferianteId: 'fer-01',
     ferianteNombre: 'El Gaucho Tradición',
-    imagenUrl: 'https://images.unsplash.com/photo-1584905066893-7d5c142ba4e1?auto=format&fit=crop&w=800&q=80',
+    imagenUrl: '/products/mate-imperial-alpaca.png',
     enStock: true,
     destacado: true,
     especificaciones: {
@@ -161,7 +161,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     rubro: 'gastronomia',
     ferianteId: 'fer-03',
     ferianteNombre: 'Sabores Serranos',
-    imagenUrl: 'https://images.unsplash.com/photo-1589135233689-d58e3cb92b8e?auto=format&fit=crop&w=800&q=80',
+    imagenUrl: '/products/mermelada-frutos-rojos.png',
     enStock: true,
     destacado: false,
     especificaciones: {
