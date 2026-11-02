@@ -10,7 +10,6 @@ import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
-  CheckCircle2,
   User,
   Mail,
   MapPin,
@@ -57,8 +56,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
   const [registroConfirmarContrasenia, setRegistroConfirmarContrasenia] = useState('');
   const [errorPassword, setErrorPassword] = useState<string | null>(null);
 
-  const [loginExitoso, setLoginExitoso] = useState<string | null>(null);
-
   // Sincronizar roles y modos al abrir modal
   useEffect(() => {
     if (loginModalOpen) {
@@ -66,7 +63,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
       setModoComprador(loginModalMode || 'login');
       setErrorPassword(null);
     } else {
-      setLoginExitoso(null);
       setErrorPassword(null);
     }
   }, [loginModalOpen, loginModalRole, loginModalMode]);
@@ -91,14 +87,10 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
 
     const res = await login(usuarioFeriante, contraseniaFeriante);
     if (res.success) {
-      setLoginExitoso(res.message);
       if (onShowToast) {
         onShowToast('success', 'Sesión Iniciada', res.message);
       }
-      setTimeout(() => {
-        closeLoginModal();
-        navigate('/admin');
-      }, 700);
+      navigate('/admin');
     } else {
       if (onShowToast) {
         onShowToast('error', 'Error de Acceso', res.message);
@@ -114,13 +106,9 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
 
     const res = await loginComprador(usuarioComprador, contraseniaComprador);
     if (res.success) {
-      setLoginExitoso(res.message);
       if (onShowToast) {
         onShowToast('success', 'Sesión Iniciada', res.message);
       }
-      setTimeout(() => {
-        closeLoginModal();
-      }, 700);
     } else {
       if (onShowToast) {
         onShowToast('error', 'Error de Acceso', res.message);
@@ -160,13 +148,9 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
       'Río Cuarto, Córdoba'
     );
     if (res.success) {
-      setLoginExitoso(res.message);
       if (onShowToast) {
         onShowToast('success', '¡Cuenta Creada!', res.message);
       }
-      setTimeout(() => {
-        closeLoginModal();
-      }, 700);
     } else {
       if (onShowToast) {
         onShowToast('error', 'Error en Registro', res.message);
@@ -177,7 +161,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
   // Quick login para Compradores
   const handleQuickLoginComprador = (c: UsuarioComprador) => {
     loginDirectoComprador(c);
-    setLoginExitoso(`¡Bienvenido/a a la feria, ${c.nombre}!`);
     if (onShowToast) {
       onShowToast(
         'success',
@@ -185,9 +168,6 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
         `Conectado como ${c.nombre} (${c.ubicacion || 'Río Cuarto'})`
       );
     }
-    setTimeout(() => {
-      closeLoginModal();
-    }, 600);
   };
 
   return (
@@ -289,26 +269,7 @@ export const LoginModal = ({ onShowToast }: LoginModalProps) => {
 
         {/* Contenido / Cuerpo */}
         <div className="p-6 space-y-6">
-          {/* Estado de Éxito Inmediato */}
-          {loginExitoso ? (
-            <div className="py-8 flex flex-col items-center text-center space-y-3">
-              <div
-                className={`w-16 h-16 rounded-full flex items-center justify-center ${
-                  rolActivo === 'feriante'
-                    ? 'bg-terracotta-100 dark:bg-terracotta-900/50 text-terracotta'
-                    : 'bg-forest-100 dark:bg-forest-900/50 text-forest'
-                }`}
-              >
-                <CheckCircle2 className="w-10 h-10 animate-bounce" />
-              </div>
-              <h3 className="text-lg font-bold text-charcoal-900 dark:text-white">
-                ¡Operación Exitosa!
-              </h3>
-              <p className="text-sm text-charcoal-600 dark:text-sand-300">
-                {loginExitoso}
-              </p>
-            </div>
-          ) : rolActivo === 'comprador' ? (
+          {rolActivo === 'comprador' ? (
             /* ================= VISTA TAB COMPRADOR ================= */
             <>
               {/* Selector interno de modo comprador: Iniciar Sesión vs Crear Cuenta */}
