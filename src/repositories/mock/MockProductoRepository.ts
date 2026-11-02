@@ -2,9 +2,23 @@ import { PRODUCTOS_MOCK } from '../../data/mockData';
 import { FiltrosCatalogo, Producto, Rubro } from '../../types';
 import { IProductoRepository } from '../interfaces/IProductoRepository';
 import { normalizeSearchText } from '../../utils/formatters';
+import { readLocalProducts, saveLocalProduct, deleteLocalProduct } from './localProducts';
 
 export class MockProductoRepository implements IProductoRepository {
   private productos: Producto[] = [...PRODUCTOS_MOCK];
+
+  async create(producto: Producto): Promise<void> {
+    await saveLocalProduct(producto);
+  }
+
+  async update(producto: Producto): Promise<void> {
+    await saveLocalProduct(producto);
+  }
+
+  async delete(id: string): Promise<void> {
+    await deleteLocalProduct(id);
+    this.productos = this.productos.filter((producto) => producto.id !== id);
+  }
 
   // Helper para simular latencia de red asíncrona (200ms)
   private async delay(ms: number = 200): Promise<void> {
@@ -13,28 +27,30 @@ export class MockProductoRepository implements IProductoRepository {
 
   async getAll(): Promise<Producto[]> {
     await this.delay();
-    return [...this.productos];
+    const locales = await readLocalProducts();
+    const idsLocales = new Set(locales.map((producto) => producto.id));
+    return [...locales, ...this.productos.filter((producto) => !idsLocales.has(producto.id))];
   }
 
   async getById(id: string): Promise<Producto | null> {
     await this.delay();
-    const item = this.productos.find((p) => p.id === id);
+    const item = (await this.getAll()).find((p) => p.id === id);
     return item ? { ...item } : null;
   }
 
   async getByRubro(rubro: Rubro): Promise<Producto[]> {
     await this.delay();
-    return this.productos.filter((p) => p.rubro === rubro);
+    return (await this.getAll()).filter((p) => p.rubro === rubro);
   }
 
   async getByFeriante(ferianteId: string): Promise<Producto[]> {
     await this.delay();
-    return this.productos.filter((p) => p.ferianteId === ferianteId);
+    return (await this.getAll()).filter((p) => p.ferianteId === ferianteId);
   }
 
   async filtrar(filtros: FiltrosCatalogo): Promise<Producto[]> {
     await this.delay();
-    let resultado = [...this.productos];
+    let resultado = await this.getAll();
 
     // 1. Filtro por rubro
     if (filtros.rubro !== 'todos') {

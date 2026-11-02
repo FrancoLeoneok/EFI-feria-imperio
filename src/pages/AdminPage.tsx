@@ -6,9 +6,7 @@ import {
   ArrowLeft,
   ExternalLink,
   Package,
-  DollarSign,
   CheckCircle2,
-  XCircle,
   Edit2,
   Trash2,
   Save,
@@ -18,10 +16,12 @@ import {
   LogOut,
   ShieldCheck,
 } from 'lucide-react';
-import { Feriante, Producto, Rubro } from '../types';
+import { Feriante, Producto } from '../types';
 import { ferianteRepository, productoRepository } from '../repositories';
 import { useAuthStore } from '../store/useAuthStore';
+import { useStockStore } from '../store/useStockStore';
 import { formatARS } from '../utils/formatters';
+import { ProductFormDialog } from '../components/catalog/ProductFormDialog';
 
 interface AdminPageProps {
   onShowToast: (type: 'success' | 'error', title: string, message: string) => void;
@@ -34,17 +34,18 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
   const [selectedFerianteId, setSelectedFerianteId] = useState<string>(
     currentFeriante?.id || 'fer-01'
   );
-  const [productos, setProductos] = useState<Producto[]>([]);
+  const [productosBase, setProductos] = useState<Producto[]>([]);
+  const disponibilidad = useStockStore((state) => state.disponibilidad);
+  const setDisponibilidad = useStockStore((state) => state.setDisponibilidad);
+  const productos = productosBase.map((producto) => ({
+    ...producto,
+    enStock: disponibilidad[producto.id] ?? producto.enStock,
+  }));
   const [loading, setLoading] = useState(true);
 
   // Modal para agregar producto
   const [modalOpen, setModalOpen] = useState(false);
-  const [nuevoTitulo, setNuevoTitulo] = useState('');
-  const [nuevoPrecio, setNuevoPrecio] = useState(1000);
-  const [nuevaDesc, setNuevaDesc] = useState('');
-  const [nuevoRubro, setNuevoRubro] = useState<Rubro>('artesanias');
-  const [nuevaImg, setNuevaImg] = useState('');
-
+  const [editingProducto, setEditingProducto] = useState<Producto | null>(null);
   // Edición rápida de precio
   const [editingPrecioId, setEditingPrecioId] = useState<string | null>(null);
   const [tempPrecio, setTempPrecio] = useState<number>(0);
@@ -78,75 +79,65 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
 
   // Toggle de stock
   const handleToggleStock = (prodId: string) => {
-    setProductos((prev) =>
-      prev.map((p) => {
-        if (p.id === prodId) {
-          const nuevoEstado = !p.enStock;
-          onShowToast(
-            'success',
-            'Stock Actualizado',
-            `El producto "${p.titulo}" ahora figura ${nuevoEstado ? 'Disponible' : 'Bajo Pedido'}.`
-          );
-          return { ...p, enStock: nuevoEstado };
-        }
-        return p;
-      })
+    const producto = productos.find((p) => p.id === prodId);
+    if (!producto) return;
+    const nuevoEstado = !producto.enStock;
+    setDisponibilidad(prodId, nuevoEstado);
+    onShowToast(
+      'success',
+      'Stock Actualizado',
+      `El producto "${producto.titulo}" ahora figura ${nuevoEstado ? 'Disponible' : 'Sin stock'}.`
     );
   };
 
   // Guardar edición de precio
-  const handleSavePrecio = (prodId: string) => {
-    setProductos((prev) =>
-      prev.map((p) => {
-        if (p.id === prodId) {
-          onShowToast(
-            'success',
-            'Precio Actualizado',
-            `Nuevo precio para "${p.titulo}": ${formatARS(tempPrecio)}.`
-          );
-          return { ...p, precio: tempPrecio };
-        }
-        return p;
-      })
-    );
+  const handleSavePrecio = async (prodId: string) => {
+    const producto = productos.find((item) => item.id === prodId);
+    if (!producto) return;
+    if (!Number.isFinite(tempPrecio) || tempPrecio < 100) {
+      onShowToast('error', 'Precio inválido', 'Ingresá un precio de al menos $100.');
+      return;
+    }
+    const actualizado = { ...producto, precio: tempPrecio };
+    try {
+      await productoRepository.update(actualizado);
+    } catch {
+      onShowToast('error', 'No se pudo guardar', 'Intentá actualizar el precio otra vez.');
+      return;
+    }
+    setProductos((current) => current.map((item) => item.id === prodId ? actualizado : item));
+    onShowToast('success', 'Precio Actualizado', `Nuevo precio para "${producto.titulo}": ${formatARS(tempPrecio)}.`);
     setEditingPrecioId(null);
   };
 
   // Eliminar producto
-  const handleDeleteProducto = (prodId: string, titulo: string) => {
+  const handleDeleteProducto = async (prodId: string, titulo: string) => {
     if (confirm(`¿Estás seguro de eliminar "${titulo}" del catálogo de tu puesto?`)) {
+      try {
+        await productoRepository.delete(prodId);
+      } catch {
+        onShowToast('error', 'No se pudo eliminar', 'Intentá eliminar el producto otra vez.');
+        return;
+      }
       setProductos((prev) => prev.filter((p) => p.id !== prodId));
       onShowToast('success', 'Producto Eliminado', `"${titulo}" ha sido quitado de tu puesto.`);
     }
   };
 
-  // Crear nuevo producto
-  const handleCreateProducto = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!ferianteActivo) return;
-
-    const nuevo: Producto = {
-      id: `prd-${Date.now()}`,
-      titulo: nuevoTitulo,
-      precio: Number(nuevoPrecio),
-      descripcion: nuevaDesc,
-      rubro: nuevoRubro,
-      ferianteId: ferianteActivo.id,
-      ferianteNombre: ferianteActivo.nombreComercio,
-      imagenUrl:
-        nuevaImg.trim() ||
-        'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80',
-      enStock: true,
-      destacado: false,
-    };
-
+  const handleCreateProducto = async (nuevo: Producto) => {
+    await productoRepository.create(nuevo);
+    setDisponibilidad(nuevo.id, nuevo.enStock);
     setProductos((prev) => [nuevo, ...prev]);
     onShowToast('success', 'Producto Publicado', `"${nuevo.titulo}" se agregó a tu tienda.`);
     setModalOpen(false);
-    setNuevoTitulo('');
-    setNuevoPrecio(1000);
-    setNuevaDesc('');
-    setNuevaImg('');
+  };
+
+  const handleUpdateProducto = async (producto: Producto) => {
+    await productoRepository.update(producto);
+    setDisponibilidad(producto.id, producto.enStock);
+    setProductos((current) => current.map((item) => item.id === producto.id ? producto : item));
+    setEditingProducto(null);
+    onShowToast('success', 'Producto actualizado', `Se guardaron los cambios de "${producto.titulo}".`);
   };
 
   // Si no está autenticado, mostrar pantalla protegida amigable (Empty / Restricted Access State)
@@ -314,7 +305,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
               Catálogo de {ferianteActivo?.nombreComercio}
             </h2>
             <p className="text-xs text-charcoal-500 dark:text-sand-400">
-              Modificá precios o disponibilidad con un solo clic.
+              Editá tus productos, sus fotos y su disponibilidad.
             </p>
           </div>
 
@@ -442,30 +433,46 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
                       {/* Disponibilidad con Toggle */}
                       <td className="p-4 whitespace-nowrap">
                         <button
+                          type="button"
+                          role="switch"
+                          aria-checked={producto.enStock}
+                          aria-label={`Disponibilidad de ${producto.titulo}`}
                           onClick={() => handleToggleStock(producto.id)}
-                          className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                          className={`inline-flex min-h-11 items-center gap-2.5 rounded-lg px-1 text-xs font-bold focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-charcoal dark:focus-visible:outline-sand ${
                             producto.enStock
-                              ? 'bg-forest-100 dark:bg-forest-900/40 text-forest'
-                              : 'bg-sand-200 dark:bg-charcoal-700 text-charcoal-500 dark:text-sand-400'
+                              ? 'text-forest dark:text-forest-300'
+                              : 'text-red-700 dark:text-red-400'
                           }`}
                           title="Clic para alternar disponibilidad"
                         >
-                          {producto.enStock ? (
-                            <>
-                              <CheckCircle2 className="w-3.5 h-3.5" />
-                              <span>En Stock</span>
-                            </>
-                          ) : (
-                            <>
-                              <XCircle className="w-3.5 h-3.5" />
-                              <span>Bajo Pedido</span>
-                            </>
-                          )}
+                          <span
+                            aria-hidden="true"
+                            className={`inline-flex h-6 w-11 shrink-0 items-center rounded-full p-0.5 transition-colors duration-200 motion-reduce:transition-none ${
+                              producto.enStock ? 'bg-forest' : 'bg-red-600'
+                            }`}
+                          >
+                            <span
+                              className={`h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 motion-reduce:transition-none ${
+                                producto.enStock ? 'translate-x-5' : 'translate-x-0'
+                              }`}
+                            />
+                          </span>
+                          <span>{producto.enStock ? 'En Stock' : 'Sin stock'}</span>
                         </button>
                       </td>
 
                       {/* Acciones */}
                       <td className="p-4 text-right whitespace-nowrap sm:px-6">
+                        <button
+                          type="button"
+                          onClick={() => setEditingProducto(producto)}
+                          className="inline-flex min-h-11 items-center gap-1.5 rounded-xl px-3 text-xs font-bold text-forest hover:bg-forest-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-forest dark:text-forest-300 dark:hover:bg-forest-900/40"
+                          aria-label={`Editar producto ${producto.titulo}`}
+                          title="Editar producto"
+                        >
+                          <Edit2 aria-hidden="true" className="h-4 w-4" />
+                          Editar
+                        </button>
                         <button
                           onClick={() => handleDeleteProducto(producto.id, producto.titulo)}
                           className="p-2 text-charcoal-400 hover:text-red-500 dark:text-sand-500 dark:hover:text-red-400 transition-colors"
@@ -483,119 +490,14 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
         </div>
       </main>
 
-      {/* Modal para Crear Producto */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
-          <div className="bg-white dark:bg-charcoal-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full border border-sand-300 dark:border-charcoal-700 shadow-2xl space-y-5 animate-in zoom-in-95">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-black text-charcoal-900 dark:text-white">
-                Publicar en {ferianteActivo?.nombreComercio}
-              </h3>
-              <button
-                onClick={() => setModalOpen(false)}
-                className="p-1 rounded-lg text-charcoal-400 hover:text-charcoal-700 dark:hover:text-white"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <form onSubmit={handleCreateProducto} className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1">
-                  Título del Producto *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={nuevoTitulo}
-                  onChange={(e) => setNuevoTitulo(e.target.value)}
-                  placeholder="Ej: Mate Torneado en Algarrobo"
-                  className="w-full bg-sand-100 dark:bg-charcoal-700 text-charcoal-900 dark:text-white px-3.5 py-2.5 rounded-xl text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1">
-                    Precio ($ ARS) *
-                  </label>
-                  <div className="relative">
-                    <DollarSign className="w-3.5 h-3.5 absolute left-3 top-3 text-charcoal-400" />
-                    <input
-                      type="number"
-                      required
-                      min={100}
-                      value={nuevoPrecio}
-                      onChange={(e) => setNuevoPrecio(Number(e.target.value))}
-                      className="w-full bg-sand-100 dark:bg-charcoal-700 text-charcoal-900 dark:text-white pl-8 pr-3 py-2.5 rounded-xl text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1">
-                    Rubro *
-                  </label>
-                  <select
-                    value={nuevoRubro}
-                    onChange={(e) => setNuevoRubro(e.target.value as Rubro)}
-                    className="w-full bg-sand-100 dark:bg-charcoal-700 text-charcoal-900 dark:text-white px-3 py-2.5 rounded-xl text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
-                  >
-                    <option value="artesanias">Artesanías</option>
-                    <option value="ceramica">Cerámica</option>
-                    <option value="gastronomia">Gastronomía</option>
-                    <option value="marroquineria">Marroquinería</option>
-                    <option value="madera">Madera</option>
-                    <option value="indumentaria">Indumentaria</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1">
-                  Descripción Artesanal *
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={nuevaDesc}
-                  onChange={(e) => setNuevaDesc(e.target.value)}
-                  placeholder="Materiales, proceso de elaboración, medidas..."
-                  className="w-full bg-sand-100 dark:bg-charcoal-700 text-charcoal-900 dark:text-white px-3.5 py-2.5 rounded-xl text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none resize-none"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1">
-                  URL de la Imagen (opcional)
-                </label>
-                <input
-                  type="url"
-                  value={nuevaImg}
-                  onChange={(e) => setNuevaImg(e.target.value)}
-                  placeholder="https://images.unsplash.com/..."
-                  className="w-full bg-sand-100 dark:bg-charcoal-700 text-charcoal-900 dark:text-white px-3.5 py-2.5 rounded-xl text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
-                />
-              </div>
-
-              <div className="pt-2 flex justify-end gap-2.5">
-                <button
-                  type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="px-4 py-2.5 rounded-xl text-xs font-bold text-charcoal-600 dark:text-sand-300 hover:bg-sand-200 dark:hover:bg-charcoal-700 transition-colors"
-                >
-                  Cancelar
-                </button>
-                <button
-                  type="submit"
-                  className="px-6 py-2.5 rounded-xl bg-terracotta hover:bg-terracotta-600 text-white text-xs font-bold shadow-md transition-all active:scale-95"
-                >
-                  Publicar en Mi Tienda
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+      {(modalOpen || editingProducto) && ferianteActivo && (
+        <ProductFormDialog
+          key={editingProducto?.id ?? 'new'}
+          feriante={ferianteActivo}
+          producto={editingProducto ?? undefined}
+          onClose={() => { setModalOpen(false); setEditingProducto(null); }}
+          onSave={editingProducto ? handleUpdateProducto : handleCreateProducto}
+        />
       )}
     </div>
   );

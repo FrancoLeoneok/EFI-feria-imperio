@@ -306,9 +306,6 @@ export const HomePage = ({
         <ProductModal
           producto={selectedProductModal}
           onClose={() => setSelectedProductModal(null)}
-          ferianteUbicacion={
-            feriantes.find((f) => f.id === selectedProductModal.ferianteId)?.puestoNumero
-          }
         />
       )}
     </div>

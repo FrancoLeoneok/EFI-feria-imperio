@@ -1,0 +1,82 @@
+import assert from 'node:assert/strict';
+
+// Usage: node scripts/verify-product-edit.mjs [Playwright module URL] [app URL]
+const { chromium } = await import(process.argv[2] || 'playwright');
+const baseURL = process.argv[3] || 'http://127.0.0.1:5174';
+const browser = await chromium.launch({ channel: 'chrome', headless: true });
+const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+const page = await context.newPage();
+const errors = [];
+page.on('pageerror', (error) => errors.push(error.message));
+
+try {
+  await page.goto(baseURL);
+  await page.evaluate(async () => {
+    const { useAuthStore } = await import('/src/store/useAuthStore.ts');
+    const { FERIANTES_MOCK } = await import('/src/data/mockData.ts');
+    useAuthStore.getState().loginDirecto(FERIANTES_MOCK[0]);
+  });
+  await page.goto(`${baseURL}/admin`);
+  const edit = page.getByRole('button', { name: /^Editar producto / }).first();
+  await edit.waitFor();
+  const originalTitle = (await edit.getAttribute('aria-label')).replace('Editar producto ', '');
+  await edit.click();
+  const dialog = page.getByRole('dialog', { name: 'Editar producto', exact: true });
+  await dialog.waitFor();
+  assert.equal(await dialog.getByLabel('Título del producto').inputValue(), originalTitle);
+  assert.equal(await dialog.getByRole('button', { name: 'Quitar foto 1' }).count(), 1);
+  assert.ok(await dialog.getByLabel('Dato 1', { exact: true }).inputValue());
+  await dialog.getByLabel('Título del producto').fill('Cambio descartado');
+  await dialog.getByRole('button', { name: 'Cancelar', exact: true }).click();
+  await edit.click();
+  assert.equal(await dialog.getByLabel('Título del producto').inputValue(), originalTitle);
+  await dialog.getByLabel('Título del producto').fill('Producto editado completo');
+  await dialog.getByLabel('Precio ($ ARS)').fill('3456.78');
+  await dialog.getByLabel('Descripción artesanal').fill('Descripción actualizada para verificar la tienda.');
+  await dialog.getByLabel('Rubro', { exact: false }).selectOption('madera');
+  await dialog.getByLabel('Producto destacado', { exact: true }).check();
+  await dialog.getByLabel('En stock', { exact: true }).uncheck();
+  await dialog.getByRole('button', { name: 'Agregar dato a la ficha' }).click();
+  const names = dialog.getByRole('textbox', { name: /^Dato \d/ });
+  const last = await names.count();
+  await dialog.getByRole('button', { name: 'Guardar cambios', exact: true }).click();
+  await dialog.getByRole('alert').filter({ hasText: 'Completá el nombre y el valor' }).waitFor();
+  await dialog.getByLabel(`Dato ${last}`, { exact: true }).fill('Medidas');
+  await dialog.getByLabel(`Valor ${last}`, { exact: true }).fill('20 × 15 cm');
+  await dialog.locator('input[type=file]').setInputFiles('public/logo.png');
+  await dialog.getByRole('button', { name: 'Quitar foto 2' }).waitFor();
+  await dialog.getByRole('button', { name: 'Quitar foto 1' }).click();
+  assert.equal(await dialog.locator('article h3').innerText(), 'Producto editado completo');
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert.equal(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth), true);
+  await dialog.getByRole('button', { name: 'Guardar cambios', exact: true }).click();
+  await dialog.waitFor({ state: 'hidden' });
+  await page.reload();
+  const row = page.getByRole('row').filter({ hasText: 'Producto editado completo' });
+  await row.waitFor();
+  assert.equal(await row.count(), 1);
+  assert.equal(await row.getByRole('switch').getAttribute('aria-checked'), 'false');
+  const store = await page.context().newPage();
+  await store.goto(`${baseURL}/tienda/fer-01`);
+  await store.getByText('Catálogo del Puesto', { exact: true }).waitFor();
+  assert.equal(await store.getByRole('heading', { name: 'Producto editado completo', exact: true }).count(), 0);
+  await row.getByRole('button', { name: /^Editar producto / }).click();
+  assert.equal(await dialog.getByLabel('Precio ($ ARS)').inputValue(), '3456.78');
+  assert.equal(await dialog.getByLabel('Producto destacado', { exact: true }).isChecked(), true);
+  assert.equal(await dialog.getByLabel(`Valor ${last}`, { exact: true }).inputValue(), '20 × 15 cm');
+  await dialog.getByLabel('En stock', { exact: true }).check();
+  await dialog.getByRole('button', { name: 'Guardar cambios', exact: true }).click();
+  await dialog.waitFor({ state: 'hidden' });
+  await store.reload();
+  const card = store.locator('article').filter({ hasText: 'Producto editado completo' });
+  await card.waitFor();
+  assert.equal(await card.count(), 1);
+  assert.equal(await card.locator('img').getAttribute('src').then((src) => src.startsWith('data:image/png;')), true);
+  await card.getByRole('button', { name: /^Ver detalles de/ }).click();
+  await store.getByRole('dialog').getByText('20 × 15 cm', { exact: false }).waitFor();
+  assert.equal(await store.getByRole('dialog').getByText('Descripción actualizada para verificar la tienda.', { exact: true }).count(), 1);
+  assert.deepEqual(errors, []);
+  console.log('PASS: precarga, cancelar, validación de ficha, fotos, todos los campos, persistencia, sin duplicados, stock y detalle público.');
+} finally {
+  await browser.close();
+}

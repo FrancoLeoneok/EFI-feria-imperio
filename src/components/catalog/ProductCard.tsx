@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Eye, Plus, Sparkles, Store } from 'lucide-react';
+import { Plus, Sparkles, Store } from 'lucide-react';
 import { Producto } from '../../types';
 import { formatARS } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
@@ -7,11 +7,13 @@ import { useCartStore } from '../../store/useCartStore';
 interface ProductCardProps {
   producto: Producto;
   onVerDetalle: (producto: Producto) => void;
+  preview?: boolean;
 }
 
 export const ProductCard = ({
   producto,
   onVerDetalle,
+  preview = false,
 }: ProductCardProps) => {
   const [imageError, setImageError] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
@@ -49,15 +51,15 @@ export const ProductCard = ({
           )}
         </div>
 
-        {/* Quick View Hover Button */}
-        <button
+        {/* Toda la imagen abre el detalle, también con teclado. */}
+        {!preview && <button
+          type="button"
           onClick={() => onVerDetalle(producto)}
-          className="absolute inset-0 m-auto w-12 h-12 rounded-full bg-white/90 dark:bg-charcoal-800/90 text-charcoal-800 dark:text-white flex items-center justify-center shadow-lg opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95 transition-all duration-200"
+          className="absolute inset-0 h-full w-full cursor-pointer rounded-none focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-inset focus-visible:ring-terracotta"
           aria-label={`Ver detalles de ${producto.titulo}`}
           title="Ver detalles"
         >
-          <Eye className="w-5 h-5 text-terracotta" />
-        </button>
+        </button>}
       </div>
 
       {/* Card Content Body */}
@@ -70,11 +72,16 @@ export const ProductCard = ({
           </div>
 
           {/* Title */}
-          <h3
-            onClick={() => onVerDetalle(producto)}
-            className="text-base font-bold text-charcoal-900 dark:text-white line-clamp-2 hover:text-terracotta dark:hover:text-terracotta-300 cursor-pointer transition-colors leading-snug mb-2"
-          >
-            {producto.titulo}
+          <h3 className="text-base font-bold text-charcoal-900 dark:text-white leading-snug mb-2">
+            {preview ? producto.titulo : (
+              <button
+                type="button"
+                onClick={() => onVerDetalle(producto)}
+                className="line-clamp-2 text-left hover:text-terracotta dark:hover:text-terracotta-300 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-terracotta"
+              >
+                {producto.titulo}
+              </button>
+            )}
           </h3>
 
           {/* Short Description */}
@@ -87,7 +94,7 @@ export const ProductCard = ({
         <div className="pt-3 border-t border-sand-200 dark:border-charcoal-600 flex items-center justify-between gap-2">
           <div>
             <span className="block text-[11px] font-semibold text-charcoal-400 dark:text-sand-400">
-              {producto.enStock ? 'Disponible' : 'Bajo Pedido'}
+              {producto.enStock ? 'Disponible' : 'Sin stock'}
             </span>
             <span className="text-lg font-extrabold text-terracotta tracking-tight">
               {formatARS(producto.precio)}
@@ -97,6 +104,7 @@ export const ProductCard = ({
           <div className="flex items-center gap-1.5">
             <button
               type="button"
+              disabled={preview}
               onClick={() => addItem(producto)}
               className="group/add inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-2 text-sm font-bold text-white shadow-xs transition-[background-color,transform] duration-150 ease-out hover:bg-forest-600 motion-safe:hover:scale-[1.03] motion-safe:active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-charcoal-700 motion-reduce:transition-none"
               title="Agregar al carrito"

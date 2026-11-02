@@ -13,6 +13,7 @@ import { Feriante, Producto, UIStatus } from '../types';
 import { ferianteRepository, productoRepository } from '../repositories';
 import { ProductCard } from '../components/catalog/ProductCard';
 import { ProductModal } from '../components/catalog/ProductModal';
+import { useStockStore } from '../store/useStockStore';
 
 export const StoreDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,6 +23,7 @@ export const StoreDetailPage = () => {
   const [status, setStatus] = useState<UIStatus>('loading');
   const [productoModal, setProductoModal] = useState<Producto | null>(null);
   const [busquedaInterna, setBusquedaInterna] = useState('');
+  const disponibilidad = useStockStore((state) => state.disponibilidad);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -82,7 +84,8 @@ export const StoreDetailPage = () => {
   }
 
   // Productos filtrados dentro de la tienda
-  const productosFiltrados = productos.filter((p) => {
+  const productosDisponibles = productos.filter((p) => disponibilidad[p.id] ?? p.enStock);
+  const productosFiltrados = productosDisponibles.filter((p) => {
     if (!busquedaInterna.trim()) return true;
     const term = busquedaInterna.toLowerCase();
     return p.titulo.toLowerCase().includes(term) || p.descripcion.toLowerCase().includes(term);
@@ -200,7 +203,7 @@ export const StoreDetailPage = () => {
                 Creaciones de {feriante.nombreComercio}
               </h2>
               <p className="text-xs sm:text-sm text-charcoal-500 dark:text-sand-400">
-                {productos.length} {productos.length === 1 ? 'producto artesanal disponible' : 'productos artesanales disponibles'}
+                {productosDisponibles.length} {productosDisponibles.length === 1 ? 'producto artesanal disponible' : 'productos artesanales disponibles'}
               </p>
             </div>
 
@@ -221,18 +224,18 @@ export const StoreDetailPage = () => {
             <div className="p-10 text-center bg-white dark:bg-charcoal-800 rounded-3xl border border-sand-300 dark:border-charcoal-700">
               <Store className="w-12 h-12 text-terracotta mx-auto mb-3 opacity-60" />
               <h3 className="text-base font-bold text-charcoal-900 dark:text-white mb-1">
-                No encontramos productos con esa búsqueda
+                {productosDisponibles.length === 0 ? 'No hay productos disponibles por el momento' : 'No encontramos productos con esa búsqueda'}
               </h3>
               <p className="text-xs text-charcoal-500 dark:text-sand-400 mb-4">
-                Probá con otro término o limpiá el filtro interno.
+                {productosDisponibles.length === 0 ? 'Volvé pronto para ver las novedades de este puesto.' : 'Probá con otro término o limpiá el filtro interno.'}
               </p>
-              <button
+              {productosDisponibles.length > 0 && <button
                 onClick={() => setBusquedaInterna('')}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-forest text-white text-xs font-bold shadow-xs"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Ver todos los productos del puesto</span>
-              </button>
+              </button>}
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -250,9 +253,8 @@ export const StoreDetailPage = () => {
 
       {/* Modal de Ficha Técnica */}
       <ProductModal
-        producto={productoModal}
+        producto={productoModal && (disponibilidad[productoModal.id] ?? productoModal.enStock) ? productoModal : null}
         onClose={() => setProductoModal(null)}
-        ferianteUbicacion={`${ubicacionTexto} • ${feriante.puestoNumero}`}
       />
     </div>
   );

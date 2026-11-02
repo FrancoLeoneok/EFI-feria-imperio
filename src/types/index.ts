@@ -55,6 +55,7 @@ export interface Producto {
   ferianteId: string;
   ferianteNombre: string;
   imagenUrl: string;
+  imagenes?: string[];
   enStock: boolean;
   destacado: boolean;
   especificaciones?: Record<string, string>;

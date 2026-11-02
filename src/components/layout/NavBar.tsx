@@ -288,7 +288,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                       className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 hover:bg-sand-100 dark:hover:bg-charcoal-700 hover:text-forest transition-colors"
                     >
                       <LayoutDashboard className="w-4 h-4" />
-                      <span>Mi Taller (Panel de Stock)</span>
+                      <span>Administrar mi tienda</span>
                     </Link>
 
                     {currentFeriante && (
@@ -460,7 +460,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-forest text-white font-bold text-sm shadow-md"
                 >
                   <LayoutDashboard className="w-4 h-4" />
-                  <span>Ir a Mi Taller (Panel de Stock)</span>
+                  <span>Administrar mi tienda</span>
                 </Link>
                 <Link
                   to={`/tienda/${currentFeriante?.id}`}
