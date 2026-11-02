@@ -59,7 +59,7 @@ export const StoreCard = ({ feriante, conteoProductos }: StoreCardProps) => {
 
         {/* Título y Datos */}
         <div>
-          <h3 className="text-lg font-extrabold text-charcoal-900 dark:text-white leading-tight mb-1 group-hover:text-terracotta transition-colors">
+          <h3 className="text-lg font-extrabold text-charcoal-900 dark:text-white leading-tight mb-1 group-hover:text-terracotta dark:group-hover:text-terracotta-300 transition-colors">
             {feriante.nombreComercio}
           </h3>
           <p className="text-xs font-semibold text-terracotta dark:text-terracotta-300 mb-2">
@@ -72,7 +72,7 @@ export const StoreCard = ({ feriante, conteoProductos }: StoreCardProps) => {
 
           {/* Ubicación Física del Puesto */}
           <div className="flex items-center gap-1.5 text-xs text-charcoal-500 dark:text-sand-400 bg-sand-100 dark:bg-charcoal-800/70 p-2 rounded-xl mb-4">
-            <MapPin className="w-3.5 h-3.5 text-forest shrink-0" />
+            <MapPin className="w-3.5 h-3.5 text-forest dark:text-forest-300 shrink-0" />
             <span className="truncate font-medium">
               {ubicacionTexto} • {feriante.puestoNumero}
             </span>

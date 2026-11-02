@@ -102,13 +102,13 @@ export const CartDrawer = () => {
                   />
 
                   <div className="flex-1 min-w-0">
-                    <span className="text-[10px] font-bold text-forest uppercase tracking-wider block truncate">
+                    <span className="text-[10px] font-bold text-forest dark:text-forest-300 uppercase tracking-wider block truncate">
                       {item.producto.ferianteNombre}
                     </span>
                     <h5 className="text-xs font-bold text-charcoal-900 dark:text-white truncate">
                       {item.producto.titulo}
                     </h5>
-                    <span className="text-xs font-extrabold text-terracotta block mt-0.5">
+                    <span className="text-xs font-extrabold text-terracotta dark:text-terracotta-300 block mt-0.5">
                       {formatARS(item.producto.precio * item.cantidad)}
                     </span>
 
@@ -153,7 +153,7 @@ export const CartDrawer = () => {
                 <span className="text-xs font-semibold text-charcoal-500 dark:text-sand-400">
                   Total Estimado
                 </span>
-                <span className="text-xl font-extrabold text-terracotta">
+                <span className="text-xl font-extrabold text-terracotta dark:text-terracotta-300">
                   {formatARS(totalPrice)}
                 </span>
               </div>

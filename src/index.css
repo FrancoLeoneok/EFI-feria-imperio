@@ -5,6 +5,15 @@
 @layer base {
   html {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  select option {
+    @apply bg-white text-charcoal-800 dark:bg-charcoal-700 dark:text-sand-100;
   }
   
   body {

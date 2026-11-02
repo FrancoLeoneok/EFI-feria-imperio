@@ -69,7 +69,7 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
         <div className="bg-white dark:bg-charcoal-700 rounded-3xl p-6 sm:p-12 border border-sand-300 dark:border-charcoal-600 shadow-xl">
           {/* Header */}
           <div className="text-center max-w-xl mx-auto mb-10">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta text-xs font-bold mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta dark:text-terracotta-300 text-xs font-bold mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Convocatoria Abierta</span>
             </div>
@@ -135,7 +135,7 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
               {/* Instagram */}
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
-                  <Instagram className="w-3.5 h-3.5 text-terracotta" />
+                  <Instagram className="w-3.5 h-3.5 text-terracotta dark:text-terracotta-300" />
                   <span>Instagram (opcional)</span>
                 </label>
                 <input
@@ -151,7 +151,7 @@ export const ContactForm = ({ onSuccessToast, onErrorToast }: ContactFormProps) 
               {/* Facebook */}
               <div>
                 <label className="flex items-center gap-1.5 text-xs font-bold text-charcoal-700 dark:text-sand-200 mb-1.5">
-                  <Facebook className="w-3.5 h-3.5 text-terracotta" />
+                  <Facebook className="w-3.5 h-3.5 text-terracotta dark:text-terracotta-300" />
                   <span>Facebook (opcional)</span>
                 </label>
                 <input

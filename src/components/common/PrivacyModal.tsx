@@ -74,7 +74,7 @@ export const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
           {/* Introducción */}
           <div className="p-4 rounded-2xl bg-sand-100 dark:bg-charcoal-700/60 border border-sand-300 dark:border-charcoal-600">
             <p className="font-semibold text-charcoal-900 dark:text-white">
-              En <strong className="text-terracotta">Feria Imperio</strong> promovemos la economía popular, artesanal y sustentable de Río Cuarto (Paseo del Andino y Parque Sarmiento). La privacidad de los artesanos y visitantes es un principio fundacional: no lucramos con datos personales ni utilizamos intermediarios comerciales.
+              En <strong className="text-terracotta dark:text-terracotta-300">Feria Imperio</strong> promovemos la economía popular, artesanal y sustentable de Río Cuarto (Paseo del Andino y Parque Sarmiento). La privacidad de los artesanos y visitantes es un principio fundacional: no lucramos con datos personales ni utilizamos intermediarios comerciales.
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
         {/* Pie del Modal */}
         <div className="bg-sand-200/70 dark:bg-charcoal-900/60 px-6 py-4 border-t border-sand-300 dark:border-charcoal-700 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
           <div className="flex items-center gap-1.5 text-xs text-charcoal-500 dark:text-sand-400">
-            <CheckCircle2 className="w-3.5 h-3.5 text-forest" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-forest dark:text-forest-300" />
             <span>Última revisión: Octubre 2026 • Río Cuarto</span>
           </div>
           <button

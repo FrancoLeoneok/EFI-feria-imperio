@@ -41,11 +41,11 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
 
               <div className="space-y-2.5 text-xs text-charcoal-700 dark:text-sand-200">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-terracotta shrink-0" />
+                  <MapPin className="w-4 h-4 text-terracotta dark:text-terracotta-300 shrink-0" />
                   <span>Bv. Ameghino y Rieles, Río Cuarto</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-forest shrink-0" />
+                  <Calendar className="w-4 h-4 text-forest dark:text-forest-300 shrink-0" />
                   <span>Sábados, Domingos y Feriados</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -60,7 +60,7 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
                 href="https://maps.google.com/?q=Paseo+del+Andino+Rio+Cuarto"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-terracotta hover:text-terracotta-600 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-terracotta dark:text-terracotta-300 hover:text-terracotta-600 transition-colors"
               >
                 <span>Ver ubicación en Google Maps</span>
                 <span>→</span>
@@ -86,11 +86,11 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
 
               <div className="space-y-2.5 text-xs text-charcoal-700 dark:text-sand-200">
                 <div className="flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-terracotta shrink-0" />
+                  <MapPin className="w-4 h-4 text-terracotta dark:text-terracotta-300 shrink-0" />
                   <span>Av. Marcelo T. de Alvear, Banda Norte, Río Cuarto</span>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-forest shrink-0" />
+                  <Calendar className="w-4 h-4 text-forest dark:text-forest-300 shrink-0" />
                   <span>Sábados y Domingos</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -105,7 +105,7 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
                 href="https://maps.google.com/?q=Parque+Sarmiento+Rio+Cuarto"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-forest hover:text-forest-600 transition-colors"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-forest dark:text-forest-300 hover:text-forest-600 transition-colors"
               >
                 <span>Ver ubicación en Google Maps</span>
                 <span>→</span>
@@ -125,7 +125,7 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
                 Artesanos y emprendedores que estarán presencialmente con sus gazebos en feria.
               </p>
             </div>
-            <span className="text-xs font-bold text-forest bg-forest-100 dark:bg-forest-900/40 px-3 py-1 rounded-full self-start sm:self-auto">
+            <span className="text-xs font-bold text-forest dark:text-forest-300 bg-forest-100 dark:bg-forest-900/40 px-3 py-1 rounded-full self-start sm:self-auto">
               {feriantesConfirmados.length} puestos listos
             </span>
           </div>
@@ -150,7 +150,7 @@ export const FeriasSection = ({ feriantes }: FeriasSectionProps) => {
                   <p className="text-[11px] text-charcoal-500 dark:text-sand-400 truncate">
                     {feriante.puestoNumero}
                   </p>
-                  <span className="text-[10px] font-bold text-terracotta uppercase tracking-wide">
+                  <span className="text-[10px] font-bold text-terracotta dark:text-terracotta-300 uppercase tracking-wide">
                     {feriante.rubroPrincipal}
                   </span>
                 </div>

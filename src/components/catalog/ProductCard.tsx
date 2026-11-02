@@ -67,7 +67,7 @@ export const ProductCard = ({
         <div>
           {/* Feriante / Puesto Tag */}
           <div className="flex items-center gap-1.5 text-xs text-charcoal-500 dark:text-sand-400 mb-1.5">
-            <Store className="w-3.5 h-3.5 text-forest" />
+            <Store className="w-3.5 h-3.5 text-forest dark:text-forest-300" />
             <span className="font-semibold line-clamp-1">{producto.ferianteNombre}</span>
           </div>
 
@@ -96,7 +96,7 @@ export const ProductCard = ({
             <span className="block text-[11px] font-semibold text-charcoal-400 dark:text-sand-400">
               {producto.enStock ? 'Disponible' : 'Sin stock'}
             </span>
-            <span className="text-lg font-extrabold text-terracotta tracking-tight">
+            <span className="text-lg font-extrabold text-terracotta dark:text-terracotta-300 tracking-tight">
               {formatARS(producto.precio)}
             </span>
           </div>

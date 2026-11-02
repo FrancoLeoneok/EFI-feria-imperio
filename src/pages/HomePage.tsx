@@ -115,7 +115,7 @@ export const HomePage = ({
         {/* Cabecera Adaptativa: Vista Exclusiva Cliente vs Vista General */}
         {esCliente ? (
           <div className="mb-8">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-100 dark:bg-forest-900/40 text-forest text-xs font-bold mb-3">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-100 dark:bg-forest-900/40 text-forest dark:text-forest-300 text-xs font-bold mb-3">
               <Sparkles className="w-3.5 h-3.5" />
               <span>Catálogo Digital de Feria Imperio</span>
             </div>
@@ -136,7 +136,7 @@ export const HomePage = ({
                   onClick={() => setVistaCliente('productos')}
                   className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     vistaCliente === 'productos'
-                      ? 'bg-white dark:bg-charcoal-700 text-terracotta shadow-xs'
+                      ? 'bg-white dark:bg-charcoal-700 text-terracotta dark:text-terracotta-300 shadow-xs'
                       : 'text-charcoal-600 dark:text-sand-400 hover:text-charcoal-900 dark:hover:text-white'
                   }`}
                   aria-pressed={vistaCliente === 'productos'}
@@ -164,7 +164,7 @@ export const HomePage = ({
         ) : (
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta text-xs font-bold mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta-100 dark:bg-terracotta-900/40 text-terracotta dark:text-terracotta-300 text-xs font-bold mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Puestos y Emprendedores Locales</span>
               </div>
@@ -179,8 +179,9 @@ export const HomePage = ({
             {/* Filtros de Ubicación y Presencia */}
             <div className="flex flex-wrap items-center gap-2.5">
               <div className="flex items-center gap-1.5 bg-white dark:bg-charcoal-700 px-3 py-2 rounded-xl border border-sand-300 dark:border-charcoal-600 text-xs font-semibold shadow-xs">
-                <MapPin className="w-3.5 h-3.5 text-forest" />
+                <MapPin className="w-3.5 h-3.5 text-forest dark:text-forest-300" />
                 <select
+                  aria-label="Filtrar por paseo"
                   value={ubicacionActiva}
                   onChange={(e) => setUbicacionActiva(e.target.value as UbicacionFeria | 'todas')}
                   className="bg-transparent text-charcoal-800 dark:text-sand-100 focus:outline-none cursor-pointer"
@@ -207,9 +208,9 @@ export const HomePage = ({
         {busqueda.trim() !== '' && (
           <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-sand-200 dark:bg-charcoal-700 px-4 py-3 rounded-2xl text-xs border border-sand-300 dark:border-charcoal-600 shadow-xs">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-terracotta shrink-0" />
+              <Sparkles className="w-4 h-4 text-terracotta dark:text-terracotta-300 shrink-0" />
               <span className="text-charcoal-800 dark:text-sand-100">
-                Resultados para: <strong className="text-terracotta">"{busqueda}"</strong>
+                Resultados para: <strong className="text-terracotta dark:text-terracotta-300">"{busqueda}"</strong>
                 {' • '}
                 <span className="font-semibold">
                   {feriantes.length} {feriantes.length === 1 ? 'puesto' : 'puestos'}
@@ -222,7 +223,7 @@ export const HomePage = ({
             </div>
             <button
               onClick={handleResetFilters}
-              className="text-terracotta hover:underline font-bold self-start sm:self-auto cursor-pointer"
+              className="text-terracotta dark:text-terracotta-300 hover:underline font-bold self-start sm:self-auto cursor-pointer"
             >
               Limpiar búsqueda
             </button>
@@ -257,7 +258,7 @@ export const HomePage = ({
               <div className="mb-10 p-5 sm:p-6 bg-white dark:bg-charcoal-800 rounded-3xl border border-sand-300 dark:border-charcoal-700 shadow-card">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-sand-200 dark:border-charcoal-700">
                   <div className="flex items-center gap-2">
-                    <ShoppingBag className="w-5 h-5 text-terracotta" />
+                    <ShoppingBag className="w-5 h-5 text-terracotta dark:text-terracotta-300" />
                     <h3 className="text-base sm:text-lg font-extrabold text-charcoal-900 dark:text-white">
                       Artículos encontrados ({productosFiltrados.length})
                     </h3>

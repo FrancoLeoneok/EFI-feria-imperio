@@ -181,7 +181,7 @@ export const StoreDetailPage = () => {
                 Ubicación del Puesto en Feria
               </h3>
               <div className="flex items-start gap-2 text-xs text-charcoal-700 dark:text-sand-200">
-                <MapPin className="w-4 h-4 text-terracotta shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-terracotta dark:text-terracotta-300 shrink-0 mt-0.5" />
                 <div>
                   <p className="font-bold text-charcoal-900 dark:text-white">{ubicacionTexto}</p>
                   <p className="text-charcoal-500 dark:text-sand-400">{feriante.puestoNumero}</p>
@@ -195,7 +195,7 @@ export const StoreDetailPage = () => {
         <section>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-100 dark:bg-forest-900/40 text-forest text-xs font-bold mb-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-forest-100 dark:bg-forest-900/40 text-forest dark:text-forest-300 text-xs font-bold mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Catálogo del Puesto</span>
               </div>
@@ -222,7 +222,7 @@ export const StoreDetailPage = () => {
           {/* Grilla de Productos */}
           {productosFiltrados.length === 0 ? (
             <div className="p-10 text-center bg-white dark:bg-charcoal-800 rounded-3xl border border-sand-300 dark:border-charcoal-700">
-              <Store className="w-12 h-12 text-terracotta mx-auto mb-3 opacity-60" />
+              <Store className="w-12 h-12 text-terracotta dark:text-terracotta-300 mx-auto mb-3 opacity-60" />
               <h3 className="text-base font-bold text-charcoal-900 dark:text-white mb-1">
                 {productosDisponibles.length === 0 ? 'No hay productos disponibles por el momento' : 'No encontramos productos con esa búsqueda'}
               </h3>

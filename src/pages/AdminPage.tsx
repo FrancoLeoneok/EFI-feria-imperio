@@ -145,12 +145,12 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
     return (
       <div className="min-h-screen bg-sand dark:bg-charcoal text-charcoal-900 dark:text-sand-100 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-sand-100 dark:bg-charcoal-800 rounded-3xl p-8 border border-sand-300 dark:border-charcoal-700 shadow-xl text-center space-y-6 animate-in zoom-in-95">
-          <div className="w-20 h-20 rounded-3xl bg-forest/10 dark:bg-forest-900/30 text-forest mx-auto flex items-center justify-center">
+          <div className="w-20 h-20 rounded-3xl bg-forest/10 dark:bg-forest-900/30 text-forest dark:text-forest-300 mx-auto flex items-center justify-center">
             <Lock className="w-10 h-10" />
           </div>
 
           <div className="space-y-2">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta/10 text-terracotta text-xs font-bold uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-terracotta/10 text-terracotta dark:text-terracotta-300 text-xs font-bold uppercase tracking-wider">
               <ShieldCheck className="w-3.5 h-3.5" /> Área de Feriantes
             </span>
             <h1 className="text-2xl font-black text-charcoal-900 dark:text-white">
@@ -255,7 +255,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
         {ferianteActivo && (
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
             <div className="bg-white dark:bg-charcoal-800 p-5 rounded-3xl border border-sand-300 dark:border-charcoal-700 shadow-card flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-terracotta/10 text-terracotta dark:bg-terracotta-900/40 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-terracotta/10 text-terracotta dark:text-terracotta-300 dark:bg-terracotta-900/40 flex items-center justify-center shrink-0">
                 <Package className="w-6 h-6" />
               </div>
               <div>
@@ -269,14 +269,14 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
             </div>
 
             <div className="bg-white dark:bg-charcoal-800 p-5 rounded-3xl border border-sand-300 dark:border-charcoal-700 shadow-card flex items-center gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-forest/10 text-forest dark:bg-forest-900/40 flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-2xl bg-forest/10 text-forest dark:text-forest-300 dark:bg-forest-900/40 flex items-center justify-center shrink-0">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
               <div>
                 <span className="text-xs text-charcoal-500 dark:text-sand-400 block font-semibold">
                   Disponibles en Stock
                 </span>
-                <span className="text-2xl font-black text-forest">
+                <span className="text-2xl font-black text-forest dark:text-forest-300">
                   {productos.filter((p) => p.enStock).length}
                 </span>
               </div>
@@ -398,7 +398,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
                             />
                             <button
                               onClick={() => handleSavePrecio(producto.id)}
-                              className="p-1 text-forest hover:bg-forest-100 dark:hover:bg-forest-900/40 rounded"
+                              className="p-1 text-forest dark:text-forest-300 hover:bg-forest-100 dark:hover:bg-forest-900/40 rounded"
                               title="Guardar precio"
                             >
                               <Save className="w-3.5 h-3.5" />
@@ -413,7 +413,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
                           </div>
                         ) : (
                           <div className="flex items-center gap-2">
-                            <span className="font-black text-terracotta text-sm">
+                            <span className="font-black text-terracotta dark:text-terracotta-300 text-sm">
                               {formatARS(producto.precio)}
                             </span>
                             <button

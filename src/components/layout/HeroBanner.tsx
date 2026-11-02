@@ -19,7 +19,7 @@ export const HeroBanner = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         {/* Next Edition Alert Chip */}
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-forest-100 dark:bg-forest-900/50 border border-forest-300 dark:border-forest-700 text-forest-700 dark:text-forest-300 text-xs sm:text-sm font-bold mb-6 shadow-xs animate-pulse">
-          <Calendar className="w-4 h-4 text-forest" />
+          <Calendar className="w-4 h-4 text-forest dark:text-forest-300" />
           <span>Próxima Feria: Sábado 22/11 • 10hs a 20hs</span>
         </div>
 
@@ -84,7 +84,7 @@ export const HeroBanner = () => {
         {/* Main Value Proposition Title */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-charcoal-900 dark:text-white max-w-4xl mx-auto leading-tight mb-6">
           El corazón de las ferias de{' '}
-          <span className="text-terracotta underline decoration-terracotta-300 underline-offset-8">
+          <span className="text-terracotta dark:text-terracotta-300 underline decoration-terracotta-300 underline-offset-8">
             Río Cuarto
           </span>
         </h1>
@@ -109,7 +109,7 @@ export const HeroBanner = () => {
             href="#ferias"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white dark:bg-charcoal-700 hover:bg-sand-100 dark:hover:bg-charcoal-600 text-charcoal-800 dark:text-sand-100 border border-sand-300 dark:border-charcoal-600 font-bold text-sm sm:text-base shadow-xs active:scale-95 transition-all"
           >
-            <MapPin className="w-4 h-4 text-forest" />
+            <MapPin className="w-4 h-4 text-forest dark:text-forest-300" />
             <span>Ver Paseos & Ubicaciones</span>
           </a>
         </div>
@@ -117,7 +117,7 @@ export const HeroBanner = () => {
         {/* Trust & Location Badges */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
           <div className="flex items-center justify-center gap-2.5 p-3 rounded-2xl bg-white/70 dark:bg-charcoal-800/70 border border-sand-300 dark:border-charcoal-700 shadow-card">
-            <MapPin className="w-5 h-5 text-terracotta shrink-0" />
+            <MapPin className="w-5 h-5 text-terracotta dark:text-terracotta-300 shrink-0" />
             <div className="text-left">
               <p className="text-xs font-bold text-charcoal-900 dark:text-white">Paseo del Andino</p>
               <p className="text-[11px] text-charcoal-500 dark:text-sand-400">Bv. Ameghino & Rieles</p>
@@ -125,7 +125,7 @@ export const HeroBanner = () => {
           </div>
 
           <div className="flex items-center justify-center gap-2.5 p-3 rounded-2xl bg-white/70 dark:bg-charcoal-800/70 border border-sand-300 dark:border-charcoal-700 shadow-card">
-            <MapPin className="w-5 h-5 text-forest shrink-0" />
+            <MapPin className="w-5 h-5 text-forest dark:text-forest-300 shrink-0" />
             <div className="text-left">
               <p className="text-xs font-bold text-charcoal-900 dark:text-white">Parque Sarmiento</p>
               <p className="text-[11px] text-charcoal-500 dark:text-sand-400">Banda Norte</p>

@@ -111,7 +111,7 @@ export const ProductModal = ({
 
               {/* Price */}
               <div className="mb-6">
-                <span className="text-2xl sm:text-3xl font-extrabold text-terracotta">
+                <span className="text-2xl sm:text-3xl font-extrabold text-terracotta dark:text-terracotta-300">
                   {formatARS(producto.precio)}
                 </span>
               </div>
@@ -125,13 +125,13 @@ export const ProductModal = ({
               {producto.especificaciones && (
                 <div className="bg-sand-100 dark:bg-charcoal-700/60 p-4 rounded-2xl border border-sand-200 dark:border-charcoal-600">
                   <h4 className="text-sm font-bold text-charcoal-800 dark:text-sand-200 mb-3 flex items-center gap-2">
-                    <Tag className="w-3.5 h-3.5 text-terracotta" />
+                    <Tag className="w-3.5 h-3.5 text-terracotta dark:text-terracotta-300" />
                     <span>Ficha Artesanal</span>
                   </h4>
                   <ul className="space-y-3 text-sm text-charcoal-600 dark:text-sand-300">
                     {Object.entries(producto.especificaciones).map(([key, val]) => (
                       <li key={key} className="flex items-start gap-2">
-                        <Check className="w-3.5 h-3.5 text-forest shrink-0 mt-0.5" />
+                        <Check className="w-3.5 h-3.5 text-forest dark:text-forest-300 shrink-0 mt-0.5" />
                         <span>
                           <strong>{key}:</strong> {val}
                         </span>
