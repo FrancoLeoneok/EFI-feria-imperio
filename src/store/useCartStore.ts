@@ -2,6 +2,7 @@ import { customerPrice, roundMoney } from '../utils/pricing';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Producto } from '../types';
+import { useStockStore } from './useStockStore';
 
 export interface CartItem {
   producto: Producto;
@@ -31,6 +32,7 @@ export const useCartStore = create<CartStore>()(
       isOpen: false,
 
       addItem: (producto: Producto) => {
+        if (!(useStockStore.getState().disponibilidad[producto.id] ?? producto.enStock)) return;
         set((state) => {
           const existing = state.items.find((item) => item.producto.id === producto.id);
           if (existing) {

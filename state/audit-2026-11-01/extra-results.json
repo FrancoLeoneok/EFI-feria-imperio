@@ -1,0 +1,55 @@
+[
+  {
+    "name": "Product question and seller answer through public UI",
+    "details": {
+      "published": true,
+      "answered": true,
+      "visibleOnProduct": true
+    },
+    "status": "completed"
+  },
+  {
+    "name": "Deleting seeded product reappears after reload",
+    "details": {
+      "removedImmediately": true,
+      "reappearedAfterReload": true
+    },
+    "status": "completed"
+  },
+  {
+    "name": "Stock disabled prevents adding and buying existing cart",
+    "details": {
+      "addDisabled": true,
+      "checkoutError": [
+        "Mate Imperial Cincelado en Alpaca ya no está disponible. Quitalo del carrito para continuar."
+      ]
+    },
+    "status": "completed"
+  },
+  {
+    "name": "Guest cart unreachable after closing drawer",
+    "details": {
+      "desktopCartButtons": 0,
+      "mobileCartButtons": 0,
+      "items": 2
+    },
+    "status": "completed"
+  },
+  {
+    "name": "Out of stock product card allows adding",
+    "details": {
+      "text": "MADERA\nTaller Criollo Maderas\nTabla para Asado en Algarrobo Macizo\n\nTabla parrillera de una sola pieza con canaleta anti-derrame de jugos profunda y asas talladas ergonómicas. Curada con mezcla de cera de abeja y aceite mineral.\n\nSin stock\n$ 19.800 ARS\nAgregar",
+      "enabled": true,
+      "addedOutOfStock": true
+    },
+    "status": "completed"
+  },
+  {
+    "name": "Contact storage failure still reports sent",
+    "details": {
+      "successDespiteStorageFailure": true,
+      "stored": null
+    },
+    "status": "completed"
+  }
+]

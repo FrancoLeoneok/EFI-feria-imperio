@@ -15,6 +15,9 @@ export const Footer = () => {
       state.currentFeriante !== null,
   );
   const availableGuide: GuideTab = isFerianteView ? 'feriante' : 'usuario';
+  const isBuyerView = useAuthStore(
+    (state) => state.isAuthenticated && state.userRole === 'comprador',
+  );
 
   return (
     <footer className="bg-sand-200/80 dark:bg-charcoal-900 border-t border-sand-300 dark:border-charcoal-700 py-12 sm:py-16">
@@ -94,7 +97,7 @@ export const Footer = () => {
             <ul className="space-y-2 text-xs text-charcoal-600 dark:text-sand-300">
               <li>
                 <a
-                  href="#inicio"
+                  href="/#inicio"
                   className="hover:text-terracotta transition-colors"
                 >
                   Inicio
@@ -108,22 +111,22 @@ export const Footer = () => {
                   Catálogo Digital
                 </a>
               </li>
-              <li>
+              {!isBuyerView && <li>
                 <a
-                  href="#ferias"
+                  href="/#ferias"
                   className="hover:text-terracotta transition-colors"
                 >
                   Paseos de Ferias
                 </a>
-              </li>
-              <li>
+              </li>}
+              {!isBuyerView && <li>
                 <a
                   href="/#contacto"
                   className="hover:text-terracotta transition-colors"
                 >
                   Postular mi Puesto
                 </a>
-              </li>
+              </li>}
               <li>
                 <button
                   type="button"

@@ -127,28 +127,30 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                 value={busqueda}
                 onChange={(e) => onBusquedaChange(e.target.value)}
                 placeholder="Buscar puestos, rubros o artículos (ej: mate, cazuela)..."
-                className="w-full bg-sand-200 dark:bg-charcoal-700 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 pl-10 pr-24 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:bg-white dark:focus:bg-charcoal-800 focus:outline-none transition-all shadow-inner"
+                className="w-full bg-sand-200 dark:bg-charcoal-700 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 pl-10 pr-40 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:bg-white dark:focus:bg-charcoal-800 focus:outline-none transition-all shadow-inner"
               />
-              {busqueda.trim() !== '' && (
+              <div className="absolute right-1.5 flex items-center gap-1">
+                {busqueda.trim() !== '' && (
+                  <button
+                    type="button"
+                    onClick={() => onBusquedaChange('')}
+                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-charcoal-400 hover:text-charcoal-700 dark:hover:text-sand-200 transition-colors"
+                    title="Limpiar búsqueda"
+                    aria-label="Limpiar búsqueda"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                {/* Botón Centralizado de Búsqueda */}
                 <button
-                  type="button"
-                  onClick={() => onBusquedaChange('')}
-                  className="absolute right-20 p-1 text-charcoal-400 hover:text-charcoal-700 dark:hover:text-sand-200 transition-colors"
-                  title="Limpiar búsqueda"
-                  aria-label="Limpiar búsqueda"
+                  type="submit"
+                  className="shrink-0 px-3.5 py-1.5 rounded-full bg-terracotta hover:bg-terracotta-600 text-white text-xs font-bold shadow-xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
+                  title="Buscar en la feria"
                 >
-                  <X className="w-3.5 h-3.5" />
+                  <Search className="w-3 h-3" />
+                  <span>Buscar</span>
                 </button>
-              )}
-              {/* Botón Centralizado de Búsqueda */}
-              <button
-                type="submit"
-                className="absolute right-1.5 px-3.5 py-1.5 rounded-full bg-terracotta hover:bg-terracotta-600 text-white text-xs font-bold shadow-xs active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer"
-                title="Buscar en la feria"
-              >
-                <Search className="w-3 h-3" />
-                <span>Buscar</span>
-              </button>
+              </div>
             </div>
           </form>
 
@@ -363,22 +365,24 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
               placeholder="Buscar puestos, rubros o artículos..."
               className="w-full bg-sand-200 dark:bg-charcoal-700 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 pl-10 pr-28 py-3 rounded-full text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
             />
-            {busqueda.trim() !== '' && (
+            <div className="absolute right-1 flex items-center gap-1">
+              {busqueda.trim() !== '' && (
+                <button
+                  type="button"
+                  onClick={() => onBusquedaChange('')}
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-charcoal-400 hover:text-charcoal-700 dark:hover:text-sand-200"
+                  aria-label="Limpiar búsqueda"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
               <button
-                type="button"
-                onClick={() => onBusquedaChange('')}
-                className="absolute right-16 p-2 text-charcoal-400 hover:text-charcoal-700 dark:hover:text-sand-200"
-                aria-label="Limpiar búsqueda"
+                type="submit"
+                className="shrink-0 px-3 py-1 rounded-full bg-terracotta text-white text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
               >
-                <X className="w-3.5 h-3.5" />
+                Buscar
               </button>
-            )}
-            <button
-              type="submit"
-              className="absolute right-1 px-3 py-1 rounded-full bg-terracotta text-white text-xs font-bold shadow-xs active:scale-95 cursor-pointer"
-            >
-              Buscar
-            </button>
+            </div>
           </div>
         </form>
       </div>

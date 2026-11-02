@@ -4,6 +4,7 @@ import { Plus, Sparkles, Store } from 'lucide-react';
 import { Producto } from '../../types';
 import { formatARS } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
+import { useStockStore } from '../../store/useStockStore';
 
 interface ProductCardProps {
   producto: Producto;
@@ -18,6 +19,8 @@ export const ProductCard = ({
 }: ProductCardProps) => {
   const [imageError, setImageError] = useState(false);
   const addItem = useCartStore((state) => state.addItem);
+  const stockOverride = useStockStore((state) => state.disponibilidad[producto.id]);
+  const inStock = preview ? producto.enStock : stockOverride ?? producto.enStock;
 
   return (
     <article className="group flex flex-col bg-white dark:bg-charcoal-700 rounded-3xl border border-sand-300 dark:border-charcoal-600 overflow-hidden shadow-card hover:shadow-card-hover hover:-translate-y-1 transition-all duration-200">
@@ -95,7 +98,7 @@ export const ProductCard = ({
         <div className="pt-3 border-t border-sand-200 dark:border-charcoal-600 flex items-center justify-between gap-2">
           <div>
             <span className="block text-[11px] font-semibold text-charcoal-400 dark:text-sand-400">
-              {producto.enStock ? 'Disponible' : 'Sin stock'}
+              {inStock ? 'Disponible' : 'Sin stock'}
             </span>
             <span className="text-lg font-extrabold text-terracotta dark:text-terracotta-300 tracking-tight">
               {formatARS(customerPrice(producto.precio))}
@@ -105,9 +108,9 @@ export const ProductCard = ({
           <div className="flex items-center gap-1.5">
             <button
               type="button"
-              disabled={preview}
+              disabled={preview || !inStock}
               onClick={() => addItem(producto)}
-              className="group/add inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-2 text-sm font-bold text-white shadow-xs transition-[background-color,transform] duration-150 ease-out hover:bg-forest-600 motion-safe:hover:scale-[1.03] motion-safe:active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-charcoal-700 motion-reduce:transition-none"
+              className="group/add inline-flex min-h-11 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-forest px-3 py-2 text-sm font-bold text-white shadow-xs transition-[background-color,transform] duration-150 ease-out hover:bg-forest-600 motion-safe:hover:scale-[1.03] motion-safe:active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-forest-400 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-charcoal-700 motion-reduce:transition-none disabled:cursor-not-allowed disabled:opacity-50"
               title="Agregar al carrito"
               aria-label={`Agregar ${producto.titulo} al carrito`}
             >

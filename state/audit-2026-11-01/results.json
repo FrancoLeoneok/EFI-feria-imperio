@@ -1,0 +1,220 @@
+{
+  "results": [
+    {
+      "name": "Home, search and filters",
+      "status": "completed",
+      "details": {
+        "stores": 6,
+        "filtered": 3,
+        "search": "Puestos y Emprendedores Locales\nExplorá las Tiendas de la Feria\n\nConocé a los artesanos, visitá el catálogo de cada puesto y contactate directamente.\n\nTodos los Paseos\nPaseo del Andino\nParque Sarmiento\nTodos los Rubros\nArtesanías\n1\nCerámica\n1\nGastronomía\nMarroquinería\nMadera\nIndumentaria\nResultados para: \"mate\" • 2 puestos y 2 artículos\nLimpiar búsqueda\nArtículos encontrados (2)\nCreaciones que coinciden con \"mate\"\nARTESANIAS\nDestacado\nEl Gaucho Tradición\nMate Imperial Cincelado en Alpaca\n\nCalabaza brasilera de paredes gruesas forrada en cuero vacuno legítimo con virola cincelada a mano en alpaca maciza. Incluye bombilla pico de loro.\n\nDisponible\n$ 16.500 ARS\nAgregar\nCERAMICA\nDestacado\nBarro Vivo Cerámicas\nCazuela de Cerámica Rústica Esmaltada\n\nCazuela modelada en torno alfarero y cocida a 1040°C. Apta para microondas, horno tradicional y lavavajillas. Terminación terracota mate con esmalte blanco.\n\nDisponible\n$ 9.350 ARS\nAgregar\nARTESANIAS\n1 producto\nEl Gaucho Tradición\n\nPor Carlos Altamirano\n\nMás de 15 años cincelando alpaca y vistiendo mates tradicionales en cuero crudo en el Paseo del Andino.\n\nPaseo del Andino • Puesto 14 - Galpón Blanco\nVer Tienda & Catálogo\nCERAMICA\n2 productos\nBarro Vivo Cerámicas\n\nPor Valeria Rossi\n\nCerámica utilitaria horneada a alta temperatura con arcillas naturales de la región y esmaltes libres de plomo.\n\nParque Sarmiento • Puesto 03 - Paseo de los Tilos\nVer Tienda & Catálogo",
+        "empty": "Puestos y Emprendedores Locales\nExplorá las Tiendas de la Feria\n\nConocé a los artesanos, visitá el catálogo de cada puesto y contactate directamente.\n\nTodos los Paseos\nPaseo del Andino\nParque Sarmiento\nTodos los Rubros\nArtesanías\nCerámica\nGastronomía\nMarroquinería\nMadera\nIndumentaria\nResultados para: \"zzzinexistenteQA\" • 0 puestos y 0 artículos\nLimpiar búsqueda\nNo encontramos puestos con esos criterios\n\nProbá buscando por otro nombre, seleccionando otro rubro o cambiando de paseo ferial.\n\nVer todos los puestos",
+        "clearButtonWorks": false
+      }
+    },
+    {
+      "name": "Store, product and guest cart",
+      "status": "completed",
+      "details": {
+        "store": "El Gaucho Tradición",
+        "product": "Mate Imperial Cincelado en Alpaca",
+        "guestCartButton": 0,
+        "cart": {
+          "state": {
+            "revision": "d8a2d868-1c55-4ed6-89a5-37d05d2e68ee",
+            "items": [
+              {
+                "cantidad": 1,
+                "producto": {
+                  "id": "prd-01",
+                  "titulo": "Mate Imperial Cincelado en Alpaca",
+                  "descripcion": "Calabaza brasilera de paredes gruesas forrada en cuero vacuno legítimo con virola cincelada a mano en alpaca maciza. Incluye bombilla pico de loro.",
+                  "precio": 15000,
+                  "rubro": "artesanias",
+                  "ferianteId": "fer-01",
+                  "ferianteNombre": "El Gaucho Tradición",
+                  "imagenUrl": "/products/mate-imperial-alpaca.png",
+                  "enStock": true,
+                  "destacado": true,
+                  "especificaciones": {
+                    "Material": "Calabaza seleccionada, cuero vacuno y alpaca",
+                    "Origen": "Río Cuarto, Córdoba",
+                    "Incluye": "Bombilla pico de loro de acero inoxidable"
+                  }
+                }
+              }
+            ]
+          },
+          "version": 0
+        }
+      }
+    },
+    {
+      "name": "Checkout two stores, receipt validation and reload",
+      "status": "completed",
+      "details": {
+        "before": "Seguir explorando\n\nFERIA IMPERIO · TU PEDIDO\n\nFinalizá tu compra\n\nRevisá tus productos y confirmá tu pedido con los datos de tu cuenta.\n\nDatos del cliente\n\nMaría Gómez\n\nmaria.gomez@gmail.com\n\n5493584998877\n\nRío Cuarto Centro\n\nEl Gaucho Tradición\nMate Imperial Cincelado en Alpaca\n\n1 × $ 16.500 ARS\n\n$ 16.500 ARS\n\nSubtotal de la tienda\n$ 16.500 ARS\nSabores Serranos\nMermelada Orgánica de Frutos Rojos\n\n1 × $ 3.520 ARS\n\n$ 3.520 ARS\n\nSubtotal de la tienda\n$ 3.520 ARS\nResumen de compra\n\n2 productos · 2 tiendas\n\nTotal\n$ 20.020 ARS\n\nLos precios incluyen la comisión del 10%. Después de confirmar, verás los datos para transferir el total a Feria Imperio y cargar tus comprobantes. No se realiza ningún débito automático.\n\nFinalizar compra",
+        "orderURL": "https://feria-imperio.vercel.app/checkout?pedido=comp-01-1ed25fcd-adf3-4f9e-bce7-85f49f7a0242",
+        "invalid": [
+          "invalid.txt: elegí una imagen JPG, PNG o WebP de hasta 5 MB.",
+          ""
+        ],
+        "confirmation": "Seguir explorando\n\nFERIA IMPERIO · TU PEDIDO\n\nCompra realizada\n\nGracias por apoyar a nuestros feriantes. Completá el pago total por transferencia a Feria Imperio.\n\n¡Gracias, María Gómez!\n\nPedido comp-01-1ed25fcd-adf3-4f9e-bce7-85f49f7a0242 · 1/11/2026, 11:18:07\n\nmaria.gomez@gmail.com\n\nTotal: $ 20.020 ARS\n\nPago pendiente de transferencia\n\nGuardá el enlace de esta página para volver a adjuntar tus comprobantes. Este pedido y sus archivos se guardan únicamente en este navegador.\n\nEl Gaucho Tradición\nMate Imperial Cincelado en Alpaca\n\n1 × $ 16.500 ARS\n\n$ 16.500 ARS\n\nSubtotal de la tienda\n$ 16.500 ARS\nSabores Serranos\nMermelada Orgánica de Frutos Rojos\n\n1 × $ 3.520 ARS\n\n$ 3.520 ARS\n\nSubtotal de la tienda\n$ 3.520 ARS\nTransferencia y comprobantes\nPago único a Feria Imperio\n\nTotal del pedido a transferir $ 20.020 ARS\n\nIncluye los productos de todas las tiendas. La comisión del 10% ya está incorporada en sus precios.\n\nDestinatario\nFeria Imperio\nAlias\nferia.imperio\n\nAlias de ejemplo: todavía no está confirmado para recibir pagos. No transfieras hasta que Feria Imperio publique sus datos bancarios reales.\n\nComprobantes del pago a Feria Imperio\n\nArrastrá tus fotos o hacé clic para subir\nHasta 6 fotos · JPG, PNG o WebP · 5 MB por foto\n\nGuardá los cambios para adjuntar los comprobantes. 1 de 6 fotos.\n\nGuardar comprobantes",
+        "cartCleared": true
+      }
+    },
+    {
+      "name": "Footer Inicio and Paseos from product",
+      "status": "completed",
+      "details": {
+        "inicio": {
+          "url": "https://feria-imperio.vercel.app/producto/prd-01#inicio",
+          "targetExists": 0
+        },
+        "paseos": {
+          "url": "https://feria-imperio.vercel.app/producto/prd-01#ferias",
+          "targetExists": 0
+        }
+      }
+    },
+    {
+      "name": "Postular link for authenticated buyer",
+      "status": "completed",
+      "details": {
+        "url": "https://feria-imperio.vercel.app/#contacto",
+        "targetExists": 0,
+        "feriasExists": 0
+      }
+    },
+    {
+      "name": "Buyer re-login and saved purchase",
+      "status": "completed",
+      "details": {
+        "demoBuyerCanRecover": true
+      }
+    },
+    {
+      "name": "Vendor sales and receipt preview same browser",
+      "status": "completed",
+      "details": {
+        "saleCount": 1,
+        "receiptOpens": true
+      }
+    },
+    {
+      "name": "Independent browser cannot see order or vendor sale",
+      "status": "completed",
+      "details": {
+        "sameBuyerCannotRecover": "Seguir explorando\n\nFERIA IMPERIO · TU PEDIDO\n\nFinalizá tu compra\n\nRevisá tus productos y confirmá tu pedido con los datos de tu cuenta.\n\nNo encontramos este pedido para tu cuenta.\n\nReintentarVolver al carrito",
+        "independentVendorSales": 0
+      }
+    },
+    {
+      "name": "Privacy and guides",
+      "status": "completed",
+      "details": {
+        "privacy": "PROTECCIÓN DE DATOS • LEY 25.326\nPolíticas de Privacidad\n\nFeria Imperio Río Cuarto — Compromiso con la transparencia, la soberanía de datos y la economía local.\n\nEn Feria Imperio promovemos la economía popular, artesanal y sustentable de Río Cuarto (Paseo del Andino y Parque Sarmiento). La privacidad de los artesanos y visitantes es un principio fundacional: no lucramos con datos personales ni utilizamos intermediarios comerciales.\n\n1. Información de Puestos y Postulaciones\n\nLos datos facilitados mediante el formulario de postulación (nombre, rubro de producción y descripción del puesto) se utilizan exclusivamente para validar la presencia ferial, coordinar las ubicaciones en los paseos y publicar el catálogo digital al público.\n\n2. Privacidad de clientes y compras\n\nNo exigimos registro ni contraseña a los visitantes para explorar el catálogo. El carrito y las preferencias de modo oscuro se guardan en la memoria local de su navegador (localStorage). Los pedidos y comprobantes de transferencia se guardan en este navegador mediante IndexedDB. Para confirmar una compra se utiliza la cuenta del cliente. No utilizamos cookies invasivas de rastreo de terceros.\n\n3. Pagos y comisión de Feria Imperio\n\nLos pagos de las compras se realizan por transferencia a la cuenta única de Feria Imperio. Todos los productos incluyen una comisión fija del 10% sobre el precio base definido por el feriante. El precio publicado es el precio final que paga el cliente; no se vuelve a sumar la comisión al confirmar la compra. La entrega y la garantía se coordinan con el feriante.\n\n4. Derechos de Acceso, Rectificación y Cancelación (Habeas Data)\n\nEn conformidad con la Ley de Protección de Datos Personales N° 25.326 de la República Argentina, todo expositor o titular de datos tiene derecho a solicitar la rectificación, actualización o eliminación inmediata de su información pública de nuestro catálogo digital contactando al equipo coordinador.\n\nÚltima revisión: Octubre 2026 • Río Cuarto\nEntendido y Aceptar",
+        "guide": "Guía de feriante\n\nConocé las herramientas de Mi Taller para gestionar el catálogo de tu puesto.\n\nPaso 1 de 6\n\nConocé tu taller y tu tienda pública\n\nEntrá a “Mi Taller” desde tu cuenta. Tocá “Ver Mi Tienda” y copiá el enlace del navegador para compartir tu catálogo.\n\nLos cuadros y las flechas señalan dónde actuar.\nAmpliar captura\n(abre en una pestaña nueva)\nAnterior\nSiguiente"
+      }
+    },
+    {
+      "name": "Mobile navigation and dark mode",
+      "status": "completed",
+      "details": {
+        "menu": "El Gaucho Tradición\n\nPuesto Activo\n\nAdministrar mi tienda\nVer Mi Puesto Público",
+        "overflow": {
+          "scroll": 390,
+          "width": 390,
+          "dark": true
+        }
+      }
+    },
+    {
+      "name": "Registration then re-login loses account identity",
+      "status": "completed",
+      "details": {
+        "first": {
+          "id": "comp-1793585914026",
+          "nombre": "QA Auditoría",
+          "email": "qa.auditoria@example.com",
+          "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80",
+          "ubicacion": "Río Cuarto, Córdoba",
+          "rol": "comprador"
+        },
+        "second": {
+          "id": "comp-1793585922178",
+          "nombre": "qa.auditoria@example.com",
+          "email": "qa.auditoria@example.com",
+          "avatarUrl": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=300&q=80",
+          "ubicacion": "R�o Cuarto",
+          "rol": "comprador"
+        },
+        "identityChanged": true,
+        "wrongPasswordAccepted": true
+      }
+    },
+    {
+      "name": "Postulation reports success with local storage only",
+      "status": "completed",
+      "details": {
+        "requestsDuringSubmit": [],
+        "stored": [
+          {
+            "nombreCompleto": "QA Auditoría",
+            "nombreEmprendimiento": "PRUEBA QA NO REAL",
+            "email": "qa.auditoria@example.com",
+            "instagram": "",
+            "facebook": "",
+            "rubro": "artesanias",
+            "mensaje": "Prueba funcional autorizada. No es una postulación real.",
+            "id": "con-1793585925353",
+            "fechaEnvio": "2026-11-02T02:18:45.353Z"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Missing routes and entities",
+      "status": "completed",
+      "details": [
+        {
+          "path": "/ruta-qa-inexistente",
+          "http": 200,
+          "headings": [
+            "Página no encontrada"
+          ]
+        },
+        {
+          "path": "/producto/qa-no-existe",
+          "http": 200,
+          "headings": [
+            "Producto no encontrado"
+          ]
+        },
+        {
+          "path": "/tienda/qa-no-existe",
+          "http": 200,
+          "headings": [
+            "Puesto o Tienda no encontrada"
+          ]
+        },
+        {
+          "path": "/checkout?pedido=qa-no-existe",
+          "http": 200,
+          "headings": [
+            "Finalizá tu compra",
+            "Ingresá con tu cuenta de cliente"
+          ]
+        },
+        {
+          "path": "/admin",
+          "http": 200,
+          "headings": [
+            "Acceso a Mi Taller"
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "requests": []
+}
