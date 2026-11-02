@@ -83,9 +83,11 @@ export const HeroBanner = () => {
 
         {/* Main Value Proposition Title */}
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-charcoal-900 dark:text-white max-w-4xl mx-auto leading-tight mb-6">
-          El corazón de las ferias de{' '}
-          <span className="text-terracotta dark:text-terracotta-300 underline decoration-terracotta-300 underline-offset-8">
+          <span className="block text-terracotta dark:text-terracotta-300 underline decoration-terracotta-300 underline-offset-8 mb-2 sm:mb-3">
             Río Cuarto
+          </span>
+          <span className="block text-charcoal-900 dark:text-white">
+            El Corazón De Las Ferias
           </span>
         </h1>
 
