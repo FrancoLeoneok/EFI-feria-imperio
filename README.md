@@ -1,126 +1,178 @@
-# Feria Imperio | Catálogo Digital de Feriantes
+# Feria Imperio | Catálogo digital de feriantes
 
-Feriantes y emprendedores de Río Cuarto, Córdoba.
+Prototipo frontend académico para visibilizar a feriantes y emprendedores de Río Cuarto, Córdoba, con catálogo digital y un flujo de compra de demostración.
 
-![React](https://img.shields.io/badge/React_18-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite_6-646CFF?style=for-the-badge&logo=vite&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS_3-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Zustand](https://img.shields.io/badge/Zustand-443E38?style=for-the-badge&logoColor=white)
+[Ver demostración en Vercel](https://feria-imperio.vercel.app/)
 
-> Proyecto de catálogo digital para dar visibilidad a los puestos del Paseo del Andino y del Parque Sarmiento, conocer sus productos.
+## Sobre el proyecto
 
-## 🌐 Sitio web
+Feria Imperio reúne a emprendedores del Paseo del Andino y del Parque Sarmiento. Permite explorar tiendas y productos, realizar preguntas, armar un carrito y generar pedidos de demostración. Cada feriante dispone de un taller para administrar sus productos, responder consultas y visualizar los pedidos de su tienda.
 
-El proyecto está desplegado en **Vercel**:
+La aplicación utiliza datos de ejemplo y persistencia local en el navegador. No incorpora backend, autenticación de servidor ni pagos reales. Los datos generados en un navegador no se comparten con otros dispositivos ni se envían a la organización.
 
-👉 [Visitar Feria Imperio](https://feria-imperio.vercel.app/)
+Los rubros del catálogo son **artesanías, cerámica, gastronomía, marroquinería, madera e indumentaria**.
 
-## 📚 Sobre el proyecto
+## Funcionalidades actuales
 
-**Feria Imperio** reúne en una misma aplicación a artesanos y emprendedores locales. Cada puesto cuenta con una tienda que presenta su historia, responsable, ubicación y catálogo de productos con precios en pesos argentinos.
+### Catálogo y navegación
 
-La propuesta permite explorar la feria antes de visitarla, armar una lista con un presupuesto estimado. Incluye seis rubros: **artesanías, cerámica, gastronomía, marroquinería, madera e indumentaria**.
+- Directorio de tiendas con búsqueda por texto y filtros por rubro y paseo ferial.
+- Ficha de cada tienda con banner, biografía, responsable, ubicación y catálogo con búsqueda interna.
+- Catálogo de productos con búsqueda y filtro por rubro.
+- Página individual de producto con galería, descripción, especificaciones, precio y disponibilidad.
+- Vista inicial adaptada al rol: el comprador puede alternar entre productos y tiendas.
+- Información estática de los paseos, enlaces a Google Maps y redes institucionales.
+- Diseño responsive, tema claro/oscuro, guías de uso, notificaciones y aviso de privacidad.
 
-La versión actual es una **demostración frontend** con datos simulados: seis feriantes, ocho productos y tres perfiles de compradores de ejemplo.
+### Compradores
 
-## ✨ Funcionalidades
+- Inicio de sesión y registro de demostración.
+- Carrito persistente con productos de diferentes tiendas, cantidades y total.
+- Checkout de demostración que requiere una sesión de comprador para confirmar.
+- Pedido con productos agrupados por tienda y conservación de los precios e imágenes del momento de la compra.
+- Instrucciones de transferencia ficticias y carga local de imágenes de comprobantes.
+- Recuperación del pedido mediante su enlace en el mismo navegador y con la sesión correspondiente.
+- Preguntas públicas por producto, con respuestas del feriante, dentro de los datos del navegador.
 
-- **Directorio de puestos:** búsqueda por nombre, responsable o biografía; filtros por rubro, paseo ferial y presencia confirmada para el fin de semana.
-- **Tiendas individuales:** perfil del emprendedor, catálogo, búsqueda interna de productos y enlaces a Instagram cuando están disponibles.
-- **Detalle de productos:** imagen, descripción, precio, disponibilidad y especificaciones.
-- **Mi Lista de Feria:** agregar productos, modificar cantidades, quitar artículos y calcular el total estimado.
-- **Accesos de demostración:** inicio de sesión como comprador o feriante y registro simulado de compradores.
-- **Mi Taller:** panel del feriante con creación y eliminación de productos, edición de precios y cambio de disponibilidad dentro de la vista.
-- **Información de las ferias:** ubicaciones y enlaces a Google Maps.
-- **Postulación de emprendimientos:** formulario con datos de contacto, rubro y enlaces obligatorios a Instagram y Facebook.
-- **Postulación de stands:** modal accesible desde el banner y el botón «Postular mi emprendimiento», con elección de paseo, resumen del stand, pago simulado y confirmación. La demostración contempla un costo de $45.000 ARS e incluye un espacio de 3 × 3 metros, electricidad y Wi-Fi.
-- **Banner y redes institucionales:** portada promocional, enlaces a Facebook, Instagram, y YouTube, y enlace a Vertex Tech en el pie de página.
-- **Interfaz adaptable:** navegación móvil, tema claro y oscuro, notificaciones, guías de uso y modal de privacidad.
+### Feriantes: Mi Taller
 
-## 🛠️ Tecnologías utilizadas
+- Acceso de demostración a los puestos de ejemplo.
+- Alta y edición de productos, precios, descripciones, imágenes, disponibilidad y marca de destacado.
+- Eliminación de productos, con la limitación de los productos iniciales descrita más abajo.
+- Gestión de preguntas de los productos de la tienda.
+- Consulta de pedidos de la propia tienda y ampliación de sus comprobantes locales.
 
-- **React 18 y TypeScript:** componentes y modelos de dominio tipados.
-- **Vite 6:** servidor de desarrollo y compilación para producción.
-- **Tailwind CSS 3, PostCSS y Autoprefixer:** estilos utilitarios y diseño responsive.
-- **React Router DOM 7:** navegación entre las páginas de la aplicación.
-- **Zustand 5:** estado global y persistencia local de la sesión y la lista de productos.
-- **Lucide React:** iconos de la interfaz.
-- **Google Fonts:** tipografía Plus Jakarta Sans.
+El formulario de consulta/postulación de tienda guarda la solicitud localmente. No crea un feriante, aprueba una tienda ni envía correos o notificaciones a la organización.
 
-La identidad visual utiliza tonos terracota, verde bosque, arena y carbón, definidos en `tailwind.config.js`.
+## Precios y pagos de demostración
 
-## 🧩 Arquitectura
+El precio almacenado del producto es el precio base del feriante. La aplicación añade un **10 % de recargo de plataforma** al calcular el precio al comprador y los totales del pedido. La regla se centraliza en `src/utils/pricing.ts`.
 
-La aplicación utiliza el **patrón Repository** para separar las consultas de datos de los componentes visuales:
+La configuración de transferencia está en `src/config/platformPayment.ts`: contiene un alias de ejemplo, CVU vacío y `demostracion: true`. **No se debe transferir dinero a partir de estos datos.**
 
-1. Las páginas y componentes consultan las instancias exportadas en `src/repositories/index.ts`.
-2. Las interfaces definen los contratos de productos, feriantes, consultas de contacto y postulaciones de stands.
-3. Las implementaciones `mock` trabajan con datos locales y demoras artificiales para simular consultas asíncronas.
-4. Los stores de Zustand administran la sesión, la lista de productos y los pasos de la postulación de stands.
+Confirmar un pedido o adjuntar un comprobante no acredita un pago. El estado permanece pendiente; no hay integración bancaria, validación del pago ni liquidación a vendedores.
 
-Los modelos compartidos están en `src/types/index.ts`; el formato de precios se centraliza en `src/utils/formatters.ts`.
+## Tecnologías
 
-## 📁 Estructura
+- **React 18 y TypeScript:** interfaz y modelos tipados.
+- **Vite 6:** desarrollo y compilación de producción.
+- **Tailwind CSS 3, PostCSS y Autoprefixer:** estilos y diseño responsive.
+- **React Router DOM 7:** navegación SPA mediante rutas dinámicas.
+- **Zustand 5:** sesión, carrito y disponibilidad, con persistencia local.
+- **IndexedDB y localStorage:** almacenamiento del navegador.
+- **Lucide React:** iconos; **clsx y tailwind-merge:** composición de clases.
+- **Google Fonts:** Plus Jakarta Sans.
 
-```text
-EFI-feria-imperio/
-├── public/                     # Logos, favicon y banners
-├── src/
-│   ├── components/
-│   │   ├── auth/               # Modal de ingreso y registro
-│   │   ├── cart/               # Mi Lista de Feria
-│   │   ├── catalog/            # Categorías, tarjetas y detalle de productos
-│   │   ├── common/             # Tema, notificaciones, guías y privacidad
-│   │   ├── contact/            # Formulario de postulación
-│   │   ├── ferias/             # Información de los paseos feriales
-│   │   ├── layout/             # Navegación, banner y pie de página
-│   │   ├── stand/              # Modal de postulación y pago simulado
-│   │   └── stores/             # Tarjetas y grilla de tiendas
-│   ├── data/mockData.ts        # Feriantes, productos y compradores de ejemplo
-│   ├── pages/                  # Inicio, tienda y panel del feriante
-│   ├── repositories/
-│   │   ├── interfaces/         # Contratos de acceso a datos
-│   │   └── mock/               # Implementaciones simuladas
-│   ├── store/                  # Sesión, lista de productos y postulación de stands
-│   ├── types/                  # Tipos del dominio
-│   ├── utils/                  # Formateadores
-│   ├── App.tsx                # Rutas y componentes globales
-│   ├── main.tsx               # Entrada de React
-│   └── index.css              # Directivas Tailwind y estilos base
-├── docs/contexto/              # Documentación de arquitectura y decisiones
-├── Index.jsx                   # Prototipo previo
-├── DetalleTienda.jsx            # Prototipo previo
-├── PanelAdmin.jsx              # Prototipo previo
-├── legacy_index.html           # Maqueta HTML previa
-├── detalle_tienda.html          # Maqueta HTML previa
-├── panel_admin.html             # Maqueta HTML previa
-├── index.html                  # Entrada HTML de la aplicación actual
-├── package.json
-├── package-lock.json
-├── vite.config.ts
-├── tailwind.config.js
-├── postcss.config.js
-├── tsconfig.json
-├── tsconfig.node.json
-└── README.md
+Las familias de versiones corresponden a `package.json`; `package-lock.json` fija las versiones resueltas. La paleta terracota, verde bosque, arena y carbón se define en `tailwind.config.js`.
+
+Python, FastAPI, SQLite, SQLModel, Alembic y Docker no forman parte de la implementación actual. Son alternativas planteadas para una evolución posterior.
+
+## Ejecutar localmente
+
+Requisitos: Git, Node.js compatible con Vite 6 y npm.
+
+```bash
+git clone https://github.com/FrancoLeoneok/EFI-feria-imperio.git
+cd EFI-feria-imperio
+npm ci
+npm run dev
 ```
 
-La aplicación actual se ejecuta desde `src/main.tsx`. Los prototipos JSX y las maquetas HTML de la raíz se conservan como referencias previas.
+Abrir la dirección que indique Vite, normalmente `http://localhost:5173`. Si el puerto está ocupado, Vite puede seleccionar otro.
 
-## 💾 Datos y alcance de la demostración
+No se requieren variables de entorno, credenciales de servicios externos ni una base de datos de servidor para ejecutar la demostración.
 
-- **Catálogo inicial:** se define en `src/data/mockData.ts` y se consulta mediante repositorios simulados. No hay API ni base de datos remota.
-- **Ediciones en Mi Taller:** solo modifican el estado local de la página. No actualizan el repositorio ni el catálogo público y se pierden al recargar o volver a montar la vista.
-- **Lista de productos:** se conserva en el navegador con la clave `feria_imperio_cart`.
-- **Sesión:** se conserva con la clave `feria_imperio_auth`.
-- **Tema visual:** se guarda con la clave `feria_theme`.
-- **Consultas y postulaciones del formulario de contacto:** se guardan localmente con la clave `feria_imperio_consultas`; el formulario no envía correos ni notifica a una organización real.
-- **Postulaciones de stands:** se guardan localmente con la clave `feria_imperio_postulaciones_stand`. El enlace y la acreditación del pago son simulados; no se realiza ningún cobro ni reserva real.
-- **Autenticación y registro:** se simulan en el cliente. El registro de compradores genera una sesión local, sin crear una cuenta en un servidor.
-- **Compras:** no se procesan pagos ni se generan órdenes de compra.
+### Compilación y vista previa
 
-Los datos de demostración, precios, contactos y confirmaciones de presencia no provienen de una agenda o inventario actualizado en tiempo real. La información local depende del navegador y puede perderse al borrar sus datos.
+```bash
+npm run build
+npm run preview
+```
+
+`build` ejecuta la comprobación de TypeScript y genera los archivos estáticos en `dist/`. `preview` permite revisar esa compilación localmente.
+
+El despliegue del frontend está preparado para Vercel. `vercel.json` redirige las rutas a `index.html` para permitir el acceso directo a tiendas, productos y checkout. Publicar la aplicación no centraliza los datos guardados en cada navegador.
+
+## Accesos de prueba
+
+El modal de ingreso ofrece perfiles de demostración para explorar los roles.
+
+- **Feriante:** se puede ingresar con un puesto de ejemplo, como `fer-01`, y la clave `feria123`.
+- **Comprador:** se puede usar un perfil de ejemplo con la clave `comprador123`, o completar el registro simulado.
+
+El registro del comprador genera una sesión local, sin crear una cuenta en un servidor. Estos accesos sirven para probar la interfaz y no constituyen autenticación real.
+
+## Arquitectura y rutas
+
+Las páginas y componentes consultan repositorios para separar la interfaz del acceso a datos. `src/repositories/index.ts` expone implementaciones mock de productos, feriantes, contacto y postulaciones. Los productos combinan datos iniciales con modificaciones locales. Pedidos y preguntas disponen de módulos de persistencia propios.
+
+Los hooks de React administran estado de componentes; Zustand gestiona sesión, carrito y disponibilidad. Los tipos compartidos están en `src/types/index.ts`, y los módulos de pedidos y preguntas también declaran sus propios modelos.
+
+Rutas activas:
+
+- `/`: directorio y catálogo.
+- `/tienda/:id`: ficha de tienda.
+- `/producto/:id`: detalle y preguntas de producto.
+- `/admin`: Mi Taller del feriante; no es administración general de la plataforma.
+- `/checkout`: resumen de compra; `?pedido=...` permite recuperar un pedido local.
+- Cualquier otra ruta muestra una página de recuperación.
+
+```text
+src/
+├── components/
+│   ├── admin/          # Ventas de la tienda
+│   ├── auth/           # Ingreso y registro de demostración
+│   ├── cart/           # Carrito, pedido y comprobantes
+│   ├── catalog/        # Tarjetas, galerías y formularios de producto
+│   ├── common/         # Tema, guías, privacidad y notificaciones
+│   ├── contact/        # Consulta/postulación local
+│   ├── ferias/         # Información de los paseos
+│   ├── layout/         # Navegación, banner y pie
+│   ├── questions/      # Preguntas y respuestas
+│   └── stores/         # Directorio de tiendas
+├── config/             # Datos de pago de demostración
+├── data/               # Catálogo inicial y guías
+├── pages/              # Inicio, tienda, producto, taller y checkout
+├── repositories/       # Contratos, mocks y persistencia local
+├── store/              # Stores de Zustand
+├── types/              # Modelos compartidos
+├── utils/              # Precios, formatos y eventos de pedidos
+├── App.tsx             # Rutas y componentes globales
+├── main.tsx            # Entrada de la aplicación
+└── index.css           # Tailwind y estilos base
+```
+
+También se incluyen `public/` para recursos estáticos, `scripts/` para verificaciones y `docs/` para documentación. Los archivos JSX y las maquetas HTML de la raíz son referencias previas; la aplicación activa se inicia desde `src/main.tsx`.
+
+## Persistencia y límites
+
+- **localStorage:** sesión, carrito, disponibilidad manual, tema y consultas del formulario.
+- **IndexedDB:** productos creados/editados, pedidos con imágenes de comprobantes y preguntas/respuestas.
+- **Datos iniciales:** tiendas y productos de ejemplo definidos en `src/data/mockData.ts`.
+
+Los datos dependen del navegador y del origen de la aplicación. Localhost y el sitio publicado tienen almacenamientos separados. Borrar los datos del sitio puede eliminar el contenido local. Cambiar de rol en el mismo navegador permite recorrer la demostración de comprador y feriante; abrir otro dispositivo no comparte esas operaciones.
+
+Limitaciones conocidas:
+
+- Los productos iniciales eliminados pueden reaparecer al recargar, porque su eliminación no queda registrada permanentemente sobre el catálogo de ejemplo.
+- La disponibilidad es un indicador manual; no hay unidades de stock ni descuento automático por compra.
+- El formulario de contacto no confirma recepción por una organización real y su repositorio puede devolver éxito aunque falle el almacenamiento local.
+- La información de presencia y próxima feria es estática, sin una agenda administrable. El banner contiene una fecha sin año que debe revisarse antes de usarla como información real.
+- Existe un repositorio mock para postular y simular el pago de un stand físico, pero ese flujo no está conectado a la interfaz actual.
+- No hay administrador general, aprobación de emprendedores, suscripciones, cupos comerciales por plan, reseñas, chatbot, WhatsApp integrado, seguimiento de envíos ni mapas en vivo.
+
+La evolución a un servicio operativo requiere backend, persistencia compartida, autenticación y permisos de servidor, recepción efectiva de postulaciones e integración de pagos.
+
+## Verificación y documentación
+
+`npm run build` comprueba tipos y compilación. `scripts/` contiene verificaciones de recorridos como checkout, ventas, productos, preguntas y navegación; no hay un comando `npm test` configurado. Consultar cada script antes de ejecutarlo para conocer sus dependencias, URL objetivo y requisitos de navegador.
+
+Documentación disponible:
+
+- [Contexto y arquitectura](docs/contexto/arquitectura.md).
+- [Auditoría funcional del 1 de noviembre de 2026](docs/auditoria-funcional-2026-11-01.md): resultados y limitaciones de esa revisión; no implica que todos los hallazgos sigan vigentes.
+- [Revisión del documento académico](docs/revision-documento-academico-2026-11-01.md): diferencias entre la propuesta escrita y la implementación revisada.
+- [Especificaciones de funcionalidades](docs/intake/): checkout por transferencia, ventas por tienda y preguntas por producto.
 
 ## 🤝 Colaboradores
 
