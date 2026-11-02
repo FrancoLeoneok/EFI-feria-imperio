@@ -195,7 +195,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     rubro: 'madera',
     ferianteId: 'fer-05',
     ferianteNombre: 'Taller Criollo Maderas',
-    imagenUrl: 'https://images.unsplash.com/photo-1590794056226-79ef3a8147e1?auto=format&fit=crop&w=800&q=80',
+    imagenUrl: '/products/tabla-asado-algarrobo.jpg',
     enStock: false,
     destacado: false,
     especificaciones: {
@@ -212,7 +212,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     rubro: 'indumentaria',
     ferianteId: 'fer-06',
     ferianteNombre: 'Hilados del Río',
-    imagenUrl: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?auto=format&fit=crop&w=800&q=80',
+    imagenUrl: '/products/chal-crochet.jpg',
     enStock: true,
     destacado: false,
     especificaciones: {
@@ -229,7 +229,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     rubro: 'ceramica',
     ferianteId: 'fer-02',
     ferianteNombre: 'Barro Vivo Cerámicas',
-    imagenUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
+    imagenUrl: '/products/cuenco-terracota-verde.webp',
     enStock: true,
     destacado: false,
     especificaciones: {
@@ -245,7 +245,7 @@ export const PRODUCTOS_MOCK: Producto[] = [
     rubro: 'marroquineria',
     ferianteId: 'fer-04',
     ferianteNombre: 'Cueros del Sur',
-    imagenUrl: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80',
+    imagenUrl: '/products/cinturon-cuero-trenzado.jpg',
     enStock: true,
     destacado: false,
     especificaciones: {
