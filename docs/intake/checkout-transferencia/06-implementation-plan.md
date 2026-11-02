@@ -23,6 +23,7 @@ Verificación automatizada: scripts/verify-checkout.mjs prepara sesión y produc
 La orquestación de confirmación queda separada en src/repositories/checkout.ts y la presentación del pedido realizado en src/components/cart/OrderConfirmation.tsx.
 
 ## Validación realizada
+- Regresión posterior de fotos grandes: se reprodujo QuotaExceededError al agregar el mate con una imagen válida de 3 MB, guardada como portada y galería. El estado mostraba un artículo en memoria y cero persistidos. Se corrigió partialize del carrito para omitir la galería y las portadas data URI en localStorage; CartProductImage recupera la portada del repositorio cuando es necesario y checkout conserva las fotos en la instantánea IndexedDB del pedido. verify-cart-photos.mjs verifica persistencia compacta, apertura real de otra pestaña, foto, recarga y compra completa. Compilación y regresión de checkout correctas; React Doctor sobre cambios rastreados sin hallazgos, 94/100.
 - npm run build: correcto.
 - scripts/verify-checkout.mjs: apertura real de otra pestaña, resumen de dos tiendas, móvil y modo oscuro, confirmación, sincronización, comprobantes persistentes, formato inválido, duplicados, propiedad del pedido, visualización de CVU/alias con datos de prueba, fallo de almacenamiento sin vaciar carrito y cierre de sesión: correcto.
 - scripts/verify-product-upload.mjs: regresión del componente compartido, carga múltiple, arrastre, publicación, galería, recarga, stock y borrado: correcto.

@@ -92,7 +92,19 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'feria_imperio_cart',
-      partialize: ({ items, revision }) => ({ items, revision }),
+      // Uploaded photos already live in IndexedDB. Duplicating a cover and its
+      // gallery here can exceed localStorage and silently lose cross-tab items.
+      partialize: ({ items, revision }) => ({
+        revision,
+        items: items.map(({ producto, cantidad }) => ({
+          cantidad,
+          producto: {
+            ...producto,
+            imagenUrl: producto.imagenUrl.startsWith('data:') ? '' : producto.imagenUrl,
+            imagenes: undefined,
+          },
+        })),
+      }),
     }
   )
 );

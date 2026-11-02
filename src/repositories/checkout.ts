@@ -1,5 +1,5 @@
 import { useAuthStore } from '../store/useAuthStore';
-import { useCartStore } from '../store/useCartStore';
+import { CartItem, useCartStore } from '../store/useCartStore';
 import { useStockStore } from '../store/useStockStore';
 import { UsuarioComprador } from '../types';
 import { ferianteRepository, productoRepository } from './index';
@@ -17,6 +17,7 @@ export async function confirmPurchase(comprador: UsuarioComprador, expectedRevis
   const [products, stores] = await Promise.all([productoRepository.getAll(), ferianteRepository.getAll()]);
   await useStockStore.persist.rehydrate();
   const stock = useStockStore.getState().disponibilidad;
+  const purchaseItems: CartItem[] = [];
   for (const item of snapshot.items) {
     const product = products.find(({ id }) => id === item.producto.id);
     if (!product || !(stock[product.id] ?? product.enStock)) {
@@ -28,13 +29,18 @@ export async function confirmPurchase(comprador: UsuarioComprador, expectedRevis
     if (!Number.isInteger(item.cantidad) || item.cantidad < 1 || !Number.isFinite(product.precio) || product.precio < 0) {
       throw new Error('Revisá las cantidades y precios del carrito.');
     }
+    // Orders use IndexedDB, so their historical snapshot can retain the photos.
+    purchaseItems.push({
+      ...item,
+      producto: { ...item.producto, imagenUrl: product.imagenUrl, imagenes: product.imagenes },
+    });
   }
 
   await useCartStore.persist.rehydrate();
   await useAuthStore.persist.rehydrate();
   if (useAuthStore.getState().currentComprador?.id !== comprador.id) throw new Error('La sesión cambió. Ingresá con tu cuenta para continuar.');
   if (useCartStore.getState().revision !== snapshot.revision) throw new Error(changedCartMessage);
-  const groups = groupItems(snapshot.items, stores);
+  const groups = groupItems(purchaseItems, stores);
   const order = await createOrder({
     id: `${comprador.id}-${snapshot.revision}`,
     comprador: structuredClone(comprador),

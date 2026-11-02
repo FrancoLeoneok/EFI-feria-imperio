@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { X, Trash2, Plus, Minus, ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
 import { formatARS } from '../../utils/formatters';
+import { CartProductImage } from './CartProductImage';
 
 export const CartDrawer = () => {
   const {
@@ -95,8 +96,8 @@ export const CartDrawer = () => {
                   key={item.producto.id}
                   className="flex items-center gap-3 p-3 rounded-2xl bg-sand-50 dark:bg-charcoal-700/50 border border-sand-200 dark:border-charcoal-700"
                 >
-                  <img
-                    src={item.producto.imagenUrl}
+                  <CartProductImage
+                    producto={item.producto}
                     alt={item.producto.titulo}
                     className="w-16 h-16 rounded-xl object-cover shrink-0 bg-sand-200 dark:bg-charcoal-800"
                   />
