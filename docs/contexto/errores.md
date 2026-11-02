@@ -1,21 +1,27 @@
-# Registro de Errores y Prevención de Gotchas - Feria Imperio
+# Historial de incidencias y correcciones - Feria Imperio
 
-## 1. Trampas Comunes de Maquetado (Gotchas Prevenidos)
+Actualizado: 2026-11-02. Pendientes y límites actuales: [errores-conocidos.md](errores-conocidos.md).
 
-| ID | Gotcha de Maquetado | Riesgo / Síntoma | Solución Técnica Aplicada |
-|---|---|---|---|
-| **GOT-001** | Scroll Horizontal en Móviles | Desplazamiento lateral indeseado por paddings fijos o elementos con `w-screen`. | Uso estricto de `w-full`, contención con `overflow-x-hidden` en el contenedor raíz y testeo en viewport de 360px. |
-| **GOT-002** | Contraste deficiente de Texto | Textos ilegibles sobre fondo Terracota (`#c85a32`) o Verde Bosque (`#2f5233`). | Asegurar relación de contraste mínima 4.5:1 (WCAG AA). Uso de texto blanco puro `#ffffff` sobre botones primarios y validación en ambos modos (claro y oscuro). |
-| **GOT-003** | Imágenes Rotas o con Carga Lenta | Tarjetas vacías o saltos visuales si falla una URL externa de ImgBB / Unsplash. | Atributo `alt` descriptivo obligatorio, relación de aspecto fija (`aspect-square` o `aspect-video`) y componente con fallback / placeholder gráfico elegante. |
-| **GOT-004** | Solapamiento de NavBar Fijo | Al hacer clic en un enlace de navegación interna (ancla), el título de la sección queda oculto detrás de la barra superior fija. | Implementación de `scroll-mt-20` (scroll margin top) en los contenedores de sección de destino. |
-| **GOT-005** | Fuga de Estado al Alternar Tema | Parpadeo (*flash*) blanco al recargar en modo oscuro. | Sincronización de clase `.dark` en el elemento `<html>` directamente desde la inicialización del store en `localStorage`. |
+## Base histórica
 
----
+- **ERR-001 · 2026-10-15:** configuración del contexto y reglas; no fue un fallo de ejecución.
+- **ERR-002 · 2026-10-15:** documentación inicial de arquitectura y alcance.
+- **ERR-003 · 2026-10-15:** transición de maquetas a Vite + React + TypeScript, repositorios y Zustand. Las maquetas permanecen como referencias.
 
-## 2. Historial de Incidencias Resueltas
+## Correcciones incorporadas al 1 de noviembre
 
-| ID | Fecha | Descripción del Error | Causa Raíz | Solución Aplicada |
-|---|---|---|---|---|
-| ERR-001 | 2026-10-15 | Inicialización del sistema de reglas | N/A (Configuración inicial) | Configurado sistema Antigravity OS con reglas permanentes. |
-| ERR-002 | 2026-10-15 | Definición del contexto base | Adopción de arquitectura inicial | Documentada la especificación completa de Feria Imperio en `docs/contexto/`. |
-| ERR-003 | 2026-10-15 | Monolito estático sin reactividad ni tipos | Archivos `.jsx` heredados sin entorno de build | Creada arquitectura Vite + React 18 + TS + Zustand + Patrón Repository y 4 estados de UI. |
+- **ERR-004 · Rutas directas en despliegue:** rewrite SPA en vercel.json. Referencia: 14968f4.
+- **ERR-005 · Fotos grandes en carrito:** evitar duplicar data URL/galerías en localStorage; recuperar fotos del catálogo en IndexedDB y conservarlas en pedidos. Fuentes: useCartStore, CartProductImage y verify-cart-photos.mjs.
+- **ERR-006 · Reapertura del ingreso:** flujo revisado en a043acc; script verify-login-reopen.mjs.
+- **ERR-007 · Agregado de agotados:** ProductCard/useCartStore bloquean agregado sin disponibilidad efectiva; catálogo considera overrides y checkout vuelve a validar.
+- **ERR-008 · Búsqueda superpuesta:** controles limpiar/enviar separados para evitar que Buscar intercepte el clic.
+- **ERR-009 · Footer desde páginas internas:** enlaces llevan a destinos de portada correspondientes.
+- **ERR-010 · Enlaces sin sección para compradores:** ocultar Paseos de Ferias y Postular mi Puesto cuando ese rol no dispone de sus secciones.
+
+ERR-007 a ERR-010 corresponden a hallazgos 4 a 7 de la auditoría y correcciones de e5b72b9, con regresión documentada mediante verify-audit-fixes.mjs y checkout.
+
+## Evidencia histórica
+
+La [auditoría de 2026-11-01](../auditoria-funcional-2026-11-01.md) registra build satisfactorio y diez scripts locales aprobados: checkout, ventas, edición, preguntas, navegación responsive, precios, detalle, fotos de carrito, reapertura de ingreso y guías. También registra fallo del fixture duplicado de verify-product-upload.
+
+Estos resultados pertenecen a aquella revisión; no implican pruebas nuevas, cobertura total, dispositivos físicos ni equivalencia comprobada entre despliegue y último commit local. Esta actualización documental no modifica la aplicación.

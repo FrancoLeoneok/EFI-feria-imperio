@@ -1,71 +1,54 @@
-# Flujos de Usuario y Casos de Uso - Feria Imperio
+# Flujos de usuario y casos de uso - Feria Imperio
 
-## 1. Flujos Principales de Usuario
+Actualizado: 2026-11-02. Recorridos de demostración local, sin ventas bancarias ni comunicaciones reales.
 
-```mermaid
-flowchart TD
-    Inicio([Visitante ingresa a Feria Imperio]) --> Hero[Hero Banner: Próxima fecha y polos feriales]
-    Hero --> Directorio[Directorio de Puestos y Emprendedores]
-    Directorio --> Filtros{¿Filtra por Rubro, Paseo o Finde Confirmado?}
-    Filtros -- Sí --> TiendasFiltradas[Grilla de Puestos actualizada al instante]
-    Filtros -- No --> TiendasDefault[Todos los Puestos de la Feria]
-    
-    TiendasFiltradas --> VisitarTienda[Clic en 'Ver Tienda & Catálogo']
-    TiendasDefault --> VisitarTienda
-    
-    VisitarTienda --> VistaTienda[Página Individual de Tienda /tienda/:id]
-    VistaTienda --> CatalogoTienda[Exploración de Creaciones Exclusivas de la Tienda]
-    
-    CatalogoTienda --> Accion{Acción del Cliente}
-    Accion -- Consulta directa --> WA[WhatsApp directo con el Feriante]
-    Accion -- Agregar a mi lista --> Cart[Guardar en Carrito de Presupuesto]
-    Accion -- Ver detalles --> Modal[Modal con Ficha Técnica Artesanal]
-    
-    Nav[Barra Superior] --> PanelAdmin[Panel de Vendedor /admin]
-    PanelAdmin --> Gestion[Alternar Stock, Editar Precios y Crear Productos]
-```
+## Visitante y catálogo
 
-### 1.1 Flujo A: Exploración de Directorio y Visita a Tienda de Emprendedor
-1. El usuario ingresa a la portada (`/`) y consulta los puestos feriales activos.
-2. Filtra por **Rubro** (*Artesanías, Cerámica, Gastronomía, Marroquinería, Madera, Indumentaria*) o por **Paseo** (*Paseo del Andino* o *Parque Sarmiento*), o activa la casilla de **Finde Confirmado**.
-3. Al seleccionar una tienda, navega a la URL dedicada `/tienda/:id` (ej: `/tienda/fer-01`).
-4. En la página de la tienda, visualiza la bio del artesano, ubicación exacta del gazebo y el catálogo exclusivo de ese puesto.
-5. Puede consultar disponibilidad directamente por WhatsApp o agregar artículos a su lista de presupuesto.
+1. En / explora portada, paseos y directorio; busca por texto y filtra rubro/paseo. La búsqueda normaliza tildes y mayúsculas.
+2. Abre /tienda/:id para ver responsable, biografía, ubicación y catálogo con búsqueda interna.
+3. Abre /producto/:id para consultar galería, descripción, especificaciones, precio al comprador, disponibilidad y preguntas locales.
+4. Agrega productos disponibles al carrito sin necesitar sesión. Ajusta cantidades o quita artículos; confirmar exige comprador.
+5. Rutas/entidades inexistentes presentan recuperación. Guías y privacidad abren desde el footer. Los enlaces a paseos/postulación se ocultan para compradores.
 
-### 1.2 Flujo B: Autenticación de Feriantes y Gestión de Mi Taller (`/admin`)
-1. El artesano hace clic en el botón *"Iniciar Sesión"* en la barra de navegación.
-2. Se abre el **Modal Integrado de Ingreso** (`LoginModal`), donde puede:
-   - Iniciar sesión con su nombre de puesto/responsable y contraseña (`feria123`).
-   - O utilizar el **Acceso Rápido de Demostración** (1 click sobre su avatar).
-3. Una vez autenticado:
-   - La barra de navegación muestra su avatar, el nombre de su puesto y el badge pulsante *"Puesto Activo"*.
-   - El menú desplegable le permite ir directo a *"Mi Taller"*, *"Ver Mi Puesto Público"* o *"Cerrar Sesión"*.
-   - Es redirigido automáticamente a su panel de gestión en `/admin`.
-4. Si un usuario no autenticado ingresa a `/admin`, el sistema muestra un estado protegido amigable invitándolo a iniciar sesión.
-5. Dentro de su taller, el feriante gestiona su propio inventario en tiempo real: alternar stock, editar precios en vivo y dar de alta nuevas piezas artesanales.
+## Ingreso de demostración
 
-### 1.3 Flujo C: Postulación o Contacto Ferial
-1. El artesano o visitante completa el formulario en la portada (Nombre, Emprendimiento, WhatsApp, Rubro y Mensaje).
-2. El sistema valida los datos y muestra un Toast feedback exitoso confirmando la recepción.
+LoginModal permite seleccionar rol y modo de ingreso/registro. Feriantes tienen puestos demo (por ejemplo fer-01, clave feria123) y acceso rápido. Compradores tienen perfiles demo (clave comprador123), ingreso y registro simulado. La sesión persiste localmente.
 
-### 1.4 Flujo D: Autenticación de Usuario Comprador (Vecino de Río Cuarto)
-1. El visitante hace clic en *"Iniciar Sesión"* en la barra de navegación superior.
-2. Selecciona la pestaña **[Soy Comprador]** (Portal Vecinos).
-3. Puede ingresar su nombre/correo y contraseña (`comprador123`) o seleccionar un perfil de comprador demo con 1 click (María Gómez, Lucas Rossi o Valentina Torres).
-4. Al ingresar:
-   - La barra de navegación centraliza la búsqueda y muestra su avatar con el badge *"Comprador Ferial"*.
-   - El menú de usuario le permite abrir directamente *"Mi Lista de Compras"*, *"Explorar Puestos y Ferias"* o *"Cerrar Sesión"*.
-   - Los pedidos enviados a los artesanos por WhatsApp personalizan el saludo con el nombre del comprador conectado.
+El comprador ve una portada centrada en catálogo, alterna productos/tiendas y no ve hero, paseos ni convocatoria. El feriante accede a Mi Taller y a su puesto público desde su menú. Cerrar sesión cambia la experiencia según el rol.
 
----
+El registro no crea cuenta en un servidor. Un comprador nuevo puede recibir otro ID al volver a ingresar y perder acceso a pedidos anteriores: ver errores-conocidos.md. Perfiles mock estables permiten repetir la demo.
 
-## 2. Checklist de Verificación y Criterios de Aceptación (DoD)
+## Carrito y pedido
 
-Para considerar cada vista o componente terminado, se valida explícitamente el cumplimiento de los **4 Estados de UI**:
+1. CartDrawer muestra artículos, cantidades y total con recargo de plataforma de 10 % sobre precio base.
+2. El usuario abre /checkout; debe iniciar sesión como comprador antes de confirmar.
+3. confirmPurchase valida revisión del carrito, sesión, cantidades, precios y disponibilidad actual. Si cambian datos, informa el error para revisar el resumen.
+4. Guarda en IndexedDB un pedido agrupado por tienda con instantáneas de precios e imágenes. Comprador/revisión determinan un ID para evitar duplicar esa confirmación.
+5. Después de guardar, limpia el carrito si no cambió su revisión; muestra el pedido pendiente.
+6. /checkout?pedido=... recupera el pedido en el mismo origen/navegador con la identidad correspondiente.
 
-| Estado de UI | Comportamiento Requerido en Directorio y Tiendas |
-|---|---|
-| ⏳ **Loading** | *Skeleton loaders* con pulsación suave tanto en la grilla de tiendas como en la vista de detalle. |
-| 📭 **Empty** | Si un filtro no arroja resultados, mostrar icono de tienda, mensaje empático y botón para restablecer filtros. |
-| ❌ **Error** | Mensaje amigable con botón de reintento en el directorio o botón para volver al directorio si no se encuentra la tienda (`/tienda/:id`). |
-| ✅ **Success** | Renderizado fluido con fotos de alta resolución, banners, enlaces funcionales a WhatsApp y badges feriales. |
+## Transferencia y comprobantes ficticios
+
+Se muestran instrucciones de demostración desde platformPayment.ts. El comprador adjunta imágenes y las guarda localmente; puede recargar el pedido para consultarlas. No se acredita pago: estadoPago permanece pendiente. No hay integración bancaria ni liquidación automática.
+
+## Mi Taller y ventas
+
+/admin limita su interfaz al feriante identificado; no es administración general. Permite crear/editar productos (precio base, descripción, fotos, disponibilidad y destacado), eliminarlos, responder preguntas y revisar ventas de su tienda.
+
+Productos se guardan en IndexedDB; disponibilidad manual tiene store persistente. Borrar productos iniciales puede revertirse al recargar.
+
+StoreSales muestra los grupos del pedido de la tienda, comprador, artículos e importes, y permite ampliar comprobantes locales. Para recorrer ambos roles, cambiar de comprador a feriante en el mismo navegador. Otro dispositivo no verá esas ventas.
+
+## Preguntas
+
+Las preguntas son públicas dentro de los datos del navegador. Comprador identificado pregunta (1 a 1000 caracteres); feriante dueño responde desde su taller (1 a 2000). El repositorio impide responder otra tienda o sobrescribir una respuesta. Eventos locales/BroadcastChannel actualizan pestañas del mismo origen.
+
+## Contacto y postulación
+
+ContactForm solicita nombre, emprendimiento, correo, Instagram, Facebook, rubro y mensaje. Guarda consulta local sin envío a la organización ni alta/aprobación de tienda. El éxito actual puede ser engañoso y el repositorio oculta fallos de almacenamiento.
+
+PostulacionStand y MockPostulacionRepository modelan reserva/pago simulado de stand físico; no hay recorrido activo de interfaz conectado.
+
+## Criterios comunes
+
+Representar carga, vacío, error y éxito donde corresponda; revisar navegación, teclado y tema. Consultar flujo-de-trabajo.md para verificaciones y errores.md para evidencia histórica. La existencia de un componente no sustituye una prueba de su recorrido.

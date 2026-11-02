@@ -1,55 +1,37 @@
-# Convenciones de Desarrollo - Feria Imperio
+# Convenciones de desarrollo - Feria Imperio
 
-## 1. Estilo de HTML Semántico
-El maquetado debe utilizar etiquetas semánticas nativas de HTML5 en lugar de `div` redundantes:
-- `<header>`: Encabezado superior global (`NavBar`) y cabecera de la tienda individual.
-- `<nav>`: Enlaces de navegación interna en `NavBar` y menús accesibles.
-- `<main>`: Contenedor principal del cuerpo de cada vista (`HomePage`, `StoreDetailPage`, `AdminPage`).
-- `<section>`: Bloques temáticos (`HeroBanner`, `FeriasSection`, sección de contacto, grillas).
-- `<article>`: Tarjetas autosuficientes de información (`StoreCard`, `ProductCard`).
-- `<aside>`: Cajón lateral deslizable del carrito (`CartDrawer`).
-- `<footer>`: Pie de página institucional y enlaces de contacto.
-- `<figure>` / `<figcaption>`: Imágenes de productos con su descripción textual contextual.
+Actualizado: 2026-11-02.
 
----
+## Código y datos
 
-## 2. Naming y Sistema de Estilos: Utilidades TailwindCSS
-- **Framework Utilizado**: **TailwindCSS v3** exclusivamente.
-  - **NO se usa metodología BEM** (`.block__element--modifier`) ni hojas CSS monolíticas.
-  - Se utilizan clases utilitarias atómicas y declarativas directamente en el atributo `className`.
-- **Estrategia Responsive Mobile-First**:
-  - Base: Móvil por defecto (`< 768px`).
-  - Breakpoints oficiales: `sm:` (640px), `md:` (768px), `lg:` (1024px), `xl:` (1280px).
-- **Modo Oscuro**:
-  - Manejado con la variante `dark:` (ej: `bg-sand dark:bg-charcoal text-charcoal dark:text-sand-100`).
-- **Nombres de Clases y Tokens de Marca**:
-  - `terracotta` (`#c85a32`): Identidad primaria, botones principales y acentos destacados.
-  - `forest` (`#2f5233`): Acento secundario y vínculos a ferias ecológicas.
-  - `sand` (`#fbfaf8`): Fondo y superficies en modo claro.
-  - `charcoal` (`#18181b`): Textos en modo claro y fondo en modo oscuro.
-  - `whatsapp` (`#25d366`): Botones y llamadas a la acción directas hacia WhatsApp.
-- **Nomenclatura en Código**:
-  - Componentes React: `PascalCase.tsx` (ej: `ProductCard.tsx`, `StoreGrid.tsx`).
-  - Hooks y stores: `camelCase.ts` con prefijo `use` (ej: `useCartStore.ts`).
-  - Interfaces y tipos: `PascalCase` en `src/types/index.ts` (ej: `Feriante`, `Producto`, `UIStatus`).
-  - Contratos de repositorio: prefijo `I` (ej: `IFerianteRepository.ts`, `IProductoRepository.ts`).
+- React con TypeScript estricto; componentes PascalCase.tsx, hooks/stores con prefijo use y archivos camelCase.ts. Evitar any arbitrario.
+- Tipos compartidos en src/types/index.ts; modelos específicos de pedidos/preguntas en sus módulos. Contratos de repositorio con prefijo I.
+- Acceder a catálogo y feriantes mediante src/repositories/index.ts; pedidos, checkout y preguntas mediante sus módulos. Evitar almacenamiento ad hoc desde componentes.
+- Hooks para estado de componente; Zustand para sesión, carrito y disponibilidad. Persistir datos necesarios, no estados transitorios de modales o carga.
+- Reutilizar formatARS y normalizeSearchText de src/utils/formatters.ts. La existencia de buildWhatsAppLink no implica un recorrido WhatsApp integrado en la interfaz actual.
 
----
+## Estilos y accesibilidad
 
-## 3. Patrones Permitidos
-1. **Patrón Repository**: Consumir datos siempre a través de las abstracciones inyectadas (`ferianteRepository`, `productoRepository`, `contactoRepository`), nunca mediante llamadas directas hardcodeadas en vistas.
-2. **Validación de 4 Estados de UI**: Toda vista o componente con carga asíncrona debe implementar explícitamente:
-   - ⏳ `loading`: Skeletons animados con `animate-pulse`.
-   - 📭 `empty`: Estado informativo con icono y botón para resetear filtros.
-   - ❌ `error`: Mensaje claro de fallo con botón de reintento (`onRetry`).
-   - ✅ `success`: Renderizado normal de los datos.
-3. **Manejo de Estado Atómico con Zustand**: Persistir selectivamente en `localStorage` mediante middleware oficial `persist`.
-4. **Formateo Centralizado**: Utilizar funciones de `src/utils/formatters.ts` (`formatARS`, `buildWhatsAppLink`).
+Tailwind CSS v3, sin Bootstrap ni sintaxis de Tailwind v4. Tokens terracotta, forest, sand y charcoal en tailwind.config.js; modo oscuro con dark:. CSS base en src/index.css.
 
----
+Diseño mobile-first: sm 640, md 768, lg 1024 y xl 1280 px. Preferir anchos fluidos y contenedores máximos; evitar w-screen y anchos rígidos desbordados.
 
-## 4. Patrones Prohibidos
-1. ❌ **Prohibido el uso de `any` arbitrario**: Toda entidad, propiedad y evento debe tener tipos estrictos de TypeScript.
-2. ❌ **Prohibido el uso de Bootstrap o CSS Vanilla desordenado**: No incorporar archivos CSS externos fuera de Tailwind utilities y `src/index.css`.
-3. ❌ **Prohibido anchos fijos que causen scroll horizontal**: No usar valores absolutos en píxeles que desborden pantallas móviles de 360px (usar `w-full`, `max-w-*` y `overflow-x-hidden`).
-4. ❌ **Prohibido agregar dependencias o pasarelas de pago** sin consulta y aprobación explícita previa del usuario.
+Usar HTML semántico según función: header, nav, main, section, article, aside y footer. Etiquetar imágenes/controles, comprobar teclado, foco visible, cierre y retorno de foco en diálogos. Contraste y áreas táctiles deben verificarse: las clases utilitarias no certifican accesibilidad.
+
+## Estados de interfaz
+
+Representar carga, vacío, error recuperable y éxito en operaciones asíncronas; UIStatus también incluye idle. No anunciar éxito antes de finalizar la persistencia. Diferenciar simulación local de recepción por servidor; el formulario de contacto todavía presenta una excepción conocida.
+
+## Invariantes funcionales
+
+- Producto.precio contiene precio base. Aplicar el recargo de 10 % mediante customerPrice en src/utils/pricing.ts; no volver a aplicarlo al precio final de un pedido histórico.
+- Conservar instantáneas del pedido; guardar antes de limpiar el carrito. Respetar revisión/idempotencia y cambios de sesión al confirmar.
+- Disponibilidad efectiva: override de useStockStore si existe, o enStock del producto. Bloquear agregado y validar de nuevo en checkout.
+- No duplicar fotos data URL y galerías en localStorage del carrito; mantener imágenes en IndexedDB.
+- Filtrar ventas por feriante y recuperar pedidos por comprador. Son controles de demostración en cliente, no seguridad de servidor.
+- Solo comprador identificado pregunta y confirma; solo el feriante dueño responde preguntas de su tienda. Respuesta única validada en repositorio.
+- No presentar comprobantes como pagos acreditados ni datos bancarios de ejemplo como operativos.
+
+## Alcance
+
+Mantener el alcance académico local acordado. Evaluar con el usuario cambios de dependencias, servicios o arquitectura cuando excedan su pedido. Una actualización documental o un arreglo puntual no implica migrar a backend.

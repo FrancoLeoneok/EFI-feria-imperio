@@ -1,47 +1,41 @@
-# Flujo de Trabajo y Definition of Done - Feria Imperio
+# Flujo de trabajo y Definition of Done - Feria Imperio
 
-## 1. Pasos para Realizar un Cambio de Maquetado o Funcionalidad
-Cada modificación debe ejecutarse de acuerdo con la estrategia de 4 fases de SDD:
+Actualizado: 2026-11-02.
 
-1. **Fase 1: Justificación y Especificación (Spec)**:
-   - Identificar el objetivo de UX, los archivos involucrados y explicar el **por qué** antes del **cómo**.
-   - Definir de antemano el comportamiento en los 4 estados de UI (Loading, Empty, Error, Success).
-2. **Fase 2: Contratos e Interfaces (Design)**:
-   - Si se modifican datos, actualizar primero las interfaces en `src/types/index.ts` y contratos en `src/repositories/interfaces/`.
-3. **Fase 3: Maquetado e Implementación (Implementation)**:
-   - Utilizar clases declarativas de TailwindCSS v3 siguiendo la directiva Mobile-First.
-   - Usar etiquetas HTML5 semánticas (`<header>`, `<main>`, `<section>`, `<article>`).
-   - Conectar los componentes a los repositorios o al store de Zustand (`useCartStore`).
-4. **Fase 4: Verificación contra DoD y Testing Visual (Review)**:
-   - Validar que no existan errores de compilación TypeScript.
-   - Probar la vista en los distintos viewports y alternar el modo oscuro.
+## Cómo abordar cambios
 
----
+1. Leer README y contexto, contrastando con código e historial. arquitectura describe implementación; flujo, recorridos; convenciones, reglas; decisiones, historial; errores, arreglos; errores-conocidos, pendientes; glosario, vocabulario.
+2. Delimitar objetivo y aceptación. Consultar docs/intake/checkout-transferencia, ventas-tiendas y preguntas-productos cuando corresponda. Mantener el alcance académico local salvo pedido que lo cambie.
+3. Revisar modelos/contratos y efectos sobre persistencia, roles, precios e historial antes de implementar.
+4. Utilizar repositorios/stores existentes, estados asíncronos aplicables y errores visibles.
+5. Verificar lo afectado y actualizar contexto con evidencia real. Documentar un pendiente no lo resuelve.
 
-## 2. Checklist de "Terminado" (Definition of Done - DoD)
-Ningún ticket, componente o refactor se da por concluido si no aprueba estos 4 puntos:
-- [ ] **1. Justificación Técnica**: El cambio incluye explicación clara de diseño, trade-offs e impacto.
-- [ ] **2. Tipado Estricto**: Cero errores de TypeScript (`npm run build` sin errores, sin uso de `any` arbitrario).
-- [ ] **3. Cumplimiento de los 4 Estados de UI**:
-  - ⏳ **Loading**: Skeletons o spinners no invasivos mientras se resuelven promesas.
-  - 📭 **Empty**: Mensaje claro cuando no hay resultados, con CTA para restablecer filtros o volver.
-  - ❌ **Error**: Manejo visible del error con botón de reintento (`onRetry`).
-  - ✅ **Success**: Renderizado correcto de datos, imágenes con `alt` y botones interactivos.
-- [ ] **4. Código Limpio y Accesibilidad**: Código modular, sin duplicación (DRY), con áreas táctiles aptas (mínimo 44x44px).
+## Comandos y scripts
 
----
+- npm ci: instalar dependencias del lockfile cuando haga falta.
+- npm run dev: servidor Vite; usar URL/puerto informados.
+- npm run build: TypeScript y build de producción.
+- npm run preview: revisar compilación estática.
 
-## 3. Protocolo de Validación Responsive
-Toda pantalla o componente debe validarse en 3 rangos de resolución mínimos:
-1. **Móvil (360px a 767px)**:
-   - Grilla de 1 columna vertical.
-   - Menú de navegación condensado en panel lateral / menú hamburguesa.
-   - Botón de WhatsApp flotante (`FloatingWhatsApp`) visible y accesible sin tapar botones clave.
-   - Ausencia total de scroll horizontal (`overflow-x-hidden`).
-2. **Tablet (768px a 1023px)**:
-   - Grillas en 2 columnas con espacio intermedio (`gap-4` o `gap-6`).
-   - Barra de búsqueda visible en la cabecera.
-3. **Desktop (>= 1024px)**:
-   - Grillas en 3 o 4 columnas (`lg:grid-cols-3` o `xl:grid-cols-4`).
-   - Menú horizontal completo visible en `NavBar`.
-   - Modales centrados con ancho máximo controlado (`max-w-2xl` o `max-w-4xl`).
+No hay npm test ni Playwright declarado en package.json. Scripts .mjs importan Playwright del entorno o desde URL de módulo recibida por argumento y utilizan Chrome. Revisar cada cabecera y parámetros; algunos importan /src/ y requieren servidor de desarrollo, no preview/producción.
+
+En scripts/: verify-checkout, verify-store-sales, verify-platform-pricing, verify-cart-photos, verify-product-detail, verify-product-edit, verify-product-upload, verify-product-questions, verify-login-reopen, verify-responsive-navigation, verify-guides y verify-audit-fixes. audit-production y audit-production-extra registran recorridos amplios; capture-guides genera capturas. Ver errores-conocidos por el fixture duplicado de subida.
+
+## Definition of Done
+
+- [ ] Comportamiento solicitado implementado con alcance/límites explicados.
+- [ ] Tipos/build correctos al cambiar código y verificaciones adecuadas. Para documentación, comprobar fuentes, rutas y consistencia sin atribuir pruebas no ejecutadas.
+- [ ] Carga, vacío, error recuperable y éxito donde corresponda.
+- [ ] Rol correcto en ingreso, taller, preguntas y confirmación, sin presentar controles locales como seguridad real.
+- [ ] Precios coherentes, recargo único de 10 %, redondeo y conservación del historial.
+- [ ] Persistencia confirmada antes del éxito/vaciado; considerar cuota, recarga, sesión y pestañas según el cambio.
+- [ ] Responsive, teclado, foco, etiquetas e imágenes revisados en vistas afectadas.
+- [ ] Contexto actualizado sin borrar historia ni mezclar propuestas con implementación.
+
+## Revisión de interfaz y resultados
+
+Comprobar móvil (incluyendo 320/360 px), tablet y escritorio según el cambio. No imponer grilla única: revisar cada componente. Alternar tema; comprobar menú móvil, búsqueda, anclas desde rutas internas, galería, modales y drawer sin desbordamiento/solapamiento.
+
+Para compras: visitante/comprador, agotados, cantidades, recarga, multitienda, comprobantes y vista de feriante en el mismo navegador. No efectuar transferencias ni mensajes externos para verificar una demo.
+
+Indicar comandos realmente ejecutados y resultados. Separar evidencia histórica de pruebas actuales. Usar errores.md para correcciones y errores-conocidos.md para pendientes/límites. Recomendaciones de auditoría no autorizan automáticamente ampliar alcance.

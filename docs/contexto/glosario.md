@@ -1,42 +1,58 @@
-# Glosario de Dominio, UI y Siglas - Feria Imperio
+# Glosario de dominio, UI y siglas - Feria Imperio
 
-## 1. Términos del Dominio Ferial (Negocio)
-- **Feria Imperio**: Portal y catálogo web de artesanos y emprendedores de Río Cuarto (Córdoba).
-- **Feriante / Artesano**: Persona física o taller que elabora y comercializa creaciones en la feria.
-- **Gazebo / Puesto**: Espacio físico numerado (`puestoNumero`) en el predio ferial, reflejado digitalmente en la tarjeta de tienda.
-- **Paseos de Ferias**: Polos feriales de la ciudad:
-  - *Paseo del Andino*
-  - *Parque Sarmiento*
-- **Rubro**: Clasificación productiva (`artesanias`, `ceramica`, `gastronomia`, `marroquineria`, `madera`, `indumentaria`).
-- **Finde Confirmado**: Distintivo (`findeConfirmado: boolean`) que certifica la asistencia presencial del feriante en la próxima edición.
-- **Presupuesto Simulado**: Lista de compra no vinculante que el usuario arma localmente antes de contactar al artesano vía WhatsApp.
-- **Disponibilidad**: Estado del producto: *En Stock* (entrega inmediata) o *Bajo Pedido* (elaboración artesanal previa).
+Actualizado: 2026-11-02.
 
----
+## Dominio
 
-## 2. Entidades de Interfaz de Usuario (UI)
-- **`NavBar`**: Cabecera fija con logotipo, buscador de feriantes, selector de tema oscuro y acceso al panel de vendedor.
-- **`HeroBanner`**: Bloque promocional superior con fecha próxima, ubicación del paseo y botón directo a puestos.
-- **`CategoryFilter`**: Barra de botones (pills) para filtrar dinámicamente por rubro y predio ferial.
-- **`StoreCard`**: Tarjeta de resumen de tienda ferial con fotos de portada, avatar, rubro, puesto y botón "Ver Tienda".
-- **`StoreGrid`**: Contenedor en grilla responsiva de puestos que gestiona los 4 estados de UI.
-- **`ProductCard`**: Tarjeta individual de producto con precio en ARS, disponibilidad y botones de WhatsApp y carrito.
-- **`ProductGrid`**: Grilla de productos del catálogo exclusivo de una tienda.
-- **`ProductModal`**: Ventana modal con ficha ampliada y especificaciones artesanales.
-- **`CartDrawer`**: Panel deslizable lateral que lista productos seleccionados, subtotales y botón de consulta por WhatsApp.
-- **`FeriasSection`**: Sección informativa sobre los predios feriales oficiales (Andino y Sarmiento).
-- **`ContactForm`**: Formulario de postulación de "Convocatoria Abierta" para nuevos feriantes interesados en registrarse, que solicita datos de contacto, rubro y enlaces obligatorios a redes sociales (Instagram y Facebook con URLs de ejemplo).
-- **`FloatingWhatsApp`**: Botón flotante de contacto rápido ubicado en la esquina inferior derecha.
-- **`ThemeToggle`**: Botón para alternar entre modo claro y modo oscuro.
-- **`Toast`**: Notificación flotante temporal de confirmación o alerta.
+- **Feria Imperio:** prototipo académico de catálogo y compra simulada local de Río Cuarto, Córdoba.
+- **Feriante / artesano:** responsable de tienda; rol feriante en sesión demo.
+- **Comprador / cliente:** rol comprador; confirma pedidos y publica preguntas.
+- **Gazebo / puesto:** espacio físico identificado por puestoNumero; tienda digital en /tienda/:id.
+- **Paseos:** Paseo del Andino y Parque Sarmiento; UbicacionFeria también admite ambos.
+- **Rubro:** artesanias, ceramica, gastronomia, marroquineria, madera o indumentaria.
+- **Finde confirmado:** dato estático findeConfirmado, no agenda administrable.
+- **Producto:** pieza con precio base, fotos, especificaciones y disponibilidad; ruta /producto/:id.
+- **Disponibilidad efectiva:** override del store de stock, si existe, o enStock del producto; no representa unidades.
+- **Precio base:** Producto.precio, importe del feriante sin recargo.
+- **Precio al comprador:** customerPrice aplica 10 % y redondeo; COMMISSION_PERCENT define la regla.
+- **Carrito / lista:** selección persistente multitienda con cantidades; evolucionó del presupuesto inicial al checkout simulado.
+- **Revisión del carrito:** identificador que cambia con artículos/cantidades y detecta modificaciones durante confirmación.
+- **Pedido (Order):** instantánea local de comprador, grupos, importes y comprobantes; no acredita pago.
+- **Grupo (OrderGroup):** artículos/subtotal de una tienda en pedido multitienda.
+- **Venta (StoreSale):** proyección del grupo de pedido para su feriante; no implica cobro.
+- **Comprobante:** imagen local adjunta al pedido; el pago sigue pendiente.
+- **PreguntaProducto:** pregunta local asociada a producto/comprador/feriante con respuesta única opcional.
+- **ConsultaContacto:** solicitud local; no crea cuenta/tienda ni comunica a la organización.
+- **PostulacionStand:** reserva física con pago simulado, sin recorrido de interfaz activo.
 
----
+## Interfaz
 
-## 3. Siglas y Convenciones Internas
-- **ARS**: Pesos Argentinos (moneda utilizada en el catálogo).
-- **SPA**: Single Page Application (aplicación web de una sola página gestionada con `react-router-dom`).
-- **ADR**: Architecture Decision Record (registro formal de decisiones de diseño de software).
-- **SDD**: Spec-Driven Development (desarrollo guiado por especificaciones).
-- **DoD**: Definition of Done (criterios innegociables para dar por finalizada una tarea).
-- **UIStatus**: Tipo unión (`'idle' | 'loading' | 'success' | 'empty' | 'error'`) para controlar la experiencia de carga asíncrona.
-- **CTA**: Call To Action (llamada a la acción, ej: "Consultar por WhatsApp", "Ver Tienda").
+- **NavBar:** marca, búsqueda, tema, ingreso y menú por rol.
+- **HeroBanner / FeriasSection:** portada e información estática, omitidas para comprador autenticado.
+- **CategoryFilter / StoreGrid / StoreCard:** filtros y directorio de tiendas.
+- **ProductGrid / ProductCard:** catálogo y acceso a producto; agregado sujeto a disponibilidad.
+- **ProductDetailPage / ProductGallery:** ficha y galería individual. ProductModal existe como componente, pero no sustituye la ruta.
+- **ProductFormDialog / ProductImageUpload:** alta/edición y fotos del taller.
+- **LoginModal:** ingreso, perfiles y registro de demostración.
+- **CartDrawer / CheckoutPage / OrderConfirmation:** selección, confirmación y recuperación del pedido.
+- **TransferPayment / OrderProducts / CartProductImage:** transferencia ficticia, artículos históricos y fotos del carrito.
+- **StoreSales:** pedidos de la tienda y comprobantes ampliables.
+- **ProductQuestions / StoreQuestions:** preguntas públicas locales y gestión de respuestas.
+- **ContactForm:** consulta/postulación local.
+- **GuidesModal / PrivacyModal:** guías y aviso de privacidad.
+- **ThemeToggle / Toast:** tema y notificación temporal. FloatingWhatsApp no está activo en el código actual.
+
+## Tecnología y proceso
+
+- **ARS:** pesos argentinos.
+- **SPA:** aplicación de navegación cliente; el hosting debe resolver rutas al HTML de entrada.
+- **Repository / mock:** separación de acceso a datos e interfaz; aquí con implementaciones simuladas/locales.
+- **localStorage:** almacenamiento por origen para sesión, carrito, stock, tema y contacto.
+- **IndexedDB:** base de datos del navegador para productos, pedidos, preguntas e imágenes locales.
+- **BroadcastChannel / storage:** comunicación entre contextos del mismo origen; no entre dispositivos.
+- **ADR:** registro histórico de decisiones, que pueden evolucionar en registros posteriores.
+- **SDD:** desarrollo guiado por especificaciones.
+- **DoD:** criterios para terminar una tarea.
+- **UIStatus:** idle, loading, success, empty o error.
+- **CTA:** acción propuesta por un control.
+- **Idempotencia de confirmación:** repetir comprador/revisión recupera el pedido existente en lugar de duplicarlo.

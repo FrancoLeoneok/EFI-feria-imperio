@@ -1,5 +1,7 @@
 # Registro de Decisiones de Arquitectura (ADRs) - Feria Imperio
 
+> Estado actualizado al 2026-11-02: consultar ADR-018 a ADR-022. Los registros anteriores se preservan como historia y pueden describir comportamientos reemplazados.
+
 > **Regla de Guardas y Control de Cambios Estructurales**:  
 > Cada nueva solicitud del usuario debe quedar registrada aquí. Si una instrucción implica un cambio importante o estructural (arquitectura, cambio de framework, borrado de archivos o librerías), **se DEBE pedir autorización explícita antes de ejecutarlo**.
 
@@ -146,3 +148,43 @@
 - **Consecuencias**: Experiencia de compra limpia y directa para los clientes de Río Cuarto, eliminación del llamado a postulación para compradores y cumplimiento total del Definition of Done.
 
 
+
+---
+
+## Actualización de contexto · 2026-11-02
+
+Los ADR-001 a ADR-017 se conservan como historial de su momento. No certifican el estado actual ni pruebas nuevas. Los registros siguientes documentan retrospectivamente la implementación observada hasta 7a72d7e; la fecha es de registro, no de implementación original.
+
+### [ADR-018] · [2026-11-02] Catálogo, detalle y taller con persistencia local
+
+- **Contexto:** los documentos anteriores no reflejaban la evolución reciente del catálogo y la gestión.
+- **Decisión implementada:** /producto/:id con galería/ficha, alta y edición con imágenes locales en IndexedDB, disponibilidad y destacado. /admin sigue siendo taller del feriante, no administrador general. Los datos locales se combinan por ID con los iniciales. Recuperación de rutas inexistentes y rewrite SPA en Vercel.
+- **Consecuencias:** productos ya no existen solo en memoria; borrar datos iniciales aún puede revertirse al recargar. El hero actual presenta Río Cuarto y El Corazón De Las Ferias; el texto de ADR-015 se conserva como antecedente histórico.
+- **Fuentes:** ProductDetailPage, ProductFormDialog, MockProductoRepository, localProducts y vercel.json; dc1fab7, 14968f4 y 6965e90.
+
+### [ADR-019] · [2026-11-02] Checkout y transferencia de demostración
+
+- **Contexto:** el presupuesto de ADR-002/004 evolucionó a compra local simulada; especificaciones en docs/intake/checkout-transferencia.
+- **Decisión implementada:** /checkout exige comprador al confirmar, aplica recargo de 10 % sobre precio base, agrupa por tienda y guarda pedidos en IndexedDB con instantáneas de precios/fotos. Valida sesión, revisión, precios, cantidades y disponibilidad. ID comprador/revisión evita duplicar esa confirmación; persiste antes de vaciar carrito. Recuperación por ?pedido=... y carga local de comprobantes.
+- **Consecuencias:** reemplaza la descripción de WhatsApp como recorrido comercial vigente de ADR-002/008. No hay WhatsApp integrado en la interfaz actual ni pagos reales: alias de ejemplo, CVU vacío, demostracion: true y estado pendiente incluso con comprobantes. Se mantiene el alcance sin backend remoto.
+- **Fuentes:** checkout.ts, localOrders.ts, pricing.ts, platformPayment.ts y CheckoutPage; 02f6c86 y cambios posteriores.
+
+### [ADR-020] · [2026-11-02] Ventas y preguntas por tienda
+
+- **Contexto:** completar ambos roles de la demo; especificaciones en docs/intake/ventas-tiendas y preguntas-productos.
+- **Decisión implementada:** StoreSales presenta grupos de pedidos de la tienda, comprador y comprobantes ampliables. Preguntas en IndexedDB; comprador pregunta y feriante dueño responde una vez, con validaciones de sesión/longitud en repositorio.
+- **Consecuencias:** ambos lados se recorren cambiando de rol en el mismo navegador. No hay comunicación entre dispositivos ni permisos de servidor. Eventos locales y BroadcastChannel notifican cambios donde corresponde.
+- **Fuentes:** StoreSales, localOrders.ts, questions.ts y componentes questions; 9984f8f para ventas.
+
+### [ADR-021] · [2026-11-02] Correcciones puntuales de auditoría
+
+- **Contexto:** la auditoría del 1 de noviembre separó límites académicos de fallos; se autorizaron correcciones de sus puntos 4 a 7.
+- **Decisión implementada:** bloquear agregado sin stock también en el store, reflejar disponibilidad efectiva, separar limpiar/enviar búsqueda, corregir destinos del footer y ocultar enlaces a secciones ausentes para compradores.
+- **Consecuencias:** cambios acotados sin convertir la demo en servicio operativo. Permanecen incidencias de identidad de registro, contacto, borrado inicial y acceso visible al carrito de visitante. La auditoría no autoriza por sí sola resolver todo su listado.
+- **Fuentes:** e5b72b9, verify-audit-fixes.mjs y docs/auditoria-funcional-2026-11-01.md, que documenta build/regresiones de aquella sesión.
+
+### [ADR-022] · [2026-11-02] Sincronización de los ocho archivos de contexto
+
+- **Solicitud:** revisar y actualizar todos los archivos de docs/contexto con el trabajo realizado.
+- **Decisión:** contrastar documentos con código, README, scripts, especificaciones e historial local. Actualizar arquitectura, flujos, convenciones, procedimiento, glosario y separar correcciones históricas de pendientes.
+- **Consecuencias:** corregidas referencias obsoletas a seis documentos, ausencia de README/autenticación y presupuesto exclusivamente por WhatsApp. Historial previo preservado; sus afirmaciones de seguridad, accesibilidad o cumplimiento no se toman como certificaciones. No se modificó código ni dependencias. La revisión documental no equivale a ejecutar de nuevo las pruebas históricas.

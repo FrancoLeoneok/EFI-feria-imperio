@@ -1,86 +1,53 @@
-# Arquitectura del Sistema - Feria Imperio
+# Arquitectura del sistema - Feria Imperio
 
-## 1. Stack Tecnológico (Detectado en el Repositorio)
-- **HTML5**: Estructura semántica en `index.html` (viewport mobile, `Plus Jakarta Sans` y Material Symbols vía Google Fonts, `class="scroll-smooth"`).
-- **Framework CSS**: **TailwindCSS v3** (`^3.4.17`) con PostCSS (`^8.5.2`) y Autoprefixer (`^10.4.20`).
-  - *Bootstrap*: **NO se utiliza** (no hay dependencias ni estilos de Bootstrap en el proyecto).
-  - *Vanilla CSS*: Estilos base mínimos en `src/index.css` (`@tailwind base/components/utilities`, `@layer base` para tipografía/overflow, y `.scroll-section`).
-  - *Tokens de diseño*: Paleta extendida en `tailwind.config.js` (`terracotta`, `forest`, `sand`, `charcoal`, `whatsapp`, y mapeo `primary`/`secondary`/`surface`).
-  - *Modo Oscuro*: Estrategia por clase (`darkMode: "class"`).
-- **Frontend Core**: React 18 (`18.3.1`) + TypeScript (`5.7.3`) + Vite (`6.1.0`).
-- **Enrutamiento**: `react-router-dom` (`^7.18.4`) para navegación cliente (SPA).
-- **Estado Global**: Zustand (`^5.0.3`) con middleware `persist` en `localStorage`.
-- **Iconografía**: `lucide-react` (`^0.475.0`).
-- **Patrón Arquitectural**: Patrón Repository para aislar la obtención de datos de la capa visual.
+Actualizado: 2026-11-02. Contrastado con código local hasta `7a72d7e`.
 
----
+## Alcance y stack
 
-## 2. Mapa Real de Carpetas y Archivos
-```
-/ (Raíz)
-├── index.html                  # Plantilla HTML5 principal
-├── package.json                # Dependencias y scripts (dev, build, preview)
-├── vite.config.ts              # Configuración de Vite con plugin React
-├── tailwind.config.js          # Tokens de marca, darkMode 'class' y extensiones
-├── postcss.config.js           # Plugins de PostCSS (tailwindcss, autoprefixer)
-├── tsconfig.json               # Configuración TypeScript strict
-├── GEMINI.md                   # Configuración y contexto vivo para el agente
-├── docs/contexto/              # Documentación viva (6 archivos Gentle-AI)
-├── .agents/rules/              # Reglas globales permanentes (antigravity_global_rules.md)
-├── DetalleTienda.jsx           # Prototipo visual estático (legado)
-├── Index.jsx                   # Prototipo visual estático (legado)
-├── PanelAdmin.jsx              # Prototipo visual estático (legado)
-├── detalle_tienda.html         # Maqueta HTML estática (legado)
-├── legacy_index.html           # Maqueta HTML estática (legado)
-├── panel_admin.html            # Maqueta HTML estática (legado)
-└── src/                        # Código fuente modular de la aplicación React + TS
-    ├── main.tsx                # Bootstrap de React con ReactDOM
-    ├── App.tsx                 # Enrutador principal, layout global y toasts
-    ├── index.css               # Directivas Tailwind y reglas base
-    ├── types/index.ts          # Tipos e interfaces de dominio (Feriante, Producto, UIStatus)
-    ├── data/mockData.ts        # Datos iniciales tipados de puestos y productos de Río Cuarto
-    ├── utils/formatters.ts     # Formateadores (moneda ARS, enlaces wa.me)
-    ├── store/useCartStore.ts   # Store Zustand del presupuesto simulado (localStorage)
-    ├── repositories/           # Capa de abstracción de datos
-    │   ├── index.ts            # Exportación de instancias activas
-    │   ├── interfaces/         # Contratos (IFerianteRepository, IProductoRepository, etc.)
-    │   └── mock/               # Implementaciones simuladas asíncronas
-    ├── components/             # Componentes de interfaz ordenados por función
-    │   ├── layout/             # NavBar, Footer, HeroBanner
-    │   ├── stores/             # StoreCard, StoreGrid (con 4 estados)
-    │   ├── catalog/            # CategoryFilter, ProductCard, ProductGrid, ProductModal
-    │   ├── ferias/             # FeriasSection (Paseo del Andino / Parque Sarmiento)
-    │   ├── contact/            # ContactForm (postulación de feriantes)
-    │   ├── cart/               # CartDrawer (cajón de presupuesto)
-    │   └── common/             # ThemeToggle, Toast, FloatingWhatsApp
-    └── pages/                  # Vistas completas asociadas a rutas
-        ├── HomePage.tsx        # Portada y directorio general ('/')
-        ├── StoreDetailPage.tsx # Ficha y catálogo individual ('/tienda/:id')
-        └── AdminPage.tsx       # Gestión de stock y precios ('/admin')
-```
+Prototipo académico de catálogo y compra simulada para feriantes de Río Cuarto. Funciona en el navegador sin backend ni base de datos de servidor; sí utiliza IndexedDB local. No hay pagos ni autenticación reales.
 
----
+React 18.3, TypeScript 5.7 estricto, Vite 6.1, React Router DOM 7 y Zustand 5. Estilos con Tailwind CSS 3.4, PostCSS y Autoprefixer; tokens en tailwind.config.js, estilos base en src/index.css y modo oscuro por clase. Lucide React, clsx, tailwind-merge y Plus Jakarta Sans completan la interfaz. package.json declara versiones y package-lock.json fija las resueltas.
 
-## 3. Flujo de Datos
-```mermaid
-graph TD
-    UI[Componentes React: Paginas y Grillas] --> Repo[Capa Repositories: productoRepository / ferianteRepository]
-    Repo --> Data[MockData / Estado en Memoria]
-    UI --> CartStore[Zustand useCartStore: Presupuesto Simulado]
-    CartStore --> LocalStorage[(LocalStorage: 'feria_imperio_cart')]
-    UI --> ThemeToggle[ThemeToggle: Dark / Light Mode]
-    ThemeToggle --> DOMClass[Elemento html class='dark']
-    ThemeToggle --> ThemeStorage[(LocalStorage: 'feria_theme')]
-    UI --> Router[react-router-dom: /, /tienda/:id, /admin]
-    UI --> WhatsApp[Enlace externo https://wa.me/?text=...]
-```
+## Organización
 
----
+- src/App.tsx: rutas, búsqueda compartida, layout, carrito, ingreso y toast globales.
+- src/pages/: HomePage, StoreDetailPage, ProductDetailPage, AdminPage, CheckoutPage y NotFoundPage.
+- src/components/: layout, auth, stores, catalog, cart, admin, questions, contact, ferias y common. Incluye galerías/formularios de producto, ventas, guías y privacidad. No hay FloatingWhatsApp activo.
+- src/types/index.ts: modelos compartidos. Pedidos y preguntas declaran modelos específicos en sus repositorios.
+- src/repositories/interfaces/ y mock/: contratos e implementaciones simuladas. index.ts exporta productos, feriantes, contacto y postulaciones.
+- src/repositories/mock/localProducts.ts: productos locales. MockProductoRepository combina registros locales con PRODUCTOS_MOCK, priorizando los locales por ID.
+- src/repositories/checkout.ts: confirmación; localOrders.ts: pedidos, comprobantes y ventas; questions.ts: preguntas y respuestas.
+- src/store/: useAuthStore, useCartStore y useStockStore.
+- src/utils/: formatos/búsqueda, precios y eventos de pedidos. src/config/platformPayment.ts: transferencia ficticia.
+- src/data/: catálogo inicial y guías. public/: recursos estáticos.
+- scripts/: auditorías y verificaciones. docs/intake/: especificaciones de checkout, ventas y preguntas. README.md: ejecución y alcance.
+- Maquetas HTML/JSX de la raíz: referencias anteriores. Entrada activa: src/main.tsx.
 
-## 4. Qué NO Existe en el Repositorio (Límites Observados)
-- [PENDIENTE: Servidor backend propio / API REST remota]: La app funciona 100% en el cliente con repositorios mock y demoras simuladas.
-- [PENDIENTE: Base de datos SQL/NoSQL remota]: No existe conexión a PostgreSQL, MySQL, Mongo ni Firebase.
-- [PENDIENTE: Pasarelas de pago online]: No hay integración con Mercado Pago, Stripe ni checkout bancario. Las transacciones se coordinan por WhatsApp.
-- [PENDIENTE: Autenticación / Login de usuarios]: El acceso a `/admin` es directo sin credenciales, tokens JWT ni sesiones.
-- [PENDIENTE: Archivo README.md]: No existe actualmente documentación en `README.md` en la raíz.
-- [PENDIENTE: Suite de pruebas automatizadas]: No hay tests configurados (Vitest, Jest o Playwright ausentes en `package.json`).
+## Rutas
+
+- /: directorio y catálogo adaptados al rol.
+- /tienda/:id: ficha y catálogo de tienda.
+- /producto/:id: galería, ficha, compra y preguntas.
+- /admin: Mi Taller del feriante identificado; no administración general.
+- /checkout: resumen/confirmación; ?pedido=... recupera un pedido local del comprador correspondiente.
+- Cualquier otra ruta: recuperación mediante NotFoundPage.
+
+vercel.json resuelve rutas SPA a index.html; publicar no centraliza datos.
+
+## Persistencia y flujo de datos
+
+- localStorage: feria_imperio_auth, feria_imperio_cart, feria-imperio-stock, feria_theme y feria_imperio_consultas.
+- IndexedDB: feria-imperio-products/products, feria-imperio-orders/orders y feria-imperio-questions/questions.
+- Carrito: cantidades y revisión; excluye galerías y portadas data URL de localStorage para no duplicar fotos grandes. Recupera imágenes del catálogo local.
+- Pedidos: instantánea histórica de comprador, productos, imágenes, importes finales, grupos por tienda, pago ficticio y comprobantes. Persisten antes de vaciar el carrito.
+- Eventos storage sincronizan carrito/stock entre pestañas; pedidos/preguntas tienen eventos propios y BroadcastChannel donde corresponde. No sincronizan dispositivos.
+
+## Compra y límites
+
+Producto.precio es el precio base. customerPrice en src/utils/pricing.ts añade 10 % con redondeo a centavos. El pedido conserva precio final y precioBase en registros nuevos; el historial no se recalcula con precios actuales.
+
+Confirmar rehidrata sesión, carrito y stock y valida cantidades, precio, disponibilidad y revisión. El ID comprador/revisión evita duplicar esa confirmación. Después de guardar se limpia el carrito si no cambió. El pago permanece pendiente incluso con comprobante.
+
+No hay API remota, permisos de servidor, recepción real de postulaciones, integración bancaria, liquidaciones, stock por unidades, envíos ni agenda administrable. Datos aislados por navegador/origen: localhost y Vercel no comparten almacenamiento. Borrar productos iniciales no persiste su eliminación tras recargar.
+
+Hay README y scripts de navegador, pero no npm test ni runner declarado. FastAPI, SQLite, SQLModel, Alembic y Docker son propuestas futuras, no implementación actual.
