@@ -1,3 +1,4 @@
+import { customerPrice, roundMoney } from '../utils/pricing';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Producto } from '../types';
@@ -84,10 +85,10 @@ export const useCartStore = create<CartStore>()(
       },
 
       getTotalPrice: () => {
-        return get().items.reduce(
-          (total, item) => total + item.producto.precio * item.cantidad,
+        return roundMoney(get().items.reduce(
+          (total, item) => total + customerPrice(item.producto.precio) * item.cantidad,
           0
-        );
+        ));
       },
     }),
     {

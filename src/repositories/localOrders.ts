@@ -1,10 +1,14 @@
 import { CartItem } from '../store/useCartStore';
 import { Feriante, UsuarioComprador } from '../types';
 import { notifyOrdersChanged } from '../utils/orderEvents';
+import { customerPrice, roundMoney } from '../utils/pricing';
+import { PlatformPayment } from '../config/platformPayment';
 
 export interface OrderGroup {
-  tienda: Pick<Feriante, 'id' | 'nombreComercio' | 'cvu' | 'alias' | 'aliasDemostracion'>;
-  items: CartItem[];
+  tienda: Pick<Feriante, 'id' | 'nombreComercio'>;
+  // Historical orders keep the final price actually charged, even if the
+  // catalog changes later. Older orders have no separate base price.
+  items: (Omit<CartItem, 'producto'> & { producto: CartItem['producto'] & { precioBase?: number } })[];
   subtotal: number;
   comprobantes: string[];
 }
@@ -16,6 +20,8 @@ export interface Order {
   grupos: OrderGroup[];
   total: number;
   estadoPago: 'pendiente';
+  pago?: PlatformPayment;
+  comprobantes?: string[];
 }
 
 export function groupItems(items: CartItem[], tiendas: Feriante[]): OrderGroup[] {
@@ -25,13 +31,14 @@ export function groupItems(items: CartItem[], tiendas: Feriante[]): OrderGroup[]
     if (!group) {
       const tienda = tiendas.find(({ id }) => id === item.producto.ferianteId);
       group = {
-        tienda: { id: item.producto.ferianteId, nombreComercio: tienda?.nombreComercio ?? item.producto.ferianteNombre, cvu: tienda?.cvu, alias: tienda?.alias, aliasDemostracion: tienda?.aliasDemostracion },
+        tienda: { id: item.producto.ferianteId, nombreComercio: tienda?.nombreComercio ?? item.producto.ferianteNombre },
         items: [], subtotal: 0, comprobantes: [],
       };
       groups.set(group.tienda.id, group);
     }
-    group.items.push(item);
-    group.subtotal += item.producto.precio * item.cantidad;
+    const precio = customerPrice(item.producto.precio);
+    group.items.push({ ...item, producto: { ...item.producto, precioBase: item.producto.precio, precio } });
+    group.subtotal = roundMoney(group.subtotal + precio * item.cantidad);
   }
   return [...groups.values()];
 }
@@ -83,13 +90,13 @@ export function createOrder(order: Order): Promise<Order> {
   });
 }
 
-export function saveReceipts(id: string, compradorId: string, tiendaId: string, images: string[]): Promise<Order> {
+export function saveReceipts(id: string, compradorId: string, images: string[]): Promise<Order> {
   return transact('readwrite', (store, done) => {
     const request = store.get(id);
     request.onsuccess = () => {
       const order = request.result as Order | undefined;
       if (!order || order.comprador.id !== compradorId) { store.transaction.abort(); return; }
-      const updated = { ...order, grupos: order.grupos.map((group) => group.tienda.id === tiendaId ? { ...group, comprobantes: images } : group) };
+      const updated = { ...order, comprobantes: images };
       store.put(updated);
       done(updated);
     };
@@ -118,7 +125,7 @@ export function readStoreSales(ferianteId: string): Promise<StoreSale[]> {
       if (grupo) sales.push({
         pedidoId: order.id, fecha: order.fecha,
         comprador: { nombre: order.comprador.nombre, email: order.comprador.email, telefono: order.comprador.telefono },
-        grupo,
+        grupo: { ...grupo, comprobantes: order.comprobantes ?? grupo.comprobantes },
       });
       cursor.continue();
     };

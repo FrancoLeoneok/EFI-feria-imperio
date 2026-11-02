@@ -6,7 +6,7 @@ import { FeriasSection } from '../components/ferias/FeriasSection';
 import { ContactForm } from '../components/contact/ContactForm';
 import { ProductCard } from '../components/catalog/ProductCard';
 import { ProductGrid } from '../components/catalog/ProductGrid';
-import { ProductModal } from '../components/catalog/ProductModal';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Feriante, Producto, Rubro, UbicacionFeria, UIStatus } from '../types';
 import { ferianteRepository, productoRepository } from '../repositories';
 import { useAuthStore } from '../store/useAuthStore';
@@ -35,8 +35,14 @@ export const HomePage = ({
   const [productosCatalogo, setProductosCatalogo] = useState<Producto[]>([]);
   const [productosStatus, setProductosStatus] = useState<UIStatus>('loading');
   const [productosFiltrados, setProductosFiltrados] = useState<Producto[]>([]);
-  const [selectedProductModal, setSelectedProductModal] = useState<Producto | null>(null);
+  const navigate = useNavigate();
+  const { hash } = useLocation();
+  const verDetalle = (producto: Producto) => navigate(`/producto/${encodeURIComponent(producto.id)}`);
   const [status, setStatus] = useState<UIStatus>('loading');
+
+  useEffect(() => {
+    if (hash === '#catalogo') document.getElementById('catalogo')?.scrollIntoView();
+  }, [hash]);
 
   // Cargar productos para conteos de tiendas
   useEffect(() => {
@@ -109,7 +115,7 @@ export const HomePage = ({
       {!esCliente && <HeroBanner />}
 
       {/* 2. Sección Principal: Catálogo Digital (Unificado con anclas #catalogo y #tiendas) */}
-      <section id="catalogo" className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="catalogo" className="scroll-mt-32 py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div id="tiendas" />
 
         {/* Cabecera Adaptativa: Vista Exclusiva Cliente vs Vista General */}
@@ -239,7 +245,7 @@ export const HomePage = ({
               status={productosStatus}
               onRetry={fetchProductos}
               onResetFilters={handleResetFilters}
-              onVerDetalle={setSelectedProductModal}
+              onVerDetalle={verDetalle}
             />
           ) : (
             <StoreGrid
@@ -272,7 +278,7 @@ export const HomePage = ({
                     <ProductCard
                       key={producto.id}
                       producto={producto}
-                      onVerDetalle={setSelectedProductModal}
+                      onVerDetalle={verDetalle}
                     />
                   ))}
                 </div>
@@ -302,13 +308,6 @@ export const HomePage = ({
         />
       )}
 
-      {/* Modal de Ficha Técnica cuando se abre un producto */}
-      {selectedProductModal && (
-        <ProductModal
-          producto={selectedProductModal}
-          onClose={() => setSelectedProductModal(null)}
-        />
-      )}
     </div>
   );
 };

@@ -23,7 +23,8 @@ import { useStockStore } from '../store/useStockStore';
 import { formatARS } from '../utils/formatters';
 import { ProductFormDialog } from '../components/catalog/ProductFormDialog';
 import { StoreSales } from '../components/admin/StoreSales';
-import { StorePaymentSettings } from '../components/admin/StorePaymentSettings';
+import { StoreQuestions } from '../components/questions/StoreQuestions';
+import { customerPrice } from '../utils/pricing';
 
 interface AdminPageProps {
   onShowToast: (type: 'success' | 'error', title: string, message: string) => void;
@@ -281,8 +282,9 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
           </div>
         )}
 
-        <StorePaymentSettings key={`payments-${ferianteActivo.id}`} tienda={ferianteActivo} />
+        <p className="mb-6 rounded-2xl bg-sand-200 p-4 text-sm text-charcoal-700 dark:bg-charcoal-700 dark:text-sand-200">Feria Imperio recibe los pagos en una cuenta única. Cargá tu precio base: sumamos un 10% fijo de comisión a todos los productos para calcular el precio final al cliente.</p>
         <StoreSales key={`sales-${ferianteActivo.id}`} ferianteId={ferianteActivo.id} />
+        <StoreQuestions key={`questions-${ferianteActivo.id}`} ferianteId={ferianteActivo.id} />
 
         {/* Barra de Gestión de Productos */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
@@ -334,7 +336,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
                   <tr>
                     <th className="p-4 sm:px-6">Producto</th>
                     <th className="p-4">Rubro</th>
-                    <th className="p-4">Precio ($ ARS)</th>
+                    <th className="p-4">Precio base / final ($ ARS)</th>
                     <th className="p-4">Disponibilidad</th>
                     <th className="p-4 text-right sm:px-6">Acciones</th>
                   </tr>
@@ -377,6 +379,9 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
                           <div className="flex items-center gap-1.5">
                             <input
                               type="number"
+                              min="100"
+                              step="0.01"
+                              aria-label="Tu precio base en pesos"
                               value={tempPrecio}
                               onChange={(e) => setTempPrecio(Number(e.target.value))}
                               className="w-24 px-2 py-1 bg-white dark:bg-charcoal-700 border border-terracotta rounded-lg text-xs font-bold"
@@ -414,6 +419,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
                             </button>
                           </div>
                         )}
+                        <p className="mt-1 text-[11px] text-charcoal-500 dark:text-sand-300">Cliente: {formatARS(customerPrice(editingPrecioId === producto.id ? Math.max(0, tempPrecio || 0) : producto.precio))} (+10%)</p>
                       </td>
 
                       {/* Disponibilidad con Toggle */}

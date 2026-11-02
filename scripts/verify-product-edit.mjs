@@ -31,7 +31,7 @@ try {
   await edit.click();
   assert.equal(await dialog.getByLabel('Título del producto').inputValue(), originalTitle);
   await dialog.getByLabel('Título del producto').fill('Producto editado completo');
-  await dialog.getByLabel('Precio ($ ARS)').fill('3456.78');
+  await dialog.getByLabel('Tu precio base ($ ARS)').fill('3456.78');
   await dialog.getByLabel('Descripción artesanal').fill('Descripción actualizada para verificar la tienda.');
   await dialog.getByLabel('Rubro', { exact: false }).selectOption('madera');
   await dialog.getByLabel('Producto destacado', { exact: true }).check();
@@ -61,7 +61,7 @@ try {
   await store.getByText('Catálogo del Puesto', { exact: true }).waitFor();
   assert.equal(await store.getByRole('heading', { name: 'Producto editado completo', exact: true }).count(), 0);
   await row.getByRole('button', { name: /^Editar producto / }).click();
-  assert.equal(await dialog.getByLabel('Precio ($ ARS)').inputValue(), '3456.78');
+  assert.equal(await dialog.getByLabel('Tu precio base ($ ARS)').inputValue(), '3456.78');
   assert.equal(await dialog.getByLabel('Producto destacado', { exact: true }).isChecked(), true);
   assert.equal(await dialog.getByLabel(`Valor ${last}`, { exact: true }).inputValue(), '20 × 15 cm');
   await dialog.getByLabel('En stock', { exact: true }).check();
@@ -73,8 +73,8 @@ try {
   assert.equal(await card.count(), 1);
   assert.equal(await card.locator('img').getAttribute('src').then((src) => src.startsWith('data:image/png;')), true);
   await card.getByRole('button', { name: /^Ver detalles de/ }).click();
-  await store.getByRole('dialog').getByText('20 × 15 cm', { exact: false }).waitFor();
-  assert.equal(await store.getByRole('dialog').getByText('Descripción actualizada para verificar la tienda.', { exact: true }).count(), 1);
+  await store.getByRole('main').getByText('20 × 15 cm', { exact: false }).waitFor();
+  assert.equal(await store.getByRole('main').getByText('Descripción actualizada para verificar la tienda.', { exact: true }).count(), 1);
   assert.deepEqual(errors, []);
   console.log('PASS: precarga, cancelar, validación de ficha, fotos, todos los campos, persistencia, sin duplicados, stock y detalle público.');
 } finally {

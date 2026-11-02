@@ -10,6 +10,7 @@ import { Feriante } from '../types';
 import { checkoutButton, checkoutCard, OrderProducts } from '../components/cart/OrderProducts';
 import { OrderConfirmation } from '../components/cart/OrderConfirmation';
 import { formatARS } from '../utils/formatters';
+import { roundMoney } from '../utils/pricing';
 
 export function CheckoutPage() {
   const items = useCartStore((state) => state.items);
@@ -59,7 +60,7 @@ export function CheckoutPage() {
   }, []);
 
   const grupos = groupItems(items, tiendas);
-  const total = grupos.reduce((sum, group) => sum + group.subtotal, 0);
+  const total = roundMoney(grupos.reduce((sum, group) => sum + group.subtotal, 0));
 
   async function finalize() {
     if (busy.current || !comprador) return;
@@ -73,14 +74,14 @@ export function CheckoutPage() {
 
   return <main className="mx-auto w-full max-w-6xl px-4 pb-16 pt-28 sm:px-6">
     <Link to="/#tiendas" className="mb-6 inline-flex items-center gap-2 text-sm font-bold text-charcoal-500 dark:text-sand-300"><ArrowLeft aria-hidden="true" className="h-4 w-4" />Seguir explorando</Link>
-    <div className="mb-8"><p className="mb-2 text-xs font-extrabold uppercase tracking-widest text-terracotta dark:text-terracotta-300">Feria Imperio · Tu pedido</p><h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{order && comprador ? 'Compra realizada' : 'Finalizá tu compra'}</h1><p className="mt-3 text-sm text-charcoal-500 dark:text-sand-300">{order ? 'Gracias por apoyar a nuestros feriantes. Completá el pago a cada tienda por transferencia.' : 'Revisá tus productos y confirmá tu pedido con los datos de tu cuenta.'}</p></div>
+    <div className="mb-8"><p className="mb-2 text-xs font-extrabold uppercase tracking-widest text-terracotta dark:text-terracotta-300">Feria Imperio · Tu pedido</p><h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl">{order && comprador ? 'Compra realizada' : 'Finalizá tu compra'}</h1><p className="mt-3 text-sm text-charcoal-500 dark:text-sand-300">{order ? 'Gracias por apoyar a nuestros feriantes. Completá el pago total por transferencia a Feria Imperio.' : 'Revisá tus productos y confirmá tu pedido con los datos de tu cuenta.'}</p></div>
     {!comprador ? <section className={`${checkoutCard} space-y-4`}><h2 className="text-lg font-bold">Ingresá con tu cuenta de cliente</h2><p className="text-sm">Usaremos los datos de tu cuenta para completar la compra.</p><button className={checkoutButton} onClick={() => openLogin('comprador')}>Ingresar como cliente</button></section>
       : loading ? <p role="status" className={checkoutCard}>Cargando tu compra…</p>
       : order ? <OrderConfirmation order={order} />
       : orderId ? <section className={`${checkoutCard} space-y-4`}><p role="alert">{error}</p><button className={checkoutButton} onClick={() => setRetry((value) => value + 1)}>Reintentar</button><Link className="ml-4 text-sm font-bold underline" to="/checkout">Volver al carrito</Link></section>
       : items.length === 0 ? <section className={`${checkoutCard} space-y-4`}><ShoppingBag aria-hidden="true" className="h-10 w-10 text-terracotta" /><h2 className="text-xl font-bold">Tu carrito está vacío</h2><Link to="/#tiendas" className={checkoutButton}>Explorar tiendas</Link></section>
       : <div className="grid items-start gap-6 lg:grid-cols-[1fr_340px]"><div className="space-y-5"><section className={checkoutCard}><h2 className="mb-3 font-extrabold">Datos del cliente</h2><p className="text-sm font-bold">{comprador.nombre}</p><p className="mt-1 break-words text-sm">{comprador.email}</p>{comprador.telefono && <p className="mt-1 text-sm">{comprador.telefono}</p>}{comprador.ubicacion && <p className="mt-1 text-sm text-charcoal-500 dark:text-sand-300">{comprador.ubicacion}</p>}</section>{grupos.map((group) => <OrderProducts key={group.tienda.id} group={group} />)}</div>
-        <aside className={`${checkoutCard} space-y-5 lg:sticky lg:top-24`}><h2 className="text-lg font-extrabold">Resumen de compra</h2><p className="text-sm text-charcoal-500 dark:text-sand-300">{items.reduce((sum, item) => sum + item.cantidad, 0)} productos · {grupos.length} {grupos.length === 1 ? 'tienda' : 'tiendas'}</p><div className="flex justify-between gap-3 text-xl font-extrabold"><span>Total</span><span className="text-terracotta dark:text-terracotta-300">{formatARS(total)}</span></div><p className="text-xs text-charcoal-500 dark:text-sand-300">Después de confirmar, verás los datos para transferir a cada tienda y cargar tus comprobantes. No se realiza ningún débito automático.</p><button className={`${checkoutButton} w-full`} disabled={submitting || !!error} onClick={() => void finalize()}>{submitting ? 'Confirmando…' : 'Finalizar compra'}</button><p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>{error && <button className="text-sm font-bold underline" onClick={() => setRetry((value) => value + 1)}>Revisar y reintentar</button>}</aside>
+        <aside className={`${checkoutCard} space-y-5 lg:sticky lg:top-24`}><h2 className="text-lg font-extrabold">Resumen de compra</h2><p className="text-sm text-charcoal-500 dark:text-sand-300">{items.reduce((sum, item) => sum + item.cantidad, 0)} productos · {grupos.length} {grupos.length === 1 ? 'tienda' : 'tiendas'}</p><div className="flex justify-between gap-3 text-xl font-extrabold"><span>Total</span><span className="text-terracotta dark:text-terracotta-300">{formatARS(total)}</span></div><p className="text-xs text-charcoal-500 dark:text-sand-300">Los precios incluyen la comisión del 10%. Después de confirmar, verás los datos para transferir el total a Feria Imperio y cargar tus comprobantes. No se realiza ningún débito automático.</p><button className={`${checkoutButton} w-full`} disabled={submitting || !!error} onClick={() => void finalize()}>{submitting ? 'Confirmando…' : 'Finalizar compra'}</button><p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>{error && <button className="text-sm font-bold underline" onClick={() => setRetry((value) => value + 1)}>Revisar y reintentar</button>}</aside>
       </div>}
   </main>;
 }

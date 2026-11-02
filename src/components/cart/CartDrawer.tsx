@@ -1,3 +1,4 @@
+import { customerPrice } from '../../utils/pricing';
 import { useEffect } from 'react';
 import { X, Trash2, Plus, Minus, ShoppingCart, ArrowRight } from 'lucide-react';
 import { useCartStore } from '../../store/useCartStore';
@@ -110,7 +111,7 @@ export const CartDrawer = () => {
                       {item.producto.titulo}
                     </h5>
                     <span className="text-xs font-extrabold text-terracotta dark:text-terracotta-300 block mt-0.5">
-                      {formatARS(item.producto.precio * item.cantidad)}
+                      {formatARS(customerPrice(item.producto.precio) * item.cantidad)}
                     </span>
 
                     {/* Quantity Selector */}
@@ -174,7 +175,7 @@ export const CartDrawer = () => {
               </div>
 
               <p className="text-[10px] text-center text-charcoal-400 dark:text-sand-500 leading-tight">
-                Revisá tu pedido y pagá por transferencia a cada tienda.
+                Precios finales con el 10% de comisión incluido. Pagá el total por transferencia a Feria Imperio.
               </p>
             </div>
           )}

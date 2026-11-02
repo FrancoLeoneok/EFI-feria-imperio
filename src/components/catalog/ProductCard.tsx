@@ -1,3 +1,4 @@
+import { customerPrice } from '../../utils/pricing';
 import { useState } from 'react';
 import { Plus, Sparkles, Store } from 'lucide-react';
 import { Producto } from '../../types';
@@ -97,7 +98,7 @@ export const ProductCard = ({
               {producto.enStock ? 'Disponible' : 'Sin stock'}
             </span>
             <span className="text-lg font-extrabold text-terracotta dark:text-terracotta-300 tracking-tight">
-              {formatARS(producto.precio)}
+              {formatARS(customerPrice(producto.precio))}
             </span>
           </div>
 

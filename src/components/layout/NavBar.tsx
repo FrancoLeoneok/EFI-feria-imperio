@@ -4,7 +4,6 @@ import {
   Search,
   Menu,
   X,
-  ShoppingBag,
   ShoppingCart,
   LogIn,
   LogOut,
@@ -41,6 +40,24 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
     logout,
   } = useAuthStore();
   const totalItems = getTotalItems();
+  const cartLabel = 'Mi carrito';
+
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const closeMenus = () => {
+      setMobileMenuOpen(false);
+      setProfileDropdownOpen(false);
+    };
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closeMenus();
+    };
+    desktop.addEventListener('change', closeMenus);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      desktop.removeEventListener('change', closeMenus);
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
 
   // Cerrar dropdown al hacer click afuera
@@ -56,6 +73,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
 
   const handleLogout = () => {
     logout();
+    setMobileMenuOpen(false);
     setProfileDropdownOpen(false);
     navigate('/');
   };
@@ -100,7 +118,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
             onSubmit={handleSearchSubmit}
             role="search"
             aria-label="Búsqueda de puestos, rubros y artículos"
-            className="hidden md:flex flex-1 justify-center max-w-md lg:max-w-lg mx-auto"
+            className="hidden lg:flex flex-1 min-w-0 justify-center max-w-lg mx-auto"
           >
             <div className="relative w-full flex items-center">
               <Search className="w-4 h-4 text-charcoal-400 dark:text-sand-400 absolute left-3.5 pointer-events-none" />
@@ -140,7 +158,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
 
             {/* SECCIÓN DE AUTENTICACIÓN (COMPRADOR / FERIANTE) */}
             {!isAuthenticated ? (
-              <div className="hidden sm:flex items-center gap-1.5 lg:gap-2">
+              <div className="hidden lg:flex items-center gap-2">
                 {/* 1. Iniciar sesión */}
                 <button
                   type="button"
@@ -163,7 +181,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
               </div>
             ) : userRole === 'comprador' && currentComprador ? (
               /* Dropdown Usuario Comprador */
-              <div className="relative hidden sm:block" ref={dropdownRef}>
+              <div className="relative hidden lg:block" ref={dropdownRef}>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="flex items-center gap-2.5 p-1.5 pr-3 rounded-2xl bg-sand-200 dark:bg-charcoal-700 hover:bg-sand-300 dark:hover:bg-charcoal-600 border border-sand-300 dark:border-charcoal-600 transition-all focus:outline-none"
@@ -209,7 +227,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                     >
                       <div className="flex items-center gap-2.5">
                         <ShoppingCart className="w-4 h-4" aria-hidden="true" />
-                        <span>Mi carrito</span>
+                        <span>{cartLabel}</span>
                       </div>
                       {totalItems > 0 && (
                         <span className="px-2 py-0.5 rounded-full bg-forest text-white text-[10px]">
@@ -241,7 +259,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
               </div>
             ) : (
               /* Dropdown Feriante Autenticado */
-              <div className="relative hidden sm:block" ref={dropdownRef}>
+              <div className="relative hidden lg:block" ref={dropdownRef}>
                 <button
                   onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
                   className="flex items-center gap-2.5 p-1.5 pr-3 rounded-2xl bg-sand-200 dark:bg-charcoal-700 hover:bg-sand-300 dark:hover:bg-charcoal-600 border border-sand-300 dark:border-charcoal-600 transition-all focus:outline-none"
@@ -320,7 +338,9 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-xl text-charcoal-700 dark:text-sand-200 hover:bg-sand-200 dark:hover:bg-charcoal-700 focus:outline-none"
-              aria-label="Abrir menú de navegación"
+              aria-label={mobileMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-navigation"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
@@ -332,7 +352,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
           onSubmit={handleSearchSubmit}
           role="search"
           aria-label="Búsqueda móvil de puestos, rubros y artículos"
-          className="md:hidden pb-3"
+          className="lg:hidden pb-3"
         >
           <div className="relative flex items-center">
             <Search className="w-4 h-4 text-charcoal-400 dark:text-sand-400 absolute left-3.5 pointer-events-none" />
@@ -341,13 +361,13 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
               value={busqueda}
               onChange={(e) => onBusquedaChange(e.target.value)}
               placeholder="Buscar puestos, rubros o artículos..."
-              className="w-full bg-sand-200 dark:bg-charcoal-700 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 pl-10 pr-22 py-2 rounded-full text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
+              className="w-full bg-sand-200 dark:bg-charcoal-700 text-charcoal-900 dark:text-white placeholder:text-charcoal-400 dark:placeholder:text-sand-500 pl-10 pr-28 py-3 rounded-full text-xs border border-sand-300 dark:border-charcoal-600 focus:border-terracotta focus:outline-none"
             />
             {busqueda.trim() !== '' && (
               <button
                 type="button"
                 onClick={() => onBusquedaChange('')}
-                className="absolute right-18 p-1 text-charcoal-400 hover:text-charcoal-700 dark:hover:text-sand-200"
+                className="absolute right-16 p-2 text-charcoal-400 hover:text-charcoal-700 dark:hover:text-sand-200"
                 aria-label="Limpiar búsqueda"
               >
                 <X className="w-3.5 h-3.5" />
@@ -365,18 +385,18 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
 
       {/* Menú Desplegable Móvil */}
       {mobileMenuOpen && (
-        <div className="lg:hidden border-t border-sand-300 dark:border-charcoal-700 bg-sand dark:bg-charcoal px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-2">
+        <nav id="mobile-navigation" aria-label="Navegación de cuenta" className="lg:hidden max-h-[calc(100dvh-8rem)] overflow-y-auto border-t border-sand-300 dark:border-charcoal-700 bg-sand dark:bg-charcoal px-4 pt-3 pb-6 space-y-2 animate-in slide-in-from-top-2">
           {/* Card de Usuario Autenticado en Mobile */}
           {isAuthenticated && userRole === 'comprador' && currentComprador ? (
             <div className="p-3 mb-3 rounded-2xl bg-sand-200 dark:bg-charcoal-700 border border-sand-300 dark:border-charcoal-600 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <img
                   src={currentComprador.avatarUrl}
                   alt={currentComprador.nombre}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-forest"
+                  className="shrink-0 w-10 h-10 rounded-full object-cover border-2 border-forest"
                 />
-                <div>
-                  <p className="text-xs font-bold text-charcoal-900 dark:text-white">
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-charcoal-900 dark:text-white break-words">
                     {currentComprador.nombre}
                   </p>
                   <p className="text-[11px] text-forest dark:text-forest-400 font-semibold flex items-center gap-1">
@@ -386,7 +406,7 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
               </div>
               <button
                 onClick={handleLogout}
-                className="p-2 rounded-xl text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-950/40"
+                className="shrink-0 p-2 rounded-xl text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-950/40"
                 title="Cerrar sesión"
               >
                 <LogOut className="w-4 h-4" />
@@ -394,24 +414,24 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
             </div>
           ) : isAuthenticated && userRole === 'feriante' && currentFeriante ? (
             <div className="p-3 mb-3 rounded-2xl bg-sand-200 dark:bg-charcoal-700 border border-sand-300 dark:border-charcoal-600 flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 min-w-0">
                 <img
                   src={currentFeriante.avatarUrl}
                   alt={currentFeriante.nombreComercio}
-                  className="w-10 h-10 rounded-xl object-cover border border-forest"
+                  className="shrink-0 w-10 h-10 rounded-xl object-cover border border-forest"
                 />
-                <div>
-                  <p className="text-xs font-bold text-charcoal-900 dark:text-white">
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-charcoal-900 dark:text-white break-words">
                     {currentFeriante.nombreComercio}
                   </p>
                   <p className="text-[11px] text-forest dark:text-forest-400 font-semibold flex items-center gap-1">
-                    <ShieldCheck className="w-3 h-3" /> Puesto Conectado
+                    <ShieldCheck className="w-3 h-3" /> Puesto Activo
                   </p>
                 </div>
               </div>
               <button
                 onClick={handleLogout}
-                className="p-2 rounded-xl text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-950/40"
+                className="shrink-0 p-2 rounded-xl text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-950/40"
                 title="Cerrar sesión"
               >
                 <LogOut className="w-4 h-4" />
@@ -442,16 +462,23 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                 </a>
               </div>
             ) : userRole === 'comprador' ? (
-              <button
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  toggleCart();
-                }}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-forest text-white font-bold text-sm shadow-md"
-              >
-                <ShoppingBag className="w-4 h-4" />
-                <span>Ver Mi Lista de Compras ({totalItems})</span>
-              </button>
+              <div className="space-y-2">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    toggleCart();
+                  }}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-forest text-white font-bold text-sm shadow-md"
+                >
+                  <ShoppingCart className="w-4 h-4" aria-hidden="true" />
+                  <span>{cartLabel}{totalItems > 0 ? ` (${totalItems})` : ''}</span>
+                </button>
+                <a href="/#tiendas" onClick={() => setMobileMenuOpen(false)}
+                  className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-sand-200 dark:bg-charcoal-700 text-charcoal-800 dark:text-sand-200 font-bold text-sm">
+                  <Compass className="w-4 h-4 text-terracotta" />
+                  <span>Catálogo</span>
+                </a>
+              </div>
             ) : (
               <div className="space-y-2">
                 <Link
@@ -468,12 +495,12 @@ export const NavBar = ({ busqueda, onBusquedaChange }: NavBarProps) => {
                   className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-sand-200 dark:bg-charcoal-700 text-charcoal-800 dark:text-sand-200 font-bold text-xs"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Ver Mi Puesto en la Feria</span>
+                  <span>Ver Mi Puesto Público</span>
                 </Link>
               </div>
             )}
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

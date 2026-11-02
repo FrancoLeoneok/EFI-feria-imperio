@@ -2,7 +2,6 @@ import { FERIANTES_MOCK, PRODUCTOS_MOCK, RUBROS_DATA } from '../../data/mockData
 import { Feriante, UbicacionFeria } from '../../types';
 import { IFerianteRepository, FiltrosFeriante } from '../interfaces/IFerianteRepository';
 import { normalizeSearchText } from '../../utils/formatters';
-import { withStorePayment } from '../storePayments';
 
 export class MockFerianteRepository implements IFerianteRepository {
   private feriantes: Feriante[] = [...FERIANTES_MOCK];
@@ -13,30 +12,30 @@ export class MockFerianteRepository implements IFerianteRepository {
 
   async getAll(): Promise<Feriante[]> {
     await this.delay();
-    return this.feriantes.map(withStorePayment);
+    return this.feriantes.map((store) => ({ ...store }));
   }
 
   async getById(id: string): Promise<Feriante | null> {
     await this.delay();
     const feriante = this.feriantes.find((f) => f.id === id);
-    return feriante ? withStorePayment(feriante) : null;
+    return feriante ? { ...feriante } : null;
   }
 
   async getByUbicacion(ubicacion: UbicacionFeria): Promise<Feriante[]> {
     await this.delay();
-    return this.feriantes.map(withStorePayment).filter(
+    return [...this.feriantes].filter(
       (f) => f.ubicacionFeria === ubicacion || f.ubicacionFeria === 'ambos'
     );
   }
 
   async getConfirmados(): Promise<Feriante[]> {
     await this.delay();
-    return this.feriantes.map(withStorePayment).filter((f) => f.findeConfirmado);
+    return [...this.feriantes].filter((f) => f.findeConfirmado);
   }
 
   async filtrar(filtros: FiltrosFeriante): Promise<Feriante[]> {
     await this.delay();
-    let lista = this.feriantes.map(withStorePayment);
+    let lista = [...this.feriantes];
 
     if (filtros.rubro && filtros.rubro !== 'todos') {
       lista = lista.filter((f) => f.rubroPrincipal === filtros.rubro);

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import {
   ArrowLeft,
   Store,
@@ -12,7 +12,6 @@ import {
 import { Feriante, Producto, UIStatus } from '../types';
 import { ferianteRepository, productoRepository } from '../repositories';
 import { ProductCard } from '../components/catalog/ProductCard';
-import { ProductModal } from '../components/catalog/ProductModal';
 import { useStockStore } from '../store/useStockStore';
 
 export const StoreDetailPage = () => {
@@ -21,7 +20,8 @@ export const StoreDetailPage = () => {
   const [feriante, setFeriante] = useState<Feriante | null>(null);
   const [productos, setProductos] = useState<Producto[]>([]);
   const [status, setStatus] = useState<UIStatus>('loading');
-  const [productoModal, setProductoModal] = useState<Producto | null>(null);
+  const navigate = useNavigate();
+  const verDetalle = (producto: Producto) => navigate(`/producto/${encodeURIComponent(producto.id)}`);
   const [busquedaInterna, setBusquedaInterna] = useState('');
   const disponibilidad = useStockStore((state) => state.disponibilidad);
 
@@ -243,7 +243,7 @@ export const StoreDetailPage = () => {
                 <ProductCard
                   key={producto.id}
                   producto={producto}
-                  onVerDetalle={setProductoModal}
+                  onVerDetalle={verDetalle}
                 />
               ))}
             </div>
@@ -251,11 +251,6 @@ export const StoreDetailPage = () => {
         </section>
       </div>
 
-      {/* Modal de Ficha Técnica */}
-      <ProductModal
-        producto={productoModal && (disponibilidad[productoModal.id] ?? productoModal.enStock) ? productoModal : null}
-        onClose={() => setProductoModal(null)}
-      />
     </div>
   );
 };

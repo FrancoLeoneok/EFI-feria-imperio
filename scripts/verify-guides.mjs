@@ -8,7 +8,7 @@ const { chromium } = await import(process.argv[2] || 'playwright');
 const baseURL = process.argv[3] || 'http://127.0.0.1:5173';
 const output = join(tmpdir(), 'feria-guide-qa');
 await mkdir(output, { recursive: true });
-const browser = await chromium.launch({ channel: 'chrome', headless: true });
+const browser = await chromium.launch({ channel: 'chrome', headless: true, args: ['--no-proxy-server'] });
 const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 const errors = [];
 page.on('pageerror', (error) => errors.push(error.message));
@@ -64,15 +64,15 @@ try {
       .count(),
     0,
   );
-  const trigger = await openGuide('cliente');
+  const trigger = await openGuide('usuario');
   await page.screenshot({ path: join(output, 'desktop.png') });
-  await checkSteps(3);
+  await checkSteps(5);
   assert.equal(
     await trigger.evaluate((element) => document.activeElement === element),
     true,
   );
-  await openGuide('cliente');
-  assert.match(await page.getByRole('dialog').innerText(), /Paso 1 de 3/);
+  await openGuide('usuario');
+  assert.match(await page.getByRole('dialog').innerText(), /Paso 1 de 5/);
   for (let index = 0; index < 14; index++) {
     await page.keyboard.press('Tab');
     assert.equal(
@@ -97,7 +97,7 @@ try {
   await page.locator('#login-comprador-password').fill('comprador123');
   await page.locator('#login-comprador-password').press('Enter');
   await page.getByRole('button', { name: /Cliente Prueba/ }).waitFor();
-  await openGuide('cliente');
+  await openGuide('usuario');
   assert.equal(
     await page
       .getByRole('dialog')
@@ -124,20 +124,18 @@ try {
     .click();
   await page.locator('#login-usuario-feriante').fill('El Gaucho Tradición');
   await page.locator('#login-password-feriante').fill('feria123');
-  await page
-    .getByRole('button', { name: 'Iniciar Sesión en Mi Taller' })
-    .click();
+  await page.locator('#login-password-feriante').press('Enter');
   await page.getByRole('heading', { name: /Mi Taller •/ }).waitFor();
   await page.reload();
   assert.equal(
     await page
       .locator('footer')
-      .getByRole('button', { name: 'Guía de cliente' })
+      .getByRole('button', { name: 'Guía de usuario' })
       .count(),
     0,
   );
   await openGuide('feriante');
-  await checkSteps(4);
+  await checkSteps(6);
 
   // Both guides fit narrow screens; their image links allow full-size inspection.
   for (const width of [375, 320]) {
@@ -154,7 +152,7 @@ try {
   }
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.getByTitle('Cerrar sesión del puesto').click();
-  await openGuide('cliente');
+  await openGuide('usuario');
   assert.equal(
     await page
       .locator('footer')
@@ -165,11 +163,11 @@ try {
   await page.keyboard.press('Escape');
   await page.setViewportSize({ width: 375, height: 740 });
   await page.evaluate(() => document.documentElement.classList.add('dark'));
-  await openGuide('cliente');
+  await openGuide('usuario');
   await page.screenshot({ path: join(output, 'mobile-dark.png') });
   assert.deepEqual(errors, []);
   console.log(
-    `PASS: guest, buyer, seller, persisted session, logout, 7 slides, focus trap, Escape, keyboard, mobile, dark mode. Screenshots: ${output}`,
+    `PASS: guest, buyer, seller, persisted session, logout, 11 slides, focus trap, Escape, keyboard, mobile, dark mode. Screenshots: ${output}`,
   );
 } finally {
   await browser.close();

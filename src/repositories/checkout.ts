@@ -4,6 +4,8 @@ import { useStockStore } from '../store/useStockStore';
 import { UsuarioComprador } from '../types';
 import { ferianteRepository, productoRepository } from './index';
 import { createOrder, groupItems } from './localOrders';
+import { PLATFORM_PAYMENT } from '../config/platformPayment';
+import { roundMoney } from '../utils/pricing';
 
 const changedCartMessage = 'El carrito cambió en otra pestaña. Revisá el resumen y volvé a confirmar.';
 
@@ -46,8 +48,10 @@ export async function confirmPurchase(comprador: UsuarioComprador, expectedRevis
     comprador: structuredClone(comprador),
     fecha: new Date().toISOString(),
     grupos: groups,
-    total: groups.reduce((sum, group) => sum + group.subtotal, 0),
+    total: roundMoney(groups.reduce((sum, group) => sum + group.subtotal, 0)),
     estadoPago: 'pendiente',
+    pago: { ...PLATFORM_PAYMENT },
+    comprobantes: [],
   });
 
   // The order is durable before clearing the cart. Preserve any newer cart.

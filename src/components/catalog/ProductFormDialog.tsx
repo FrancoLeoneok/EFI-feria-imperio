@@ -3,6 +3,8 @@ import { X } from 'lucide-react';
 import { Feriante, Producto, Rubro } from '../../types';
 import { ProductImageUpload } from './ProductImageUpload';
 import { ProductCard } from './ProductCard';
+import { customerPrice, roundMoney } from '../../utils/pricing';
+import { formatARS } from '../../utils/formatters';
 
 interface ProductFormDialogProps {
   feriante: Feriante;
@@ -70,8 +72,16 @@ export function ProductFormDialog({ feriante, producto, onClose, onSave }: Produ
         <fieldset disabled={saving} className="space-y-4">
           <div><label htmlFor="product-title" className={labelClass}>Título del producto *</label><input id="product-title" autoFocus required value={titulo} onChange={(event) => setTitulo(event.target.value)} placeholder="Ej: Mate torneado en algarrobo" className={inputClass} /></div>
           <div className="grid grid-cols-2 gap-4">
-            <div><label htmlFor="product-price" className={labelClass}>Precio ($ ARS) *</label><input id="product-price" type="number" required min="100" step="0.01" value={precio} onChange={(event) => setPrecio(event.target.value)} className={inputClass} /></div>
+            <div><label htmlFor="product-price" className={labelClass}>Tu precio base ($ ARS) *</label><input id="product-price" type="number" required min="100" step="0.01" value={precio} onChange={(event) => setPrecio(event.target.value)} className={inputClass} aria-describedby="product-price-help" /></div>
             <div><label htmlFor="product-category" className={labelClass}>Rubro *</label><select id="product-category" value={rubro} onChange={(event) => setRubro(event.target.value as Rubro)} className={inputClass}><option value="artesanias">Artesanías</option><option value="ceramica">Cerámica</option><option value="gastronomia">Gastronomía</option><option value="marroquineria">Marroquinería</option><option value="madera">Madera</option><option value="indumentaria">Indumentaria</option></select></div>
+          </div>
+          <div id="product-price-help" className="space-y-2 rounded-xl bg-sand-100 p-4 text-sm dark:bg-charcoal-700" aria-live="polite">
+            <p className="text-xs text-charcoal-600 dark:text-sand-300">Feria Imperio suma una comisión fija del 10% a todos los productos. Vos recibís tu precio base por cada venta.</p>
+            {Number.isFinite(Number(precio)) && Number(precio) >= 100 && <dl className="space-y-1">
+              <div className="flex flex-wrap justify-between gap-x-3"><dt>Tu precio base</dt><dd>{formatARS(Number(precio))}</dd></div>
+              <div className="flex flex-wrap justify-between gap-x-3"><dt>Comisión de Feria Imperio (10%)</dt><dd>{formatARS(roundMoney(customerPrice(Number(precio)) - Number(precio)))}</dd></div>
+              <div className="flex flex-wrap justify-between gap-x-3 font-bold text-forest dark:text-forest-300"><dt>Precio final al cliente</dt><dd>{formatARS(customerPrice(Number(precio)))}</dd></div>
+            </dl>}
           </div>
           <div><label htmlFor="product-description" className={labelClass}>Descripción artesanal *</label><textarea id="product-description" required rows={3} value={descripcion} onChange={(event) => setDescripcion(event.target.value)} placeholder="Materiales, proceso de elaboración, medidas…" className={`${inputClass} resize-y`} /></div>
           <ProductImageUpload images={images} onChange={setImages} onLoadingChange={setLoadingImages} />

@@ -27,7 +27,9 @@ try {
   await dialog.waitFor();
   await dialog.getByLabel('Título del producto').fill('Mate de prueba con galería');
   await dialog.getByLabel('Descripción artesanal').fill('Producto artesanal de prueba con dos fotos.');
-  await dialog.getByLabel('Precio ($ ARS)').fill('2500');
+  await dialog.getByLabel('Tu precio base ($ ARS)').fill('2500');
+  await dialog.locator('#product-price-help').getByText('$ 2.750 ARS', { exact: true }).waitFor();
+  await dialog.locator('article').getByText('$ 2.750 ARS', { exact: true }).waitFor();
   await dialog.getByRole('button', { name: 'Publicar en mi tienda', exact: true }).click();
   await dialog.getByText('Agregá al menos una foto del producto.').waitFor();
   const input = dialog.locator('input[type=file]');
@@ -57,10 +59,12 @@ try {
   const store = await context.newPage();
   await store.goto(`${baseURL}/tienda/fer-01`);
   await store.getByRole('heading', { name: 'Mate de prueba con galería', exact: true }).click();
+  await store.getByRole('main').getByText('$ 2.750 ARS', { exact: true }).waitFor();
   await store.getByRole('button', { name: /Ver foto 2 de Mate de prueba/ }).click();
   assert.equal(await store.getByAltText('Mate de prueba con galería, foto 2').count(), 1);
   await store.reload();
   await store.getByRole('heading', { name: 'Mate de prueba con galería', exact: true }).waitFor();
+  await store.goto(`${baseURL}/tienda/fer-01`);
   await page.reload();
   const row = page.getByRole('row').filter({ hasText: 'Mate de prueba con galería' });
   await row.getByRole('switch').click();

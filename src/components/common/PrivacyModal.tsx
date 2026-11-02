@@ -93,10 +93,10 @@ export const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-forest dark:text-forest-400 font-bold text-sm">
               <Lock className="w-4 h-4 shrink-0" />
-              <h3>2. Privacidad de Clientes y Presupuesto Simulado</h3>
+              <h3>2. Privacidad de clientes y compras</h3>
             </div>
             <p className="text-charcoal-600 dark:text-sand-300">
-              No exigimos registro ni contraseña a los visitantes para explorar el catálogo. Los artículos añadidos a "Mi Lista de Feria" y las preferencias de modo oscuro se guardan exclusivamente en la memoria local de su propio navegador (<code className="bg-sand-200 dark:bg-charcoal-600 px-1 py-0.5 rounded text-charcoal-800 dark:text-sand-100">localStorage</code>). No utilizamos cookies invasivas de rastreo de terceros.
+              No exigimos registro ni contraseña a los visitantes para explorar el catálogo. El carrito y las preferencias de modo oscuro se guardan en la memoria local de su navegador (<code className="bg-sand-200 dark:bg-charcoal-600 px-1 py-0.5 rounded text-charcoal-800 dark:text-sand-100">localStorage</code>). Los pedidos y comprobantes de transferencia se guardan en este navegador mediante IndexedDB. Para confirmar una compra se utiliza la cuenta del cliente. No utilizamos cookies invasivas de rastreo de terceros.
             </p>
           </div>
 
@@ -104,10 +104,10 @@ export const PrivacyModal = ({ isOpen, onClose }: PrivacyModalProps) => {
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-forest dark:text-forest-400 font-bold text-sm">
               <Smartphone className="w-4 h-4 shrink-0" />
-              <h3>3. Vínculo Directo sin Comisiones</h3>
+              <h3>3. Pagos y comisión de Feria Imperio</h3>
             </div>
             <p className="text-charcoal-600 dark:text-sand-300">
-              Feria Imperio no procesa cobros ni retiene pagos. Las condiciones de entrega, pago y garantía se pactan de forma bilateral entre el productor y el consumidor final.
+              Los pagos de las compras se realizan por transferencia a la cuenta única de Feria Imperio. Todos los productos incluyen una comisión fija del 10% sobre el precio base definido por el feriante. El precio publicado es el precio final que paga el cliente; no se vuelve a sumar la comisión al confirmar la compra. La entrega y la garantía se coordinan con el feriante.
             </p>
           </div>
 

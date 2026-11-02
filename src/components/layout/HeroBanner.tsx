@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, MapPin, ArrowRight, ShieldCheck, Store } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Store } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
 
 export const HeroBanner = () => {
@@ -117,7 +117,7 @@ export const HeroBanner = () => {
         </div>
 
         {/* Trust & Location Badges */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
           <div className="flex items-center justify-center gap-2.5 p-3 rounded-2xl bg-white/70 dark:bg-charcoal-800/70 border border-sand-300 dark:border-charcoal-700 shadow-card">
             <MapPin className="w-5 h-5 text-terracotta dark:text-terracotta-300 shrink-0" />
             <div className="text-left">
@@ -134,13 +134,6 @@ export const HeroBanner = () => {
             </div>
           </div>
 
-          <div className="flex items-center justify-center gap-2.5 p-3 rounded-2xl bg-white/70 dark:bg-charcoal-800/70 border border-sand-300 dark:border-charcoal-700 shadow-card">
-            <ShieldCheck className="w-5 h-5 text-amber-500 shrink-0" />
-            <div className="text-left">
-              <p className="text-xs font-bold text-charcoal-900 dark:text-white">Trato Directo</p>
-              <p className="text-[11px] text-charcoal-500 dark:text-sand-400">Sin intermediarios ni comisiones</p>
-            </div>
-          </div>
         </div>
       </div>
     </section>

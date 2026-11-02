@@ -19,6 +19,7 @@ async function seed(tab) {
   return tab.evaluate(async () => {
     const { useAuthStore } = await import('/src/store/useAuthStore.ts');
     const { useCartStore } = await import('/src/store/useCartStore.ts');
+    const { customerPrice } = await import('/src/utils/pricing.ts');
     const { PRODUCTOS_MOCK, COMPRADORES_MOCK } = await import('/src/data/mockData.ts');
     useAuthStore.getState().loginDirectoComprador(COMPRADORES_MOCK[0]);
     useCartStore.getState().clearCart();
@@ -26,7 +27,7 @@ async function seed(tab) {
     const second = PRODUCTOS_MOCK.find((product) => product.enStock && product.ferianteId !== first.ferianteId);
     useCartStore.getState().addItem(first);
     useCartStore.getState().addItem(second);
-    return { buyer: COMPRADORES_MOCK[0], total: first.precio + second.precio, revision: useCartStore.getState().revision };
+    return { buyer: COMPRADORES_MOCK[0], total: customerPrice(first.precio) + customerPrice(second.precio), revision: useCartStore.getState().revision };
   });
 }
 
@@ -41,13 +42,13 @@ try {
   await checkout.waitForLoadState();
   await checkout.getByRole('button', { name: 'Finalizar compra', exact: true }).waitFor();
   assert.equal(await checkout.getByRole('region', { name: /^Productos de/ }).count(), 2);
-  await checkout.screenshot({ path: join(output, 'checkout-desktop.png'), fullPage: true });
+  await checkout.screenshot({ path: join(output, 'checkout-desktop.png'), fullPage: true, animations: 'disabled' });
   await checkout.setViewportSize({ width: 390, height: 844 });
   await checkout.getByRole('button', { name: 'Cambiar a modo oscuro' }).click();
   await checkout.waitForFunction(() => getComputedStyle(document.querySelector('#root > div')).backgroundColor === 'rgb(24, 24, 27)');
   await checkout.waitForFunction(() => getComputedStyle(document.querySelector('h1')).color === 'rgb(251, 250, 248)');
   assert.equal(await checkout.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
-  await checkout.screenshot({ path: join(output, 'checkout-mobile-dark.png'), fullPage: true });
+  await checkout.screenshot({ path: join(output, 'checkout-mobile-dark.png'), fullPage: true, animations: 'disabled' });
   await checkout.getByRole('button', { name: 'Finalizar compra', exact: true }).click();
   await checkout.getByRole('heading', { name: 'Compra realizada', exact: true }).waitFor();
   const confirmedURL = checkout.url();
@@ -55,7 +56,7 @@ try {
     const { useCartStore } = await import('/src/store/useCartStore.ts');
     return useCartStore.getState().items.length === 0;
   });
-  assert.equal(await checkout.getByRole('region', { name: /^Transferencia a/ }).count(), 2);
+  assert.equal(await checkout.getByRole('region', { name: /^Transferencia a/ }).count(), 1);
   const payment = checkout.getByRole('region', { name: /^Transferencia a/ }).first();
   const input = payment.locator('input[type=file]');
   await input.setInputFiles({ name: 'invalid.txt', mimeType: 'text/plain', buffer: Buffer.from('invalid') });
@@ -66,7 +67,7 @@ try {
   await payment.getByRole('status').filter({ hasText: /Comprobantes guardados/ }).waitFor();
   await checkout.reload();
   await checkout.getByAltText('Comprobante 1', { exact: true }).waitFor();
-  await checkout.screenshot({ path: join(output, 'confirmed-mobile.png'), fullPage: true });
+  await checkout.screenshot({ path: join(output, 'confirmed-mobile.png'), fullPage: true, animations: 'disabled' });
   const stored = await checkout.evaluate(async (buyerId) => {
     const { readOrder, createOrder } = await import('/src/repositories/localOrders.ts');
     const id = new URL(location.href).searchParams.get('pedido');
@@ -85,9 +86,8 @@ try {
     const id = new URL(location.href).searchParams.get('pedido');
     const order = await readOrder(id, buyerId);
     const group = structuredClone(order.grupos[0]);
-    group.tienda.alias = 'alias.de.prueba';
-    group.tienda.cvu = '0000000000000000000000';
-    await createOrder({ ...order, id: 'bank-display-test', grupos: [group], total: group.subtotal });
+    const pago = { titular: 'Feria Imperio', alias: 'alias.de.prueba', cvu: '0000000000000000000000', demostracion: true };
+    await createOrder({ ...order, id: 'bank-display-test', pago, grupos: [group], total: group.subtotal });
   }, seeded.buyer.id);
   await checkout.goto(`${baseURL}/checkout?pedido=bank-display-test`);
   await checkout.getByText('alias.de.prueba', { exact: true }).waitFor();

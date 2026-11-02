@@ -8,7 +8,7 @@
  */
 export function formatARS(precio: number): string {
   const formateado = new Intl.NumberFormat('es-AR', {
-    maximumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(precio);
   return `$ ${formateado} ARS`;
 }

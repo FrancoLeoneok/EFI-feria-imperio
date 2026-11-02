@@ -7,6 +7,7 @@ import { CartDrawer } from './components/cart/CartDrawer';
 import { LoginModal } from './components/auth/LoginModal';
 import { HomePage } from './pages/HomePage';
 import { StoreDetailPage } from './pages/StoreDetailPage';
+import { ProductDetailPage } from './pages/ProductDetailPage';
 import { AdminPage } from './pages/AdminPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 import { CheckoutPage } from './pages/CheckoutPage';
@@ -57,6 +58,7 @@ export default function App() {
 
             {/* 2. Vista Individual de la Tienda de cada Emprendedor */}
             <Route path="/tienda/:id" element={<StoreDetailPage />} />
+            <Route path="/producto/:id" element={<ProductDetailPage />} />
 
             {/* 3. Panel de Administración / Mi Taller del Vendedor */}
             <Route path="/admin" element={<AdminPage onShowToast={showToast} />} />

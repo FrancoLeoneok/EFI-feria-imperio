@@ -1,8 +1,11 @@
+import { customerPrice } from '../../utils/pricing';
 import { useEffect, useRef, useState } from 'react';
 import { X, Store, Check, Tag, Plus } from 'lucide-react';
 import { Producto } from '../../types';
 import { formatARS } from '../../utils/formatters';
 import { useCartStore } from '../../store/useCartStore';
+import { useAuthStore } from '../../store/useAuthStore';
+import { ProductQuestions } from '../questions/ProductQuestions';
 
 interface ProductModalProps {
   producto: Producto | null;
@@ -21,7 +24,7 @@ export const ProductModal = ({
     if (!producto) return;
     const previousFocus = document.activeElement as HTMLElement | null;
     const previousOverflow = document.body.style.overflow;
-    const getControls = () => Array.from(modalRef.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? []);
+    const getControls = () => Array.from(modalRef.current?.querySelectorAll<HTMLElement>('button:not(:disabled), textarea:not(:disabled), input:not(:disabled), a[href], [tabindex="0"]') ?? []);
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
       if (e.key === 'Tab') {
@@ -112,7 +115,7 @@ export const ProductModal = ({
               {/* Price */}
               <div className="mb-6">
                 <span className="text-2xl sm:text-3xl font-extrabold text-terracotta dark:text-terracotta-300">
-                  {formatARS(producto.precio)}
+                  {formatARS(customerPrice(producto.precio))}
                 </span>
               </div>
 
@@ -141,6 +144,11 @@ export const ProductModal = ({
                 </div>
               )}
             </div>
+
+            <ProductQuestions key={producto.id} productoId={producto.id} onLogin={() => {
+              onClose();
+              useAuthStore.getState().openLoginModal('comprador');
+            }} />
 
             {/* Direct Actions: Add to Cart */}
             <div className="pt-4 border-t border-sand-200 dark:border-charcoal-700 space-y-2.5">

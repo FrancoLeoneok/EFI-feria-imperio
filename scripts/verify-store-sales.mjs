@@ -23,25 +23,8 @@ async function loginSeller(tab, index) {
   }, index);
 }
 
-async function editPayment(alias, cvu = '1234567890123456789012') {
-  await page.getByRole('button', { name: 'Cargar/editar CVU o alias' }).click();
-  const form = page.getByRole('form', { name: 'Editar datos de transferencia' });
-  await form.getByLabel('CVU', { exact: true }).fill(cvu);
-  await form.getByLabel('Alias', { exact: true }).fill(alias);
-  await form.getByRole('button', { name: 'Guardar datos de transferencia' }).click();
-  return form;
-}
-
 try {
   await page.goto(baseURL);
-  const aliases = await page.evaluate(async () => {
-    const { ferianteRepository } = await import('/src/repositories/index.ts');
-    return (await ferianteRepository.getAll()).map((store) => ({ alias: store.alias, demo: store.aliasDemostracion }));
-  });
-  assert.equal(new Set(aliases.map((store) => store.alias)).size, aliases.length);
-  assert.equal(aliases.every((store) => store.demo && /^[a-z0-9.]{6,20}$/.test(store.alias)), true);
-  assert.equal(aliases[0].alias, 'el.gaucho.tradicion');
-
   // Buyer must never see a default seller panel.
   await page.evaluate(async () => {
     const { useAuthStore } = await import('/src/store/useAuthStore.ts');
@@ -56,31 +39,7 @@ try {
   await page.goto(`${baseURL}/admin`);
   const sales = page.getByRole('region', { name: 'Ventas', exact: true });
   await sales.getByText('Todavía no tenés ventas').waitFor();
-  await page.getByText('el.gaucho.tradicion', { exact: true }).waitFor();
-  let form = await editPayment('gaucho.real', '123');
-  await form.getByRole('alert').filter({ hasText: /exactamente 22/ }).waitFor();
-  await form.getByLabel('CVU', { exact: true }).fill('1234567890123456789012');
-  await form.getByLabel('Alias', { exact: true }).fill('bad?');
-  await form.getByRole('button', { name: 'Guardar datos de transferencia' }).click();
-  await form.getByRole('alert').filter({ hasText: /entre 6 y 20/ }).waitFor();
-  await form.getByLabel('Alias', { exact: true }).fill('gaucho.real');
-  // A failed write keeps the draft and never announces success.
-  await page.evaluate(() => {
-    const original = Storage.prototype.setItem;
-    window.restorePaymentStorage = () => { Storage.prototype.setItem = original; };
-    Storage.prototype.setItem = function (key, value) {
-      if (key.startsWith('feria-imperio-payment-')) throw new DOMException('Full', 'QuotaExceededError');
-      return original.call(this, key, value);
-    };
-  });
-  await form.getByRole('button', { name: 'Guardar datos de transferencia' }).click();
-  await form.getByRole('alert').filter({ hasText: /No pudimos guardar/ }).waitFor();
-  assert.equal(await form.getByLabel('Alias', { exact: true }).inputValue(), 'gaucho.real');
-  await page.evaluate(() => { window.restorePaymentStorage(); delete window.restorePaymentStorage; });
-  await form.getByRole('button', { name: 'Guardar datos de transferencia' }).click();
-  await page.getByRole('status').filter({ hasText: /Datos de transferencia guardados/ }).waitFor();
-  await page.reload();
-  await page.getByText('gaucho.real', { exact: true }).waitFor();
+  assert.equal(await page.getByRole('button', { name: 'Cargar/editar CVU o alias' }).count(), 0);
 
   const buyer = await context.newPage();
   await buyer.goto(baseURL);
@@ -100,13 +59,13 @@ try {
   await buyer.goto(`${baseURL}/checkout`);
   await buyer.getByRole('button', { name: 'Finalizar compra', exact: true }).click();
   await buyer.getByRole('heading', { name: 'Compra realizada', exact: true }).waitFor();
-  await buyer.getByText('gaucho.real', { exact: true }).waitFor();
+  await buyer.getByText('feria.imperio', { exact: true }).waitFor();
   const confirmedURL = buyer.url();
 
   await sales.getByRole('article').waitFor();
   await sales.getByText(products.first.titulo, { exact: true }).waitFor();
   assert.equal(await sales.getByText(products.second.titulo, { exact: true }).count(), 0);
-  const payment = buyer.getByRole('region', { name: 'Transferencia a El Gaucho Tradición', exact: true });
+  const payment = buyer.getByRole('region', { name: 'Transferencia a Feria Imperio', exact: true });
   await payment.locator('input[type=file]').setInputFiles('public/favicon.png');
   await payment.getByAltText('Comprobante 1', { exact: true }).waitFor();
   await payment.getByRole('button', { name: 'Guardar comprobantes' }).click();
@@ -116,34 +75,22 @@ try {
   await page.keyboard.press('Escape');
   await page.getByRole('dialog').waitFor({ state: 'hidden' });
 
-  // A banking edit changes only future checkout snapshots.
-  await editPayment('gaucho.nuevo');
-  await page.getByText('gaucho.nuevo', { exact: true }).waitFor();
-  await buyer.reload();
-  await buyer.getByText('gaucho.real', { exact: true }).waitFor();
-  const newAlias = await buyer.evaluate(async () => {
-    const { ferianteRepository } = await import('/src/repositories/index.ts');
-    return (await ferianteRepository.getById('fer-01')).alias;
-  });
-  assert.equal(newAlias, 'gaucho.nuevo');
-
-  await page.screenshot({ path: join(output, 'sales-desktop.png'), fullPage: true });
+  await page.screenshot({ path: join(output, 'sales-desktop.png'), fullPage: true, animations: 'disabled' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole('button', { name: 'Cambiar a modo oscuro' }).click();
   await page.waitForFunction(() => getComputedStyle(document.querySelector('h1')).color === 'rgb(255, 255, 255)');
   assert.equal(await sales.evaluate((element) => element.scrollWidth <= element.clientWidth), true);
-  await page.screenshot({ path: join(output, 'sales-mobile-dark.png'), fullPage: true });
+  await page.screenshot({ path: join(output, 'sales-mobile-dark.png'), fullPage: true, animations: 'disabled' });
 
   await loginSeller(page, 1);
   await page.goto(`${baseURL}/admin`);
   const secondSales = page.getByRole('region', { name: 'Ventas', exact: true });
   await secondSales.getByText(products.second.titulo, { exact: true }).waitFor();
   assert.equal(await secondSales.getByText(products.first.titulo, { exact: true }).count(), 0);
-  assert.equal(await secondSales.getByRole('button', { name: /^Ver comprobante/ }).count(), 0);
-  await page.getByText('barro.vivo.ceramicas', { exact: true }).waitFor();
+  assert.equal(await secondSales.getByRole('button', { name: /^Ver comprobante/ }).count(), 1);
   await page.reload();
   await secondSales.getByText(products.second.titulo, { exact: true }).waitFor();
   assert.equal(new URL(confirmedURL).searchParams.has('pedido'), true);
   assert.deepEqual(errors, []);
-  console.log(`PASS: aliases for all shops, restricted access, bank validation/edit/reload, actual checkout, live sales/receipts across tabs, per-store isolation, receipt dialog/keyboard, historical banking snapshot, mobile/dark. Screenshots: ${output}`);
+  console.log(`PASS: no seller banking form, restricted access, centralized checkout, live sales/shared receipt across tabs, per-store product isolation, receipt dialog/keyboard, mobile/dark. Screenshots: ${output}`);
 } finally { await browser.close(); }

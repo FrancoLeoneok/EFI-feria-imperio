@@ -1,13 +1,16 @@
 import { useState } from 'react';
-import { OrderGroup, saveReceipts } from '../../repositories/localOrders';
+import { Order, saveReceipts } from '../../repositories/localOrders';
+import { PLATFORM_PAYMENT } from '../../config/platformPayment';
 import { ProductImageUpload } from '../catalog/ProductImageUpload';
 import { formatARS } from '../../utils/formatters';
 import { checkoutButton, checkoutCard } from './OrderProducts';
 
-export function TransferPayment({ group, orderId, compradorId }: { group: OrderGroup; orderId: string; compradorId: string }) {
-  // Edits stay local until saved; the parent keys this editor by order and store.
+export function TransferPayment({ order }: { order: Order }) {
+  const payment = order.pago ?? PLATFORM_PAYMENT;
+  // Preserve legacy receipts without changing the totals of historical orders.
+  const savedImages = order.comprobantes ?? [...new Set(order.grupos.flatMap((group) => group.comprobantes))];
   const [draftImages, setDraftImages] = useState<string[] | null>(null);
-  const images = draftImages ?? group.comprobantes;
+  const images = draftImages ?? savedImages;
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
@@ -15,19 +18,20 @@ export function TransferPayment({ group, orderId, compradorId }: { group: OrderG
   async function save() {
     setSaving(true); setError(''); setMessage('');
     try {
-      await saveReceipts(orderId, compradorId, group.tienda.id, images);
-      setMessage('Comprobantes guardados. El pago queda pendiente de verificación por la tienda.');
+      await saveReceipts(order.id, order.comprador.id, images);
+      setMessage('Comprobantes guardados. El pago queda pendiente de verificación por Feria Imperio.');
     } catch { setError('No pudimos guardar los comprobantes. Revisá el espacio disponible y volvé a intentar.'); }
     finally { setSaving(false); }
   }
-  return <section className={`${checkoutCard} space-y-4`} aria-label={`Transferencia a ${group.tienda.nombreComercio}`}>
-    <div><h2 className="font-extrabold">{group.tienda.nombreComercio}</h2><p className="mt-1 text-sm text-charcoal-500 dark:text-sand-300">Importe a transferir <strong className="text-terracotta dark:text-terracotta-300">{formatARS(group.subtotal)}</strong></p></div>
-    {group.tienda.cvu || group.tienda.alias ? <dl className="rounded-xl bg-sand-200 p-4 text-sm dark:bg-charcoal-800">
-      {group.tienda.cvu && <div><dt className="font-bold">CVU</dt><dd className="select-all break-all">{group.tienda.cvu}</dd></div>}
-      {group.tienda.alias && <div className="mt-2"><dt className="font-bold">Alias</dt><dd className="select-all break-all">{group.tienda.alias}</dd></div>}
-    </dl> : <p className="rounded-xl bg-sand-200 p-4 text-sm dark:bg-charcoal-800">Esta tienda todavía no informó su CVU o alias. <a className="font-bold underline" href={`/tienda/${group.tienda.id}`}>Visitá su tienda</a> para coordinar la transferencia.</p>}
-    {group.tienda.aliasDemostracion && <p className="text-sm text-terracotta dark:text-terracotta-300">El alias mostrado es de demostración. Coordiná con la tienda sus datos reales antes de transferir.</p>}
-    <fieldset disabled={saving} className="min-w-0"><ProductImageUpload variant="receipt" images={images} onChange={(next) => { setDraftImages(next); setMessage(''); }} onLoadingChange={setLoading} label={`Comprobantes para ${group.tienda.nombreComercio}`} /></fieldset>
+  return <section className={`${checkoutCard} space-y-4`} aria-label="Transferencia a Feria Imperio">
+    <div><h2 className="font-extrabold">Pago único a Feria Imperio</h2><p className="mt-1 text-sm text-charcoal-500 dark:text-sand-300">Total del pedido a transferir <strong className="text-terracotta dark:text-terracotta-300">{formatARS(order.total)}</strong></p><p className="mt-2 text-xs text-charcoal-500 dark:text-sand-300">Incluye los productos de todas las tiendas.{order.grupos.every((group) => group.items.every(({ producto }) => producto.precioBase !== undefined)) && ' La comisión del 10% ya está incorporada en sus precios.'}</p></div>
+    <dl className="space-y-2 rounded-xl bg-sand-200 p-4 text-sm dark:bg-charcoal-800">
+      <div><dt className="font-bold">Destinatario</dt><dd>{payment.titular}</dd></div>
+      {payment.cvu && <div><dt className="font-bold">CVU</dt><dd className="select-all break-all">{payment.cvu}</dd></div>}
+      <div><dt className="font-bold">Alias</dt><dd className="select-all break-all">{payment.alias}</dd></div>
+    </dl>
+    {payment.demostracion && <p className="text-sm text-terracotta dark:text-terracotta-300">Alias de ejemplo: todavía no está confirmado para recibir pagos. No transfieras hasta que Feria Imperio publique sus datos bancarios reales.</p>}
+    <fieldset disabled={saving} className="min-w-0"><ProductImageUpload variant="receipt" images={images} onChange={(next) => { setDraftImages(next); setMessage(''); }} onLoadingChange={setLoading} label="Comprobantes del pago a Feria Imperio" /></fieldset>
     <button type="button" disabled={loading || saving} onClick={() => void save()} className={checkoutButton}>{saving ? 'Guardando…' : 'Guardar comprobantes'}</button>
     <p role="status" className="text-sm text-forest dark:text-forest-300">{message}</p>
     <p role="alert" className="text-sm text-red-700 dark:text-red-400">{error}</p>

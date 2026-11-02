@@ -21,9 +21,6 @@ export interface RubroInfo {
 export type UbicacionFeria = 'parque_sarmiento' | 'paseo_andino' | 'ambos';
 
 export interface Feriante {
-  cvu?: string;
-  alias?: string;
-  aliasDemostracion?: boolean;
   id: string;
   nombreComercio: string;
   nombreResponsable: string;
@@ -53,7 +50,7 @@ export interface Producto {
   id: string;
   titulo: string;
   descripcion: string;
-  precio: number; // En Pesos Argentinos ($ ARS)
+  precio: number; // Precio base del feriante en ARS, sin la comisión de la plataforma.
   rubro: Rubro;
   ferianteId: string;
   ferianteNombre: string;
