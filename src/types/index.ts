@@ -23,6 +23,7 @@ export type UbicacionFeria = 'parque_sarmiento' | 'paseo_andino' | 'ambos';
 export interface Feriante {
   cvu?: string;
   alias?: string;
+  aliasDemostracion?: boolean;
   id: string;
   nombreComercio: string;
   nombreResponsable: string;

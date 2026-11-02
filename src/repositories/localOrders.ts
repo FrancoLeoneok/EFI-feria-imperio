@@ -1,8 +1,9 @@
 import { CartItem } from '../store/useCartStore';
 import { Feriante, UsuarioComprador } from '../types';
+import { notifyOrdersChanged } from '../utils/orderEvents';
 
 export interface OrderGroup {
-  tienda: Pick<Feriante, 'id' | 'nombreComercio' | 'cvu' | 'alias'>;
+  tienda: Pick<Feriante, 'id' | 'nombreComercio' | 'cvu' | 'alias' | 'aliasDemostracion'>;
   items: CartItem[];
   subtotal: number;
   comprobantes: string[];
@@ -24,7 +25,7 @@ export function groupItems(items: CartItem[], tiendas: Feriante[]): OrderGroup[]
     if (!group) {
       const tienda = tiendas.find(({ id }) => id === item.producto.ferianteId);
       group = {
-        tienda: { id: item.producto.ferianteId, nombreComercio: tienda?.nombreComercio ?? item.producto.ferianteNombre, cvu: tienda?.cvu, alias: tienda?.alias },
+        tienda: { id: item.producto.ferianteId, nombreComercio: tienda?.nombreComercio ?? item.producto.ferianteNombre, cvu: tienda?.cvu, alias: tienda?.alias, aliasDemostracion: tienda?.aliasDemostracion },
         items: [], subtotal: 0, comprobantes: [],
       };
       groups.set(group.tienda.id, group);
@@ -50,7 +51,11 @@ async function transact<T>(mode: IDBTransactionMode, action: (store: IDBObjectSt
   return new Promise((resolve, reject) => {
     let result: T;
     const tx = database.transaction('orders', mode);
-    tx.oncomplete = () => { database.close(); resolve(result); };
+    tx.oncomplete = () => {
+      database.close();
+      resolve(result);
+      if (mode === 'readwrite') notifyOrdersChanged();
+    };
     tx.onabort = () => { database.close(); reject(tx.error ?? new Error('No pudimos guardar los cambios.')); };
     action(tx.objectStore('orders'), (value) => { result = value; });
   });
@@ -87,6 +92,35 @@ export function saveReceipts(id: string, compradorId: string, tiendaId: string, 
       const updated = { ...order, grupos: order.grupos.map((group) => group.tienda.id === tiendaId ? { ...group, comprobantes: images } : group) };
       store.put(updated);
       done(updated);
+    };
+  });
+}
+
+export interface StoreSale {
+  pedidoId: string;
+  fecha: string;
+  comprador: Pick<UsuarioComprador, 'nombre' | 'email' | 'telefono'>;
+  grupo: OrderGroup;
+}
+
+export function readStoreSales(ferianteId: string): Promise<StoreSale[]> {
+  return transact('readonly', (store, done) => {
+    const request = store.openCursor();
+    const sales: StoreSale[] = [];
+    request.onsuccess = () => {
+      const cursor = request.result;
+      if (!cursor) {
+        done(sales.sort((a, b) => b.fecha.localeCompare(a.fecha)));
+        return;
+      }
+      const order = cursor.value as Order;
+      const grupo = order.grupos.find(({ tienda }) => tienda.id === ferianteId);
+      if (grupo) sales.push({
+        pedidoId: order.id, fecha: order.fecha,
+        comprador: { nombre: order.comprador.nombre, email: order.comprador.email, telefono: order.comprador.telefono },
+        grupo,
+      });
+      cursor.continue();
     };
   });
 }

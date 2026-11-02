@@ -16,12 +16,14 @@ import {
   LogOut,
   ShieldCheck,
 } from 'lucide-react';
-import { Feriante, Producto } from '../types';
-import { ferianteRepository, productoRepository } from '../repositories';
+import { Producto } from '../types';
+import { productoRepository } from '../repositories';
 import { useAuthStore } from '../store/useAuthStore';
 import { useStockStore } from '../store/useStockStore';
 import { formatARS } from '../utils/formatters';
 import { ProductFormDialog } from '../components/catalog/ProductFormDialog';
+import { StoreSales } from '../components/admin/StoreSales';
+import { StorePaymentSettings } from '../components/admin/StorePaymentSettings';
 
 interface AdminPageProps {
   onShowToast: (type: 'success' | 'error', title: string, message: string) => void;
@@ -30,10 +32,6 @@ interface AdminPageProps {
 export const AdminPage = ({ onShowToast }: AdminPageProps) => {
   const navigate = useNavigate();
   const { currentFeriante, userRole, isAuthenticated, openLoginModal, logout } = useAuthStore();
-  const [feriantes, setFeriantes] = useState<Feriante[]>([]);
-  const [selectedFerianteId, setSelectedFerianteId] = useState<string>(
-    currentFeriante?.id || 'fer-01'
-  );
   const [productosBase, setProductos] = useState<Producto[]>([]);
   const disponibilidad = useStockStore((state) => state.disponibilidad);
   const setDisponibilidad = useStockStore((state) => state.setDisponibilidad);
@@ -50,32 +48,17 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
   const [editingPrecioId, setEditingPrecioId] = useState<string | null>(null);
   const [tempPrecio, setTempPrecio] = useState<number>(0);
 
-  // Sincronizar selectedFerianteId cuando cambie la sesión
   useEffect(() => {
-    if (currentFeriante?.id) {
-      setSelectedFerianteId(currentFeriante.id);
-    }
-  }, [currentFeriante]);
-
-  // Cargar lista completa de feriantes
-  useEffect(() => {
-    ferianteRepository.getAll().then((list) => {
-      setFeriantes(list);
-    });
-  }, []);
-
-  // Cargar productos del feriante activo
-  useEffect(() => {
-    const idACargar = currentFeriante?.id || selectedFerianteId;
-    if (!idACargar) return;
+    let active = true;
+    if (!currentFeriante || userRole !== 'feriante') return;
     setLoading(true);
-    productoRepository.getByFeriante(idACargar).then((prods) => {
-      setProductos(prods);
-      setLoading(false);
-    });
-  }, [selectedFerianteId, currentFeriante]);
+    productoRepository.getByFeriante(currentFeriante.id).then((prods) => {
+      if (active) { setProductos(prods); setLoading(false); }
+    }).catch(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [currentFeriante, userRole]);
 
-  const ferianteActivo = currentFeriante || feriantes.find((f) => f.id === selectedFerianteId);
+  const ferianteActivo = currentFeriante;
 
   // Toggle de stock
   const handleToggleStock = (prodId: string) => {
@@ -141,7 +124,7 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
   };
 
   // Si no está autenticado, mostrar pantalla protegida amigable (Empty / Restricted Access State)
-  if (!isAuthenticated || !ferianteActivo) {
+  if (!isAuthenticated || userRole !== 'feriante' || !ferianteActivo) {
     return (
       <div className="min-h-screen bg-sand dark:bg-charcoal text-charcoal-900 dark:text-sand-100 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-sand-100 dark:bg-charcoal-800 rounded-3xl p-8 border border-sand-300 dark:border-charcoal-700 shadow-xl text-center space-y-6 animate-in zoom-in-95">
@@ -297,6 +280,9 @@ export const AdminPage = ({ onShowToast }: AdminPageProps) => {
             </div>
           </div>
         )}
+
+        <StorePaymentSettings key={`payments-${ferianteActivo.id}`} tienda={ferianteActivo} />
+        <StoreSales key={`sales-${ferianteActivo.id}`} ferianteId={ferianteActivo.id} />
 
         {/* Barra de Gestión de Productos */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">

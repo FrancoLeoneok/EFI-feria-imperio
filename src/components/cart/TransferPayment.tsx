@@ -26,6 +26,7 @@ export function TransferPayment({ group, orderId, compradorId }: { group: OrderG
       {group.tienda.cvu && <div><dt className="font-bold">CVU</dt><dd className="select-all break-all">{group.tienda.cvu}</dd></div>}
       {group.tienda.alias && <div className="mt-2"><dt className="font-bold">Alias</dt><dd className="select-all break-all">{group.tienda.alias}</dd></div>}
     </dl> : <p className="rounded-xl bg-sand-200 p-4 text-sm dark:bg-charcoal-800">Esta tienda todavía no informó su CVU o alias. <a className="font-bold underline" href={`/tienda/${group.tienda.id}`}>Visitá su tienda</a> para coordinar la transferencia.</p>}
+    {group.tienda.aliasDemostracion && <p className="text-sm text-terracotta dark:text-terracotta-300">El alias mostrado es de demostración. Coordiná con la tienda sus datos reales antes de transferir.</p>}
     <fieldset disabled={saving} className="min-w-0"><ProductImageUpload variant="receipt" images={images} onChange={(next) => { setDraftImages(next); setMessage(''); }} onLoadingChange={setLoading} label={`Comprobantes para ${group.tienda.nombreComercio}`} /></fieldset>
     <button type="button" disabled={loading || saving} onClick={() => void save()} className={checkoutButton}>{saving ? 'Guardando…' : 'Guardar comprobantes'}</button>
     <p role="status" className="text-sm text-forest dark:text-forest-300">{message}</p>
