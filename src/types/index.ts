@@ -21,6 +21,8 @@ export interface RubroInfo {
 export type UbicacionFeria = 'parque_sarmiento' | 'paseo_andino' | 'ambos';
 
 export interface Feriante {
+  cvu?: string;
+  alias?: string;
   id: string;
   nombreComercio: string;
   nombreResponsable: string;

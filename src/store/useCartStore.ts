@@ -8,6 +8,7 @@ export interface CartItem {
 }
 
 interface CartStore {
+  revision: string;
   items: CartItem[];
   isOpen: boolean;
   addItem: (producto: Producto) => void;
@@ -25,6 +26,7 @@ export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       items: [],
+      revision: 'initial',
       isOpen: false,
 
       addItem: (producto: Producto) => {
@@ -32,6 +34,7 @@ export const useCartStore = create<CartStore>()(
           const existing = state.items.find((item) => item.producto.id === producto.id);
           if (existing) {
             return {
+              revision: crypto.randomUUID(),
               items: state.items.map((item) =>
                 item.producto.id === producto.id
                   ? { ...item, cantidad: item.cantidad + 1 }
@@ -41,6 +44,7 @@ export const useCartStore = create<CartStore>()(
             };
           }
           return {
+            revision: crypto.randomUUID(),
             items: [...state.items, { producto, cantidad: 1 }],
             isOpen: true,
           };
@@ -50,6 +54,7 @@ export const useCartStore = create<CartStore>()(
       removeItem: (productoId: string) => {
         set((state) => ({
           items: state.items.filter((item) => item.producto.id !== productoId),
+          revision: crypto.randomUUID(),
         }));
       },
 
@@ -59,6 +64,7 @@ export const useCartStore = create<CartStore>()(
           return;
         }
         set((state) => ({
+          revision: crypto.randomUUID(),
           items: state.items.map((item) =>
             item.producto.id === productoId ? { ...item, cantidad } : item
           ),
@@ -66,7 +72,7 @@ export const useCartStore = create<CartStore>()(
       },
 
       clearCart: () => {
-        set({ items: [] });
+        set({ items: [], revision: crypto.randomUUID() });
       },
 
       openCart: () => set({ isOpen: true }),
@@ -86,6 +92,13 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'feria_imperio_cart',
+      partialize: ({ items, revision }) => ({ items, revision }),
     }
   )
 );
+
+window.addEventListener('storage', (event) => {
+  if (event.storageArea === localStorage && (event.key === 'feria_imperio_cart' || event.key === null)) {
+    void useCartStore.persist.rehydrate();
+  }
+});

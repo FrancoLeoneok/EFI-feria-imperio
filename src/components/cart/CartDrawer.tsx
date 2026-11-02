@@ -159,6 +159,11 @@ export const CartDrawer = () => {
               </div>
 
               <div className="space-y-2">
+                <a href="/checkout" target="_blank" rel="noopener noreferrer" onClick={closeCart}
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-terracotta px-5 py-3 text-sm font-bold text-white hover:bg-terracotta-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-terracotta">
+                  Comprar <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  <span className="sr-only">(abre en otra pestaña)</span>
+                </a>
                 <button
                   onClick={clearCart}
                   className="w-full py-2 text-xs font-semibold text-charcoal-500 dark:text-sand-400 hover:text-red-500 dark:hover:text-red-400 transition-colors text-center"
@@ -168,7 +173,7 @@ export const CartDrawer = () => {
               </div>
 
               <p className="text-[10px] text-center text-charcoal-400 dark:text-sand-500 leading-tight">
-                Simulador de presupuesto sin pasarela de pago. La compra se coordina directamente con los feriantes.
+                Revisá tu pedido y pagá por transferencia a cada tienda.
               </p>
             </div>
           )}
